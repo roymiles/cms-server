@@ -1,0 +1,41 @@
+<?php
+// src/AppBundle/Entity/Badges.php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="Badges")
+ */
+class Badges
+{
+    /**
+     * @ORM\Column(type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $Id;
+ 
+     /**
+     * @ORM\Column(type="string", length=256)
+     */
+    private $Name;  
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Users", inversedBy="Badges")
+     * @ORM\JoinColumn(name="CreatorId", referencedColumnName="id")
+     */
+    private $Creator;    
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $Description;
+    
+    /**
+     * @ORM\Column(type="date")
+     */
+    private $CreationDate;
+}

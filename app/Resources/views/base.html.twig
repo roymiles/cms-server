@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>{{ title|default('Zeal') }} - TB</title>
+        <meta name="description" content="{{ description|default() }}">
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+        <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script src="http://cdn.intercoolerjs.org/intercooler-0.9.7.min.js"></script>
+  
+        {% stylesheets 
+            'css/bootstrap-custom.css'
+            filter='cssrewrite' %}
+            <link rel="stylesheet" href="{{ asset_url }}" />
+        {% endstylesheets %}
+        
+        {% block stylesheets %}{% endblock %}
+        
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    </head>
+    <body>
+
+        <div id="body-container">
+
+            {% for flash_message in app.session.flashBag.get('notice') %}
+                {{ include('default/flash_message.html.twig') }}
+            {% endfor %}
+
+
+            <div id="head-nav" class="row">
+                <div class="col-xs-2"></div>
+                <div class="col-xs-8 row-fluid">
+                    <div id="head-nav-links" class="pull-left col-xs-8">
+
+                        {% if activeTab is not defined %}
+                            {% set activeTab = 'home' %}
+                        {% endif %}    
+
+                        <ul class="list-inline">
+                            <li class="{% if activeTab == 'home' %}active{% endif %}">
+                                <a href="/">Home</a>
+                            </li>
+                            <li class="{% if activeTab == 'docs' %}active{% endif %}">
+                                <a href="/docs">Documentation</a>
+                            </li>
+                            <li> | </li>
+                            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                                <li>
+                                    {{ include('default/social/profileBlock.html.twig') }}
+                                </li>
+                            {% else %}
+                                <li class="{% if activeTab == 'login' %}active{% endif %}">
+                                    <a href="{{ path('fos_user_security_login') }}">
+                                        <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
+                                        Log In
+                                    </a>
+                                </li>
+                                <li class="{% if activeTab == 'register' %}active{% endif %}">
+                                    <a href="{{ path('fos_user_registration_register') }}">Register</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    <div id="search-box" class="col-xs-4 pull-right">
+                        <form action="/search" method="GET">
+                            <input class="form-control" placeholder="Search...">
+                        </form>
+                    </div>
+                </div>
+                <div class="col-xs-2">
+                     {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                        {{ include('default/social/messenger.html.twig') }}
+                     {% endif %}
+                </div>
+            </div>
+
+            <div id="banner" class="row-fluid">
+                <div class="container">
+                    <h1>{{ bannerTitle|default('This is the title') }}</h1>
+                    <p>{{ bannerDescription|default('This is the description') }}</p>
+                </div>
+            </div>
+            <div id="content-container" class="row">
+                <div class="col-xs-2"></div>
+                <div id="content" class="col-xs-8">
+                    {% block body %}{% endblock %}
+                </div>
+                <div class="col-xs-2"></div>
+            </div>
+
+            {{ include('default/footer.html.twig') }}
+
+        </div>
+
+        {% block javascripts %}{% endblock %}
+
+    </body>
+</html>

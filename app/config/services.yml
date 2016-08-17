@@ -1,0 +1,34 @@
+services:
+    app.DocumentationManager:
+        class: AppBundle\Services\DocumentationManager
+        arguments: ['@doctrine.orm.entity_manager']   
+        
+    app.ForumCategoriesManager:
+        class: AppBundle\Services\ForumCategoriesManager
+        arguments: ['@doctrine.orm.entity_manager']    
+        
+    app.SessionsManager:
+        class: AppBundle\Services\SessionsManager
+        arguments: ['@doctrine.orm.entity_manager']  
+        
+    app.SiteModulesManager:
+        class: AppBundle\Services\SiteModulesManager
+        arguments: ['@doctrine.orm.entity_manager']   
+        
+    app.SitesManager:
+        class: AppBundle\Services\SitesManager
+        arguments: ['@doctrine.orm.entity_manager']         
+
+    app.UserRelationshipsManager:
+        class: AppBundle\Services\UserRelationshipsManager
+        arguments: ['@doctrine.orm.entity_manager']        
+        
+    app.UsersManager:
+        class: AppBundle\Services\UsersManager
+        arguments: ['@doctrine.orm.entity_manager']
+        
+    app.twig_extension:
+        class: AppBundle\Twig\AppExtension
+        public: false
+        tags:
+            - { name: twig.extension }

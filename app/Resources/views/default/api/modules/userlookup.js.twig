@@ -1,0 +1,25 @@
+zeal.prototype._userLookup = function(node) {
+    // Check to see if this users object already exists if not request it from the API    
+    if (typeof _cachedUsers[node.dataset.username] != 'undefined') {
+        var request = new XMLHttpRequest();
+        request.open('GET', zeal._API + '/getUser/' + node.dataset.username, true); // Not implemented function
+
+        request.onload = function() {
+            if (request.status >= 200 && request.status < 400) {
+                // Success!
+                _cachedUsers = JSON.parse(request.responseText);
+                document.node.appendChild(node.dataset.value);
+            } else {
+                // We reached our target server, but it returned an error
+                console.log('Failed to retrieve user information');
+            }
+        };
+
+        request.onerror = function() {
+            // There was a connection error of some sort
+            console.log('Failed to connect to the server for a userLookup');
+        };
+
+        request.send();
+    }
+};

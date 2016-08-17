@@ -1,0 +1,33 @@
+<?php
+// src/AppBundle/Entity/SiteModules.php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="SiteModules")
+ */
+class SiteModules
+{
+    /**
+     * @ORM\Column(type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $Id;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Modules", inversedBy="SiteModules")
+     * @ORM\JoinColumn(name="ModuleId", referencedColumnName="Id")
+     */
+    private $Module;
+  
+    /**
+     * @ORM\ManyToOne(targetEntity="Sites", inversedBy="Modules")
+     * @ORM\JoinColumn(name="SiteId", referencedColumnName="Id")
+     */
+    private $Site; 
+
+}

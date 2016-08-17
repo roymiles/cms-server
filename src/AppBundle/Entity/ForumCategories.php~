@@ -1,0 +1,36 @@
+<?php
+// src/AppBundle/Entity/ForumCategories.php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="ForumCategories")
+ */
+class ForumCategories
+{
+    /**
+     * @ORM\Column(type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $Id;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Users", inversedBy="ForumCategories")
+     * @ORM\JoinColumn(name="CreatorId", referencedColumnName="id")
+     */
+    private $Creator;    
+
+    /**
+     * @ORM\Column(type="string", length=256)
+     */
+    private $CategoryName;
+    
+    /**
+     * @ORM\Column(type="date")
+     */
+    private $CreationDate;
+}

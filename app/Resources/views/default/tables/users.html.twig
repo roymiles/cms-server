@@ -1,0 +1,32 @@
+<table class="table table-hover table-bordered">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Username</th>
+      <th>Email</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      {% for user in users %}
+        <th scope="row">{{ user.Id }}</th>
+        <td contenteditable="true" onBlur="saveToDatabase(this,'Username','{{ user.Id }}')" onClick="showEdit(this);">{{ user.Username }}</td>
+        <td contenteditable="true" onBlur="saveToDatabase(this,'Email','{{ user.Id }}')" onClick="showEdit(this);">{{ user.Email }}</td>
+      {% endfor %}
+    </tr>
+  </tbody>
+</table>
+{{ include('default/widgets/pagination.html.twig') }}
+<script type="text/javascript">
+function saveToDatabase(editableObj,column,id) {
+	$(editableObj).css("background","#FFF url(loaderIcon.gif) no-repeat right");
+	$.ajax({
+		url: "saveedit.php",
+		type: "POST",
+		data:'column='+column+'&editval='+editableObj.innerHTML+'&id='+id,
+		success: function(data){
+			$(editableObj).css("background","#FDFDFD");
+		}        
+	});
+}
+</script>

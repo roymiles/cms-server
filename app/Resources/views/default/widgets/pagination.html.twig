@@ -1,0 +1,17 @@
+<nav aria-label="Table navigation">
+  <ul class="pagination">
+    <li>
+      <a href="#" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    {% for pg in pagination %}
+	    <li {% if pg['active'] eq true}class="active"{% endif %}><a href="#">{% pg['number'] %}</a></li>
+    {% endfor %}
+    <li>
+      <a href="#" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+  </ul>
+</nav>

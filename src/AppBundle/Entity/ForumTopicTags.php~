@@ -1,0 +1,32 @@
+<?php
+// src/AppBundle/Entity/ForumTopicTags.php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="ForumTopicTags")
+ */
+class ForumTopicTags
+{
+    /**
+     * @ORM\Column(type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $Id;
+ 
+     /**
+     * @ORM\ManyToOne(targetEntity="ForumTopics", inversedBy="ForumTopicTags")
+     * @ORM\JoinColumn(name="TopicId", referencedColumnName="Id")
+     */
+    private $Topic;  
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Tags", inversedBy="ForumTopicTags")
+     * @ORM\JoinColumn(name="TagId", referencedColumnName="Id")
+     */
+    private $Tag;    
+}

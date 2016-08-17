@@ -1,0 +1,95 @@
+{% extends 'default/docs/base.html.twig' %}
+
+{% block breadcrumb %}
+    <div id="breadcrumb" class="row-fluid">
+        <ol class="breadcrumb" style="margin-bottom: 5px;">
+          <li><a href="#">Home</a></li>
+          <li class="active"><a href="#">Security</a></li>
+        </ol>
+    </div>
+{% endblock %}
+
+{% block content %}
+    {% filter markdown|raw %}
+        #Security module
+        
+        This module contains 3 different components that allow you to easily integrate a user system for your site. Each component can be accessed by its unique data-id attribute.
+        We strongly recommend you use this module as a starting point for getting to grips with the framework. By default this module is enabled for all new users but can be disabled through your management console.
+        
+        > Disabling this module will stop all users from logging in on registering on your site
+        
+        * [Login](#login)
+        * [Register](#register)
+        * [Logout](#logout)
+        * [Forgot password](#forgot-password)
+        * [User Information](#user-information)
+        * [Themes](#themes)
+        
+        ##Login
+        
+        This component allows your users to authenticate their credentials and establish a user session on your site.
+        To include the form on your page use the "loginForm" data-id attribute
+        
+        ```
+        {% autoescape 'html' %}
+        <div data-module="_security" data-id="loginForm"></div>
+        {% endautoescape %}
+        ```
+        
+        <div data-module="_security" data-id="loginForm"></div>
+        
+        ##Register
+        
+        This component will generate the form required for users to sign up to your website. It is loaded just like the login form but with the "registerForm" data-id attribute
+        
+        ```
+        {% autoescape 'html' %}
+        <div data-module="_security" data-id="registerForm"></div>
+        {% endautoescape %}
+        ```
+        
+        <div data-module="_security" data-id="registerForm"></div>
+        
+        ##Logout
+        Now that users can register and log in to your site they now need a way to logout.
+        > Note: This component will not render if the user is not logged in
+        
+        ```
+        {% autoescape 'html' %}
+        <div data-module="_security" data-id="logoutForm"></div>
+        {% endautoescape %}
+        ```
+        
+        <div data-module="_security" data-id="logoutForm"></div>
+        
+        ##Forgot password
+        The final form component for this module is to reset a password. When a user submits this form, they will receive an email for which they will have to validate the request.
+        
+        ```
+        {% autoescape 'html' %}
+        <div data-module="_security" data-id="resetPasswordForm"></div>
+        {% endautoescape %}
+        ```
+        
+        <div data-module="_security" data-id="resetPasswordForm"></div>
+        
+        ## User information
+        If you want to display information about the user currently logged in you can use the "user" data-id attribute along with a corresponding data-value attribute.
+        You can display all the user information apart from the password
+        - id
+        - username
+        - email
+        
+        > Note: The user has to be logged in for this block to render
+        
+        An example of such usage would be
+        ```
+        {% autoescape 'html' %}
+        <div data-module="_security" data-id="user" data-value="username"></div>
+        {% endautoescape %}
+        ```
+        
+        ## Themes
+        Each html component comes with an appropriate selector which can be used for styling in CSS. They will all have the "zeal-" prefix to ensure no collisions.
+    {% endfilter %}
+{% endblock %}

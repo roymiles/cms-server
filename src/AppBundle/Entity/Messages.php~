@@ -1,0 +1,42 @@
+<?php
+// src/AppBundle/Entity/Messages.php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="Messages")
+ */
+class Messages
+{
+    /**
+     * @ORM\Column(type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $Id;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Users", inversedBy="Messages")
+     * @ORM\JoinColumn(name="SenderId", referencedColumnName="id")
+     */
+    private $Sender;
+  
+    /**
+     * @ORM\ManyToOne(targetEntity="Users", inversedBy="Messages")
+     * @ORM\JoinColumn(name="ReceiverId", referencedColumnName="id")
+     */
+    private $Receiver;   
+    
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $Message;    
+    
+    /**
+     * @ORM\Column(type="date")
+     */
+    private $CreationDate;
+}

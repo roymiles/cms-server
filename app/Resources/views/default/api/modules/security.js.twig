@@ -1,0 +1,217 @@
+security = function(node) {
+    switch (node.dataset.id) {
+        case 'loginForm':
+            zeal.prototype._loginForm(node);
+            break;
+        case 'registerForm':
+            zeal.prototype._registerForm(node);
+            break;
+        case 'logoutForm':
+            zeal.prototype._logoutForm(node);
+            break;
+        case 'resetPasswordForm':
+            zeal.prototype._resetPasswordForm(node);
+            break;
+
+        case 'user':
+            if (!zeal.isLoggedIn) {
+                return;
+            }
+            switch (node.dataset.value) {
+
+                case 'id':
+                    var content = (_user.id ? _user.id : 'Empty ID');
+                    node.innerHTML(content)
+                    break;
+                case 'username':
+                    var content = (_user.username ? _user.username : 'Empty Username');
+                    node.innerHTML(content)
+                    break;
+            }
+
+        default:
+            console.log(node.dataset.id + ' is an unknown data-id for the _security module');
+    }
+
+    this._loginForm = function(node) {
+        if (zeal.isLoggedIn) {
+            return;
+        } // Don't show log in form if user is already logged in
+
+        console.log(node);
+
+        // Has admin specified a redirect URL? If not redirect to home
+        var redirect = node.dataset.redirect ? node.dataset.redirect : '/';
+
+        var f = document.createElement("form");
+        f.setAttribute('id', "zeal-login");
+        f.setAttribute('method', "post");
+        f.setAttribute('action', zeal._API + "/login");
+        f.setAttribute('onsubmit', "return zeal.prototype._loginSubmit('" + redirect + "')");
+
+        var i = document.createElement("input"); // Username field
+        i.setAttribute('id', "zeal-username");
+        i.setAttribute('type', "text");
+        i.setAttribute('name', "username");
+        i.setAttribute('class', "zeal-texbox");
+
+        var il = document.createElement("Label");
+        il.setAttribute("for", "zeal-username");
+        il.setAttribute('class', "zeal-label");
+        il.innerHTML = "Username";
+
+        var p = document.createElement("input"); // Password field
+        p.setAttribute('id', "zeal-password");
+        p.setAttribute('type', "text");
+        p.setAttribute('name', "password");
+        p.setAttribute('class', "zeal-texbox");
+
+        var pl = document.createElement("Label");
+        pl.setAttribute("for", "zeal-password");
+        pl.setAttribute('class', "zeal-label");
+        pl.innerHTML = "Password";
+
+        var s = document.createElement("input"); // Submit element
+        s.setAttribute('type', "submit");
+        s.setAttribute('value', "Submit");
+        s.setAttribute('class', "zeal-submit");
+
+        f.appendChild(i);
+        f.appendChild(p);
+        f.appendChild(s);
+
+        node.appendChild(f); // Append the form to the node 
+    };
+
+    this._loginSubmit = function(redirect) {
+        var username = document.getElementById('zeal-username');
+        zeal.prototype.login_isValid = true;
+        if (zeal.prototype.login_isValid) {
+            // Send the login request to the API
+            var request = new XMLHttpRequest();
+            request.open('POST', zeal._API + '/login', true);
+            request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+            request.send(username);
+
+            var data = JSON.parse(request.responseText);
+            if (data == 'sucess') {
+                zeal.prototype._createCookie('SESHID', data['SESHID'], 7); // Store the cookie for a week
+                window.location.replace(redirect);
+            } else {
+                // Invalid credentials..
+                console.log('Invalid credentials');
+            }
+
+        }
+        return false; // Stop form from submitting
+    };
+
+    this._logoutForm = function(node) {
+        if (!zeal.isLoggedIn) {
+            return;
+        } // Don't show logout form if user is not logged in  
+
+        // Has admin specified a redirect URL? If not redirect to home
+        var redirect = node.dataset.redirect ? node.dataset.redirect : '/';
+
+        var f = document.createElement("form");
+        f.setAttribute('id', "zeal-login");
+        f.setAttribute('method', "post");
+        f.setAttribute('action', _API + "/login");
+        f.setAttribute('onsubmit', "return zeal.prototype._logoutSubmit('" + redirect + "')");
+
+        var s = document.createElement("input"); // Submit element
+        s.setAttribute('type', "submit");
+        s.setAttribute('value', "Submit");
+        s.setAttribute('class', "zeal-submit");
+
+        f.appendChild(s);
+
+        document.node.appendChild(f); // Append the form to the node         
+    };
+
+    this._logoutSubmit = function() {
+        // Delete user object and redirect if specified
+        zeal.prototype._eraseCookie('SESHID');
+        window.location.replace(redirect);
+    };
+
+    // Create and render register form 
+    this._registerForm = function(node) {
+        if (zeal.isLoggedIn) {
+            return;
+        } // Don't show register form if user is logged in  
+
+        // Has admin specified a redirect URL? If not redirect to home
+        var redirect = node.dataset.redirect ? node.dataset.redirect : '/';
+
+        var f = document.createElement("form");
+        f.setAttribute('id', "zeal-register");
+        f.setAttribute('method', "post");
+        f.setAttribute('action', zeal._API + "/register");
+        f.setAttribute('onsubmit', "return zeal.prototype._logoutSubmit('" + redirect + "')");
+
+        var i = document.createElement("input"); // Username field
+        i.setAttribute('id', "zeal-username");
+        i.setAttribute('type', "text");
+        i.setAttribute('name', "username");
+        i.setAttribute('class', "zeal-texbox");
+
+        var il = document.createElement("Label");
+        il.setAttribute("for", "zeal-username");
+        il.setAttribute('class', "zeal-label");
+        il.innerHTML = "Username";
+
+        var e = document.createElement("input"); // Email field
+        e.setAttribute('id', "zeal-email");
+        e.setAttribute('type', "text");
+        e.setAttribute('name', "email");
+        e.setAttribute('class', "zeal-texbox");
+
+        var el = document.createElement("Label");
+        el.setAttribute("for", "zeal-email");
+        el.setAttribute('class', "zeal-label");
+        el.innerHTML = "Email";
+
+        var p = document.createElement("input"); // Password field
+        p.setAttribute('id', "zeal-password");
+        p.setAttribute('type', "text");
+        p.setAttribute('name', "password");
+        p.setAttribute('class', "zeal-texbox");
+
+        var pl = document.createElement("Label");
+        pl.setAttribute("for", "zeal-password");
+        pl.setAttribute('class', "zeal-label");
+        pl.innerHTML = "Password";
+
+        var s = document.createElement("input"); // Submit element
+        s.setAttribute('type', "submit");
+        s.setAttribute('value', "Submit");
+        s.setAttribute('class', "zeal-submit");
+
+        // Append the elements to the form
+        f.appendChild(i);
+        f.appendChild(e);
+        f.appendChild(p);
+        f.appendChild(s);
+
+        node.appendChild(f); // Append the form to the node        
+
+    };
+
+    this._registerSubmit = function(node) {
+        // On submit of the register form   
+    };
+
+    this._resetPasswordForm = function(node) {
+        // Create and render the reset password form 
+    };
+
+    this._resetPasswordSubmit = function(node) {
+        // On submit of the reset password form
+    };
+
+
+
+
+};

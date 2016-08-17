@@ -1,0 +1,43 @@
+<?php
+// src/AppBundle/Entity/UserRelationships.php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="UserRelationships")
+ */
+class UserRelationships
+{
+    /**
+     * @ORM\Column(type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $Id;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Users", inversedBy="UserRelationships")
+     * @ORM\JoinColumn(name="RelatingUserId", referencedColumnName="Id")
+     */
+    private $RelatingUser;  
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Users", inversedBy="UserRelationships")
+     * @ORM\JoinColumn(name="RelatedUserId", referencedColumnName="Id")
+     */
+    private $RelatedUser;    
+
+    /**
+     * @ORM\ManyToOne(targetEntity="RelationshipTypes", inversedBy="UserRelationships")
+     * @ORM\JoinColumn(name="TypeId", referencedColumnName="Id")
+     */
+    private $Type;
+    
+    /**
+     * @ORM\Column(type="date")
+     */
+    private $CreationDate;
+}

@@ -1,0 +1,35 @@
+<?php
+// src/AppBundle/Entity/Actions.php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="Actions")
+ */
+class Actions
+{
+    /**
+     * @ORM\Column(type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $Id;
+    
+    /**
+     * @ORM\Column(type="string", length=256)
+     */
+    private $ActionName;
+    
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $Description;
+    
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $CreationDate;
+}
