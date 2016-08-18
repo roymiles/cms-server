@@ -101,7 +101,7 @@ class CodeDefinitionBuilder
      *
      * @param $validator  the InputValidator instance to use
      */
-    public function setOptionValidator(\JBBCode\InputValidator $validator, $option=null)
+    public function setOptionValidator(\AppBundle\Libraries\JBBCode\InputValidator $validator, $option=null)
     {
         if(empty($option)){
             $option = $this->tagName;
@@ -115,7 +115,7 @@ class CodeDefinitionBuilder
      *
      * @param $validator  the InputValidator instance to use
      */
-    public function setBodyValidator(AppBundle\Libraries\JBBCode\InputValidator $validator)
+    public function setBodyValidator(\AppBundle\Libraries\JBBCode\InputValidator $validator)
     {
         $this->bodyValidator = $validator;
         return $this;

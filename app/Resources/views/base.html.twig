@@ -48,7 +48,7 @@
                             <li> | </li>
                             {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
                                 <li>
-                                    {{ include('default/social/profileBlock.html.twig') }}
+                                    {{ include('default/widgets/social/user-nav.html.twig') }}
                                 </li>
                             {% else %}
                                 <li class="{% if activeTab == 'login' %}active{% endif %}">
@@ -71,7 +71,7 @@
                 </div>
                 <div class="col-xs-2">
                      {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-                        {{ include('default/social/messenger.html.twig') }}
+                        {{ include('default/widgets/social/messenger.html.twig') }}
                      {% endif %}
                 </div>
             </div>

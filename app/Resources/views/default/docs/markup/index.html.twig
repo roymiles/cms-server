@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block content %}
-    {% filter bbcode %}
-        {{ documentation[0].pageContent|default('Not found. Error?') }}
+    {% filter bbcode|raw %}
+        {{ documentation[0].pageContent|raw }}
     {% endfilter %}
 {% endblock %}

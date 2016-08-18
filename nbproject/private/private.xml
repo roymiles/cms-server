@@ -3,14 +3,27 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-<<<<<<< HEAD
-            <file>file:/C:/xampp/htdocs/src/AppBundle/Controller/DocumentationController.php</file>
-            <file>file:/C:/xampp/htdocs/src/AppBundle/Controller/ForumCategoriesController.php</file>
-=======
-            <file>file:/C:/xampp/htdocs/zeal/app/config/services.yml</file>
-            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Services/ForumCategoriesManager.php</file>
-            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Services/SiteModulesManager.php</file>
->>>>>>> 1e74c9563b9b52a89b361620351681939fe891d3
+            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Libraries/JBBCode/CodeDefinitionSet.php</file>
+            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Controller/DefaultController.php</file>
+            <file>file:/C:/xampp/htdocs/zeal/app/Resources/views/default/widgets/social/user-nav.html.twig</file>
+            <file>file:/C:/xampp/htdocs/zeal/vendor/friendsofsymfony/user-bundle/Model/User.php</file>
+            <file>file:/C:/xampp/htdocs/zeal/app/Resources/FOSUserBundle/views/Registration/register.html.twig</file>
+            <file>file:/C:/xampp/htdocs/zeal/app/Resources/views/default/docs/base.html.twig</file>
+            <file>file:/C:/xampp/htdocs/zeal/vendor/friendsofsymfony/user-bundle/Resources/views/Registration/register_content.html.twig</file>
+            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Libraries/JBBCode/InputValidator.php</file>
+            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Libraries/JBBCode/validators/UrlValidator.php</file>
+            <file>file:/C:/xampp/htdocs/zeal/app/Resources/views/default/widgets/banner-message.html.twig</file>
+            <file>file:/C:/xampp/htdocs/zeal/app/Resources/views/base.html.twig</file>
+            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/AppBundle.php</file>
+            <file>file:/C:/xampp/htdocs/zeal/vendor/friendsofsymfony/user-bundle/Form/Type/GroupFormType.php</file>
+            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Libraries/JBBCode/DefaultCodeDefinitionSet.php</file>
+            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Libraries/JBBCode/CodeDefinitionBuilder.php</file>
+            <file>file:/C:/xampp/htdocs/zeal/app/Resources/views/default/widgets/social/messenger.html.twig</file>
+            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Twig/AppExtension.php</file>
+            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Libraries/JBBCode/CodeDefinition.php</file>
+            <file>file:/C:/xampp/htdocs/zeal/app/Resources/views/default/docs/markup/index.html.twig</file>
+            <file>file:/C:/xampp/htdocs/zeal/vendor/friendsofsymfony/user-bundle/Resources/views/Registration/register.html.twig</file>
+            <file>file:/C:/xampp/htdocs/zeal/vendor/friendsofsymfony/user-bundle/Form/Type/ProfileFormType.php</file>
         </group>
     </open-files>
 </project-private>

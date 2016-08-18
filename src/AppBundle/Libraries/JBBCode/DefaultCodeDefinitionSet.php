@@ -60,7 +60,7 @@ class DefaultCodeDefinitionSet implements CodeDefinitionSet
 
         /* [color] color tag */
         $builder = new CodeDefinitionBuilder('color', '<span style="color: {option}">{param}</span>');
-        $builder->setUseOption(true)->setOptionValidator(new \JBBCode\validators\CssColorValidator());
+        $builder->setUseOption(true)->setOptionValidator(new \AppBundle\Libraries\JBBCode\validators\CssColorValidator());
         array_push($this->definitions, $builder->build());
     }
 

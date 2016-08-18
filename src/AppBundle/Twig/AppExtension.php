@@ -25,11 +25,7 @@ class AppExtension extends \Twig_Extension
     {
         $parser = new Parser();
         $parser->addCodeDefinitionSet(new DefaultCodeDefinitionSet());
-        var_dump($text);
         $parser->parse($text);
-        echo "<br>";
-        echo $parser->getAsHtml();
-        echo "<br>";
         return $parser->getAsHtml();
     }
 
