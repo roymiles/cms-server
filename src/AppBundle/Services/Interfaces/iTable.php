@@ -1,5 +1,7 @@
 <?php
 
+namespace AppBundle\Services\Interfaces;
+
 interface iTable
 {
     public function get(array $options, array $filters = ['limit' => 1, 'orderby' => 'ASC']);

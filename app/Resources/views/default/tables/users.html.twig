@@ -7,16 +7,15 @@
     </tr>
   </thead>
   <tbody>
-    <tr>
-      {% for user in users %}
-        <th scope="row">{{ user.Id }}</th>
-        <td contenteditable="true" onBlur="saveToDatabase(this,'Username','{{ user.Id }}')" onClick="showEdit(this);">{{ user.Username }}</td>
-        <td contenteditable="true" onBlur="saveToDatabase(this,'Email','{{ user.Id }}')" onClick="showEdit(this);">{{ user.Email }}</td>
-      {% endfor %}
-    </tr>
+    {% for user in users %}
+        <tr>
+            <th scope="row">{{ user.Id }}</th>
+            <td contenteditable="true" onBlur="saveToDatabase(this,'Username','{{ user.Id }}')" onClick="showEdit(this);">{{ user.Username }}</td>
+            <td contenteditable="true" onBlur="saveToDatabase(this,'Email','{{ user.Id }}')" onClick="showEdit(this);">{{ user.Email }}</td>
+        </tr>
+    {% endfor %}
   </tbody>
 </table>
-{{ include('default/widgets/pagination.html.twig') }}
 <script type="text/javascript">
 function saveToDatabase(editableObj,column,id) {
 	$(editableObj).css("background","#FFF url(loaderIcon.gif) no-repeat right");

@@ -16,12 +16,14 @@ class ForumCategoriesController extends Controller
     
     /**
      * @Route("/forum", name="ForumCategories")
+     * @Route("/forum/page={pageNumber}/", name="ForumCategoriesWithPage")
+     * @Route("/forum/sort={sortBy}/", name="ForumCategoriesWithSort")
+     * @Route("/forum/page={pageNumber}/sort={sortBy}/", name="ForumCategoriesWithPageAndSort")
      */
-    public function forumCategoriesAction(Request $request)
+    public function forumCategoriesAction(Request $request, $pageNumber = 1, $sortBy = "ASC")
     {
         $ForumManager = $this->get('app.ForumManager');
-        
-        $Categories = $ForumManager->getCategories(['siteId' => -1]);
+        $Categories = $ForumManager->getCategories(['siteId' => -1, 'pageNumber' => $pageNumer, 'sortBy' => $sortBy]);
         
         if(count($Categories) < 1){
             // No categories found
@@ -32,48 +34,6 @@ class ForumCategoriesController extends Controller
         }
     
         return $this->render('default/forum/categories.html.twig', [
-            'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
-            'categories' => $Categories
-        ]);
-    }
-    
-    /**
-     * @Route("/forum/page={pageNumber}/", name="ForumCategoriesPage")
-     */
-    public function forumCategoriesPageAction(Request $request, $pageNumber)
-    {
-        $ForumManager = $this->get('app.ForumManager');
-        $Categories = $ForumManager->getCategories(['siteId' => -1, 'pageNumber' => $pageNumer]);
-        
-        return $this->render('default/forum/index.html.twig', [
-            'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
-            'categories' => $Categories
-        ]);
-    }   
-    
-    /**
-     * @Route("forum/sort={sortBy}/", name="ForumCategoriesSort")
-     */
-    public function forumCategoriesSortAction(Request $request, $sortBy)
-    {
-        $ForumManager = $this->get('app.ForumManager');
-        $Categories = $ForumManager->getCategories(['siteId' => -1, 'sortBy' => $sortBy]);
-        
-        return $this->render('default/forum/index.html.twig', [
-            'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
-            'categories' => $Categories
-        ]);
-    } 
-    
-    /**
-     * @Route("/forum/page={pageNumber}/sort={sortBy}/", name="ForumCategoriesPageSort")
-     */
-    public function forumCategoriesPageSortAction(Request $request, $pageNumber, $sortBy)
-    {
-        $ForumManager = $this->get('app.ForumManager');
-        $Categories = $ForumManager->getCategories(['siteId' => -1, 'pageNumber' => $pageNumer, 'sortBy' => $sortBy]);
-        
-        return $this->render('default/forum/index.html.twig', [
             'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
             'categories' => $Categories
         ]);

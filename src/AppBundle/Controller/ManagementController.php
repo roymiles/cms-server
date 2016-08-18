@@ -25,12 +25,6 @@ class ManagementController extends Controller
         ]);
     }
     
-    
-    /**
-     * @Route("/manage/users", name="ManageUsers")
-     */
-    public function manageUsersAction(Request $request){}
-    
     /**
      * Show all modules available and allow user to enable/disable for their website
      * @Route("/manage/modules", name="manage_modules")

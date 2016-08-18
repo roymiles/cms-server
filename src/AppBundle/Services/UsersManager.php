@@ -13,7 +13,7 @@ class UsersManager
     public function __construct(EntityManager $em)
     {
         $this->em = $em;
-        $this->repository = 'AppBundle:Entity:Users';
+        $this->repository = 'AppBundle\Entity\Users';
     }
     
     //-----------------------------------------------------
@@ -22,9 +22,9 @@ class UsersManager
     
     public function get(array $options, array $filters)
     {
-        $user = $this->getDoctrine()
-            ->getRepository($this->repository)
-            ->findBy($options, $filters['orderBy']. $filters['limit'], $filters['offset']);
+        $user = $this->em
+                     ->getRepository($this->repository)
+                     ->findBy($options, ['username' => $filters['orderBy']], $filters['limit'], $filters['offset']);
     
         if (!$user) {
             return false;

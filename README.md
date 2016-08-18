@@ -1,5 +1,5 @@
 # Zeal web development project
-======
+------
 
 ## Summary
 ------
@@ -13,23 +13,19 @@ The project is written with the [Symfony2](https://symfony.com/) framework and h
 ------
 
 ### General
-------
 - [ ] Editable sql tables with authentication
 
 ### Documentation
-------
 - [x] Get JBBCode markdown working
 - [ ] Breadcumb links
 
 ### Javascript framework
-------
 - [ ] Get the login and registration system working with OAUTH2
 
 ### Testing
-------
 - [ ] Undecided
 
-**By Roy Miles**
+*By Roy Miles*
 
 
 
