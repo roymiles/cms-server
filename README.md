@@ -1,39 +1,38 @@
-# zeal
+# Zeal web development project
+======
 
-This is what the httpd-vhosts.conf should be to render the website in the development environment (Comment out when need to access phpmyadmin)
-```
-<VirtualHost *:80>
-    ServerName localhost
-    DocumentRoot "C:/xampp/htdocs/zeal/web"
-    DirectoryIndex app_dev.php
-    <Directory "C:/xampp/htdocs/zeal/web">
-        Options Indexes FollowSymLinks MultiViews
-        AllowOverride None
-        Order allow,deny
-        allow from all
-        <IfModule mod_rewrite.c>
-            RewriteEngine On
-            RewriteCond %{REQUEST_FILENAME} !-f
-            RewriteRule ^(.*)$ /app_dev.php [QSA,L]
-        </IfModule>
-    </Directory>
-</VirtualHost>
-```
+## Summary
+------
+Zeal is a web development project to allow clients to create fully database driven websites without having any back end code on their web host. This is done through a javascript framework that authenticates a websites request to access, modify and delete different aspects of the their website to enable dynamic webpages.
 
-Useful command to clear cache. Remember bin/console not app/console
-```
-$ php bin/console cache:clear
-```
+At the moment, this project is in its very early stages and is a mere proof of concept. I may take this project in a different direction as I see fit.
 
-Lists all routes
-```
-php bin/console debug:router
-```
+The project is written with the [Symfony2](https://symfony.com/) framework and has made extensive use of their FOS bundles to speed up development.
 
-Using FOSUserBundle for the website login/registration etc but custom system for the API login/registration etc.
+## TODO
+------
+
+### General
+------
+- [ ] Editable sql tables with authentication
+
+### Documentation
+------
+- [x] Get JBBCode markdown working
+- [ ] Breadcumb links
+
+### Javascript framework
+------
+- [ ] Get the login and registration system working with OAUTH2
+
+### Testing
+------
+- [ ] Undecided
+
+**By Roy Miles**
 
 
-## To enable debug() add this to php.ini
-```
-auto_prepend_file = ${HOME}/.composer/vendor/autoload.php
-```
+
+
+
+
