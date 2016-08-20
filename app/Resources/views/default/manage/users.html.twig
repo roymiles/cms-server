@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        {% include 'default/tables/users.html.twig' with {'users': users} only %}
+        {% include 'default/widgets/pagination.html.twig' with {
+            currentFilters: { 'sortBy': filters.sortBy, 'order': filters.order },
+            currentPage: page,
+            paginationPath: "ManagementGetUsersWithSortAndPage",
+            lastPage: 10,
+            showAlwaysFirstAndLast: false
+        } only %}
+        {% include 'default/widgets/makeTablesEditable.html.twig' %}
+    </div>
+{% endblock %}

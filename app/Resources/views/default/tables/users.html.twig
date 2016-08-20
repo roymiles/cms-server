@@ -1,4 +1,4 @@
-<table class="table table-hover table-bordered">
+<table id="sql-table" class="table table-hover table-bordered">
   <thead>
     <tr>
       <th>#</th>
@@ -10,22 +10,9 @@
     {% for user in users %}
         <tr>
             <th scope="row">{{ user.Id }}</th>
-            <td contenteditable="true" onBlur="saveToDatabase(this,'Username','{{ user.Id }}')" onClick="showEdit(this);">{{ user.Username }}</td>
-            <td contenteditable="true" onBlur="saveToDatabase(this,'Email','{{ user.Id }}')" onClick="showEdit(this);">{{ user.Email }}</td>
+            <td data-column="Username" data-id="{{ user.Id }}">{{ user.Username }}</td>
+            <td data-column="Email" data-id="{{ user.Id }}">{{ user.Email }}</td>
         </tr>
     {% endfor %}
   </tbody>
 </table>
-<script type="text/javascript">
-function saveToDatabase(editableObj,column,id) {
-	$(editableObj).css("background","#FFF url(loaderIcon.gif) no-repeat right");
-	$.ajax({
-		url: "saveedit.php",
-		type: "POST",
-		data:'column='+column+'&editval='+editableObj.innerHTML+'&id='+id,
-		success: function(data){
-			$(editableObj).css("background","#FDFDFD");
-		}        
-	});
-}
-</script>

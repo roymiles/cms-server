@@ -17,40 +17,10 @@ class Users extends BaseUser
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected $id;
-    
-    /**
-     * @ORM\Column(type="integer")
-     */
-    protected $SiteId;    
+    protected $id;  
 
     public function __construct()
     {
         parent::__construct();
-        $this->SiteId = -1;
-    }
-
-    /**
-     * Set siteId
-     *
-     * @param integer $siteId
-     *
-     * @return Users
-     */
-    public function setSiteId($siteId)
-    {
-        $this->SiteId = $siteId;
-
-        return $this;
-    }
-
-    /**
-     * Get siteId
-     *
-     * @return integer
-     */
-    public function getSiteId()
-    {
-        return $this->SiteId;
     }
 }

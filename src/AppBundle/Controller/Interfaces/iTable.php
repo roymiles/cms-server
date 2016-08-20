@@ -17,4 +17,6 @@ interface iTable
     
     // Post request only to update a row in the table
     public function updateAction($obj, array $options);
+    
+    public function isColumn(string $columnName);
 }

@@ -17,45 +17,72 @@
         {# the number of pages that are displayed around the active page #}
         {% set nearbyPagesLimit = 2 %}
 
-        <div class="pagination">
+        <nav aria-label="Page navigation">
+          <ul class="pagination">
             {% if currentPage > 1 %}
-                <a href="{{ path(paginationPath, currentFilters|merge({page: currentPage-1})) }}">Previous</a>
+                <li>
+                    <a href="{{ path(paginationPath, currentFilters|merge({pageNumber: currentPage-1})) }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
 
                 {% for i in range(1, extremePagesLimit) if ( i < currentPage - nearbyPagesLimit ) %}
-                    <a href="{{ path(paginationPath, currentFilters|merge({page: i})) }}">{{ i }}</a>
+                    <li>
+                        <a href="{{ path(paginationPath, currentFilters|merge({pageNumber: i})) }}">{{ i }}</a>
+                    </li>
                 {% endfor %}
 
                 {% if extremePagesLimit + 1 < currentPage - nearbyPagesLimit %}
-                    <span class="sep-dots">...</span>
+                    <li>
+                        <span class="sep-dots">...</span>
+                    </li>
                 {% endif %}
 
                 {% for i in range(currentPage-nearbyPagesLimit, currentPage-1) if ( i > 0 ) %}
-                    <a href="{{ path(paginationPath, currentFilters|merge({page: i})) }}">{{ i }}</a>
+                    <li>
+                        <a href="{{ path(paginationPath, currentFilters|merge({pageNumber: i})) }}">{{ i }}</a>
+                    </li>
                 {% endfor %}
             {% elseif showAlwaysFirstAndLast %}
-                <span class="disabled">Previous</span>
+                <li>
+                    <span aria-hidden="true">&laquo;</span>
+                </li>
             {% endif %}
 
-            <a href="{{ path(paginationPath, currentFilters|merge({ page: currentPage })) }}"
-               class="active">{{ currentPage }}</a>
+            <li>
+                <a href="{{ path(paginationPath, currentFilters|merge({ pageNumber: currentPage })) }}" class="active">{{ currentPage }}</a>
+            </li>
 
             {% if currentPage < lastPage %}
                 {% for i in range(currentPage+1, currentPage + nearbyPagesLimit) if ( i <= lastPage ) %}
-                    <a href="{{ path(paginationPath, currentFilters|merge({page: i})) }}">{{ i }}</a>
+                    <li>
+                        <a href="{{ path(paginationPath, currentFilters|merge({pageNumber: i})) }}">{{ i }}</a>
+                    </li>
                 {% endfor %}
 
                 {% if  (lastPage - extremePagesLimit) > (currentPage + nearbyPagesLimit) %}
-                    <span class="sep-dots">...</span>
+                    <li>    
+                        <span class="sep-dots">...</span>
+                    </li>
                 {% endif %}
 
                 {% for i in range(lastPage - extremePagesLimit+1, lastPage) if ( i > currentPage + nearbyPagesLimit ) %}
-                    <a href="{{ path(paginationPath, currentFilters|merge({page: i})) }}">{{ i }}</a>
+                    <li>
+                        <a href="{{ path(paginationPath, currentFilters|merge({pageNumber: i})) }}">{{ i }}</a>
+                    </li>
                 {% endfor %}
 
-                <a href="{{ path(paginationPath, currentFilters|merge({page: currentPage+1})) }}">Next</a>
+                <li>
+                    <a href="{{ path(paginationPath, currentFilters|merge({pageNumber: currentPage+1})) }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
             {% elseif showAlwaysFirstAndLast %}
-                <span class="disabled">Next</span>
+                <li>
+                    <span aria-hidden="true">&raquo;</span>
+                </li>
             {% endif %}
-        </div>
+        </ul>
+      </nav>
     {% endif %}
 {% endspaceless %}

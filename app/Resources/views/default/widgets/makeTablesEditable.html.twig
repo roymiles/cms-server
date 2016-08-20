@@ -1,0 +1,36 @@
+<script type="text/javascript">
+(function(){
+    var tds = document.querySelectorAll('#sql-table tbody td');
+    for(i = 0; i < tds.length; ++i){
+        if(tds[i].hasAttribute("data-column") && tds[i].hasAttribute("data-id")){
+            var column = tds[i].dataset.column;
+            var id = tds[i].dataset.id;
+
+            tds[i].setAttribute("contentEditable", true);
+            tds[i].addEventListener ("blur", function(){
+                saveEdit(tds[i], column, id);
+            }, false);
+        }
+    }
+
+    var saveEdit = function(cell, column, id){
+        var request = new XMLHttpRequest();
+        request.open('POST', '/test', true);
+
+        request.onload = function(){
+          if(request.status >= 200 && request.status < 400){
+            // Success!
+            var resp = request.responseText;
+          }else{
+            // We reached our target server, but it returned an error
+          }
+        };
+
+        request.onerror = function(){
+          // There was a connection error of some sort
+        };
+
+        request.send(data);
+    }
+})();
+</script>

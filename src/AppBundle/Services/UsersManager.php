@@ -24,7 +24,7 @@ class UsersManager
     {
         $user = $this->em
                      ->getRepository($this->repository)
-                     ->findBy($options, ['username' => $filters['orderBy']], $filters['limit'], $filters['offset']);
+                     ->findBy($options, [$filters['sortBy'] => $filters['order']], $filters['limit'], $filters['offset']);
     
         if (!$user) {
             return false;
