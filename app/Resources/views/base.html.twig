@@ -16,6 +16,11 @@
             <link rel="stylesheet" href="{{ asset_url }}" />
         {% endstylesheets %}
         
+        {% javascripts 
+            'js/main.js' %}
+            <script href="{{ asset_url }}"></script>
+        {% endjavascripts %}
+
         {% block stylesheets %}{% endblock %}
         
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />

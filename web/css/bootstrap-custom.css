@@ -102,3 +102,11 @@ textarea:focus, input:focus, .uneditable-input:focus {
     padding: 10px 0;
     text-align: center;
 }
+
+#sql-table tbody tr td a.delete-column-text{
+    display: none;
+}
+
+#sql-table tbody tr:hover td a.delete-column-text{
+    display: block;
+}

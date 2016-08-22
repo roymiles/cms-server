@@ -23,9 +23,9 @@ class UserManagementController extends Controller implements iTable
     
     /**
      * @Route("/manage/users", name="ManagementGetUsers")
-     * @Route("/manage/users/page={pageNumber}", name="ManagementGetUsersWithPage")
+     * @Route("/manage/users/page{pageNumber}", name="ManagementGetUsersWithPage")
      * @Route("/manage/users/sort={sortBy}/{order}", name="ManagementGetUsersWithSort")
-     * @Route("/manage/users/sort={sortBy}/{order}/page={pageNumber}", name="ManagementGetUsersWithSortAndPage")
+     * @Route("/manage/users/sort={sortBy}/{order}/page{pageNumber}", name="ManagementGetUsersWithSortAndPage")
      */
     public function getAction(Request $request, $pageNumber = 1, $sortBy = "id", $order = "ASC"){   
         
@@ -44,7 +44,7 @@ class UserManagementController extends Controller implements iTable
             'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
             'users' => $Users,
             'filters' => $Filters,
-            'page' =>$pageNumber
+            'currentPage' =>$pageNumber
         ]);
     }
     

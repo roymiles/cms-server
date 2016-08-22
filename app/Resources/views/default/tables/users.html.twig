@@ -1,9 +1,44 @@
 <table id="sql-table" class="table table-hover table-bordered">
   <thead>
     <tr>
-      <th>#</th>
-      <th>Username</th>
-      <th>Email</th>
+        <th>
+            {% if filters.sortBy == 'id' and filters.order == 'ASC'%}
+                <a href="{{ path('ManagementGetUsersWithSortAndPage', {'sortBy': 'id', 'order': 'DESC', 'pageNumber': currentPage}) }}">
+            {% else %}
+                <a href="{{ path('ManagementGetUsersWithSortAndPage', {'sortBy': 'id', 'order': 'ASC', 'pageNumber': currentPage}) }}">
+            {% endif %}
+            {% if filters.sortBy == 'id' %}
+                <span class="glyphicon {% if filters.order == 'ASC' %}glyphicon-chevron-up{% else %}glyphicon-chevron-down{% endif %}" aria-hidden="true"></span>
+            {% endif %}
+            Id
+                </a>
+        </th>
+        <th>
+          {% if filters.sortBy == 'username' and filters.order == 'ASC'%}
+              <a href="{{ path('ManagementGetUsersWithSortAndPage', {'sortBy': 'username', 'order': 'DESC', 'pageNumber': currentPage}) }}">
+          {% else %}
+              <a href="{{ path('ManagementGetUsersWithSortAndPage', {'sortBy': 'username', 'order': 'ASC', 'pageNumber': currentPage}) }}">
+          {% endif %}
+          {% if filters.sortBy == 'username' %}
+              <span class="glyphicon {% if filters.order == 'ASC' %}glyphicon-chevron-up{% else %}glyphicon-chevron-down{% endif %}" aria-hidden="true"></span>
+          {% endif %}
+          Username
+              </a>
+        </th>
+        <th>
+          {% if filters.sortBy == 'email' and filters.order == 'ASC'%}
+              <a href="{{ path('ManagementGetUsersWithSortAndPage', {'sortBy': 'email', 'order': 'DESC', 'pageNumber': currentPage}) }}">
+          {% else %}
+              <a href="{{ path('ManagementGetUsersWithSortAndPage', {'sortBy': 'email', 'order': 'ASC', 'pageNumber': currentPage}) }}">
+          {% endif %}
+          {% if filters.sortBy == 'email' %}
+              <span class="glyphicon {% if filters.order == 'ASC' %}glyphicon-chevron-up{% else %}glyphicon-chevron-down{% endif %}" aria-hidden="true"></span>
+          {% endif %}
+          Email
+              </a>
+        </th>
+        <th>
+        </th>
     </tr>
   </thead>
   <tbody>
@@ -12,6 +47,11 @@
             <th scope="row">{{ user.Id }}</th>
             <td data-column="Username" data-id="{{ user.Id }}">{{ user.Username }}</td>
             <td data-column="Email" data-id="{{ user.Id }}">{{ user.Email }}</td>
+            <td style="width: 31px">
+                <a class="delete-column-text" href="">
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                </a>
+            </td>
         </tr>
     {% endfor %}
   </tbody>

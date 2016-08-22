@@ -2,14 +2,40 @@
 
 {% block body %}
     <div class="container">
-        {% include 'default/tables/users.html.twig' with {'users': users} only %}
-        {% include 'default/widgets/pagination.html.twig' with {
-            currentFilters: { 'sortBy': filters.sortBy, 'order': filters.order },
-            currentPage: page,
-            paginationPath: "ManagementGetUsersWithSortAndPage",
-            lastPage: 10,
-            showAlwaysFirstAndLast: false
-        } only %}
-        {% include 'default/widgets/makeTablesEditable.html.twig' %}
+        <div class="row">
+            <div class="col-xs-4 pull-left" style="margin-bottom: 20px; padding: 0">
+                <button id="add-user-buttom" type="button" class="btn btn-default" onclick="showFormToggle();">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add
+                </button>
+            </div>
+            <div class="col-xs-4 pull-right" style="margin-bottom: 20px; padding: 0;">
+                {% include 'default/widgets/table-search.html.twig' with {'filters': filters, 'currentPage': currentPage} only %}
+            </div>
+        </div>
+
+        <div id="add-user-form" class="row" style="margin-bottom: 20px; display: none">
+            {% include 'default/forms/add-user.html.twig' %}
+        </div>
+
+        <div class="row">
+            {% include 'default/tables/users.html.twig' with {'users': users, 'filters': filters, 'currentPage': currentPage} only %}
+            {% include 'default/widgets/pagination.html.twig' with {
+                currentFilters: { 'sortBy': filters.sortBy, 'order': filters.order },
+                currentPage: currentPage,
+                paginationPath: "ManagementGetUsersWithSortAndPage",
+                lastPage: 10,
+                showAlwaysFirstAndLast: false
+            } only %}
+        </div>
+        {% include 'default/widgets/updateable-tables.js.twig' %}
+        
+        <script type="text/javascript">
+            $("#add-user-buttom").click(function(){
+                $("#add-user-form").slideToggle("slow", function(){
+                    // Animation complete.
+                });
+            });
+        </script>
+
     </div>
 {% endblock %}

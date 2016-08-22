@@ -15,6 +15,7 @@ The project is written with the [Symfony2](https://symfony.com/) framework and h
 - [ ] Generic pagination widget
 - [ ] Inline editable tables
 - [ ] Authentication system for table edits (generic interface?)
+- [ ] Remove github markdown css
 
 ### Documentation
 - [x] Get JBBCode markdown working
