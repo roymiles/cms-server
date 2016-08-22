@@ -2,9 +2,7 @@
 
 namespace AppBundle\Api\Controller;
 
-use FOS\RestBundle\Controller\FOSRestController;
-
-class UsersController extends FOSRestController
+class UsersController implements iApi
 {
     /**
      * This is the documentation description of your method, it will appear
@@ -24,23 +22,18 @@ class UsersController extends FOSRestController
      * @Route("/api/users/sort={sortBy}", name="ApiGetUsersWithSort")
      * @Route("/api/users/page={pageNumber}/sort={sortBy}", name="ApiGetUsersWithPageAndSort")
      */
-    public function getUsersAction()
+    public function getUsersAction(Request $request, $pageNumber = 1, $sortBy = "id", $order = "ASC")
     {
-        $data = ...; // get data, in this case list of users.
-        $view = $this->view($data, 200)
-            ->setTemplate("MyBundle:Users:getUsers.html.twig")
-            ->setTemplateVar('users')
-        ;
-
-        return $this->handleView($view);
-    }
-
-    public function redirectAction()
-    {
-        $view = $this->redirectView($this->generateUrl('some_route'), 301);
-        // or
-        $view = $this->routeRedirectView('some_route', array(), 301);
-
-        return $this->handleView($view);
+        $UsersManager = $this->get('app.UsersManager');
+        
+        // If not a valid sort, sort by users id
+        if(!$UsersManager->isColumn($sortBy)){
+            $sortBy = 'id';
+        }        
+        
+        $Options = []; // No search criteria
+        $Filters = ['sortBy' => $sortBy, 'order' => $order, 'limit' => 10, 'offset' => 0]; //Show 10 at a time
+        $Users = $UsersManager->get($Options, $Filters);
+        return json_encode($Users);
     }
 }
