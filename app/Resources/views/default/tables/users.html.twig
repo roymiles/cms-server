@@ -3,9 +3,9 @@
     <tr>
         <th>
             {% if filters.sortBy == 'id' and filters.order == 'ASC'%}
-                <a href="{{ path('ManagementGetUsersWithSortAndPage', {'sortBy': 'id', 'order': 'DESC', 'pageNumber': currentPage}) }}">
+                <a href="{{ path('ManagementGetUsersWithSortAndPage', {'sortBy': 'id', 'order': 'descending', 'pageNumber': currentPage}) }}">
             {% else %}
-                <a href="{{ path('ManagementGetUsersWithSortAndPage', {'sortBy': 'id', 'order': 'ASC', 'pageNumber': currentPage}) }}">
+                <a href="{{ path('ManagementGetUsersWithSortAndPage', {'sortBy': 'id', 'order': 'ascending', 'pageNumber': currentPage}) }}">
             {% endif %}
             {% if filters.sortBy == 'id' %}
                 <span class="glyphicon {% if filters.order == 'ASC' %}glyphicon-chevron-up{% else %}glyphicon-chevron-down{% endif %}" aria-hidden="true"></span>
@@ -15,9 +15,9 @@
         </th>
         <th>
           {% if filters.sortBy == 'username' and filters.order == 'ASC'%}
-              <a href="{{ path('ManagementGetUsersWithSortAndPage', {'sortBy': 'username', 'order': 'DESC', 'pageNumber': currentPage}) }}">
+              <a href="{{ path('ManagementGetUsersWithSortAndPage', {'sortBy': 'username', 'order': 'descending', 'pageNumber': currentPage}) }}">
           {% else %}
-              <a href="{{ path('ManagementGetUsersWithSortAndPage', {'sortBy': 'username', 'order': 'ASC', 'pageNumber': currentPage}) }}">
+              <a href="{{ path('ManagementGetUsersWithSortAndPage', {'sortBy': 'username', 'order': 'ascending', 'pageNumber': currentPage}) }}">
           {% endif %}
           {% if filters.sortBy == 'username' %}
               <span class="glyphicon {% if filters.order == 'ASC' %}glyphicon-chevron-up{% else %}glyphicon-chevron-down{% endif %}" aria-hidden="true"></span>
@@ -27,9 +27,9 @@
         </th>
         <th>
           {% if filters.sortBy == 'email' and filters.order == 'ASC'%}
-              <a href="{{ path('ManagementGetUsersWithSortAndPage', {'sortBy': 'email', 'order': 'DESC', 'pageNumber': currentPage}) }}">
+              <a href="{{ path('ManagementGetUsersWithSortAndPage', {'sortBy': 'email', 'order': 'descending', 'pageNumber': currentPage}) }}">
           {% else %}
-              <a href="{{ path('ManagementGetUsersWithSortAndPage', {'sortBy': 'email', 'order': 'ASC', 'pageNumber': currentPage}) }}">
+              <a href="{{ path('ManagementGetUsersWithSortAndPage', {'sortBy': 'email', 'order': 'ascending', 'pageNumber': currentPage}) }}">
           {% endif %}
           {% if filters.sortBy == 'email' %}
               <span class="glyphicon {% if filters.order == 'ASC' %}glyphicon-chevron-up{% else %}glyphicon-chevron-down{% endif %}" aria-hidden="true"></span>

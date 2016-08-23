@@ -5,29 +5,34 @@
         if(tds[i].hasAttribute("data-column") && tds[i].hasAttribute("data-id")){
             var column = tds[i].dataset.column;
             var id = tds[i].dataset.id;
+            var newValue = tds[i].innerHTML;
 
             tds[i].setAttribute("contentEditable", true);
             tds[i].addEventListener ("blur", function(){
-                saveEdit(tds[i], column, id);
+                saveEdit(newValue, column, id);
             }, false);
         }
     }
 
-    var saveEdit = function(cell, column, id){
+    var saveEdit = function(newValue, columnName, id){
         var request = new XMLHttpRequest();
-        request.open('POST', '/test', true);
+        var data = "id=" + id + "&columnName=" + columnName + "&newValue=" + newValue;
+        request.open('POST', '{{ path('ManagementUpdateUser')|raw }}', true);
 
         request.onload = function(){
           if(request.status >= 200 && request.status < 400){
             // Success!
+            alertify.error('Updated user');
             var resp = request.responseText;
           }else{
+            alertify.error('Failed to update. #1');
             // We reached our target server, but it returned an error
           }
         };
 
         request.onerror = function(){
           // There was a connection error of some sort
+          alertify.error('Failed to update. #2');
         };
 
         request.send(data);

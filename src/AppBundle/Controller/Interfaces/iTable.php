@@ -16,7 +16,7 @@ interface iTable
     public function deleteAction($obj);
     
     // Post request only to update a row in the table
-    public function updateAction($obj, array $options);
+    public function updateAction(Request $request);
     
-    public function isColumn(string $columnName);
+    public function isColumn(string $columnName, string $flags);
 }

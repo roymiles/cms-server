@@ -12,35 +12,36 @@ use AppBundle\Controller\Interfaces\iTable;
 class UserManagementController extends Controller implements iTable
 {  
     
-    /*public function isColumn(string $columnName){
+    public function isColumn(string $columnName, string $flags){
         $columns = ['id', 'username', 'email'];
         if(in_array($columnName, $columns)){
             return true;
         }else{
             return false;
         }
-    }*/
+    }
     
     /**
      * @Route("/manage/users", name="ManagementGetUsers")
-<<<<<<< HEAD
      * @Route("/manage/users/page{pageNumber}", name="ManagementGetUsersWithPage")
-     * @Route("/manage/users/sort={sortBy}/{order}", name="ManagementGetUsersWithSort")
-     * @Route("/manage/users/sort={sortBy}/{order}/page{pageNumber}", name="ManagementGetUsersWithSortAndPage")
-=======
-     * @Route("/manage/users/page={pageNumber}", name="ManagementGetUsersWithPage")
      * @Route("/manage/users/sort={sortBy}-{order}", name="ManagementGetUsersWithSort")
-     * @Route("/manage/users/sort={sortBy}-{order}/page={pageNumber}", name="ManagementGetUsersWithSortAndPage")
-     * @Route("/manage/users/sort={sortBy}-{order}/q={query}/page={pageNumber}", name="ManagementGetUsersWithSortAndSearchAndPage")
->>>>>>> 9811e59bd4e66894f56c5c5d0bb05c529f4f2935
+     * @Route("/manage/users/sort={sortBy}-{order}/page{pageNumber}", name="ManagementGetUsersWithSortAndPage")
+     * @Route("/manage/users/sort={sortBy}-{order}/searchBy={searchBy}/q={query}/page{pageNumber}", name="ManagementGetUsersWithSortAndSearchAndPage")
      */
-    public function getAction(Request $request, $sortBy = "id", $order = "ASC", $searchQuery = '', $pageNumber = 1){   
+    public function getAction(Request $request, $sortBy = "id", $order = "ASC", $searchBy = 'id', $searchQuery = '', $pageNumber = 1){   
         $UsersManager = $this->get('app.UsersManager');
-        $SanitizeManager = $this->get('app.SanitizeManager');
+        $SanitizeInputsManager = $this->get('app.SanitizeInputsManager');
         
-        $sortBy = $SanitizeManager->getValidSortBy($sortBy);
-        $order = $SanitizeManager->getValidOrder($order);
-        $query = $SanitizeManager->getValidQuery($query);
+        if(!$this->isColumn($sortBy, 'notSensitive')){
+            $sortBy = 'id';
+        }
+        
+        // If not a valid and non sensitive search column, search by id
+        if($request->get('_route') == "ManagementGetUsersWithSortAndSearchAndPage" && !$this->isColumn($searchBy, 'notSensitive')){
+            $searchBy = 'id';
+        }
+        
+        $order = $SanitizeInputsManager->getValidOrder($order);
         
         $Options = []; // No search criteria
         $Filters = ['sortBy' => $sortBy, 'order' => $order, 'limit' => 10, 'offset' => 0]; //Show 10 at a time
@@ -63,7 +64,11 @@ class UserManagementController extends Controller implements iTable
         
     }
     
-    public function updateAction($obj, array $options){
-        
+    /**
+     * @Route("/manage/users/update", name="ManagementUpdateUser")
+     */
+    public function updateAction(Request $request){
+        echo $request->request->all();
+        return 1;
     }
 }
