@@ -17,13 +17,13 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 use Symfony\Component\HttpFoundation\Response;
 
-class ApiController extends Controller
+class ApiFrameWorkController extends Controller
 {
     /**
      * Load the client side js framework with the appropriate modules for the site
-     * @Route("/api/{token}/", name="ApiFramework")
+     * @Route("/api/{token}", name="ApiFramework")
      */
-    public function frameworkAction(Request $request, $token)
+    public function apiFrameWorkAction(Request $request, $token)
     {
         $SiteModulesManager = $this->get('app.SiteModulesManager');
         $SiteModules = $SiteModulesManager->getModulesByToken($token);
@@ -32,7 +32,8 @@ class ApiController extends Controller
         $Modules = $SiteModules->getModules($token);
         
         // Get an array of the module names
-        
+        // ...
+    
         $response->headers->set('Content-Type', 'application/javascript');
         
         return $this->render('default/api/client.js.twig', [
