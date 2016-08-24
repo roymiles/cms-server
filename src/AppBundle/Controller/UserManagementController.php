@@ -60,15 +60,48 @@ class UserManagementController extends Controller implements iTable
         
     }
     
-    public function deleteAction($obj){
+    /**
+     * @Route("/manage/users/delete", name="ManagementDeleteUser")
+     */
+    public function deleteAction(Request $request){
+        $UsersManager = $this->get('app.UsersManager');
+        $JsonManager = $this->get('app.JsonManager');
         
+        $id = $request->request->get('id');
+        
+        $Options = ['id' => $id];
+        $Filters = ['limit' => 1];
+        $User = $UsersManager->get($Options, $Filters);
+
+        $UsersManager->delete($User);
+        
+        echo $request->request->all();
+        return $JsonManager->success('Deleted successfully');        
     }
     
     /**
      * @Route("/manage/users/update", name="ManagementUpdateUser")
      */
     public function updateAction(Request $request){
+        $UsersManager = $this->get('app.UsersManager');
+        $JsonManager = $this->get('app.JsonManager');
+        
+        $id = $request->request->get('id');
+        $columnName = $request->request->get('columnName');
+        $newValue = $request->request->get('newValue');
+        
+        $Options = ['id' => $id];
+        $Filters = ['limit' => 1];
+        $User = $UsersManager->get($Options, $Filters);
+        
+        if(!$this->isColumn($columnName, 'notSensitive')){
+            return $JsonManager->error('Invalid parameter');
+        }
+        
+        $UpdateOptions = [$columnName => $newValue];
+        $UsersManager->update($User, $UpdateOptions);
+        
         echo $request->request->all();
-        return 1;
+        return $JsonManager->success('Updated successfully');
     }
 }
