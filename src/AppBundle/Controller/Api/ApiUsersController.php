@@ -1,8 +1,10 @@
 <?php
 
-namespace AppBundle\Api\Controller;
+namespace AppBundle\Controller\Api;
 
-class UsersController implements iApi
+use AppBundle\Controller\Interfaces;
+
+class ApiUsersController implements iTable
 {
     /**
      * This is the documentation description of your method, it will appear
@@ -22,7 +24,7 @@ class UsersController implements iApi
      * @Route("/api/users/sort={sortBy}", name="ApiGetUsersWithSort")
      * @Route("/api/users/page={pageNumber}/sort={sortBy}", name="ApiGetUsersWithPageAndSort")
      */
-    public function getUsersAction(Request $request, $pageNumber = 1, $sortBy = "id", $order = "ASC")
+    public function getAction(Request $request, $pageNumber = 1, $sortBy = "id", $order = "ASC")
     {
         $UsersManager = $this->get('app.UsersManager');
         
