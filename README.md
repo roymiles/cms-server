@@ -7,6 +7,8 @@ At the moment, this project is in its very early stages and is a mere proof of c
 
 The project is written with the [Symfony2](https://symfony.com/) framework and has made extensive use of their FOS bundles to speed up development.
 
+**Main point and goal of this project is that Everything (modules, actions etc) written and used on this site has to be able to be used externally on other websites.** All references will be done through the SiteId where SiteId = -1 will be for zela.io directly with local session storage and SiteId != -1 will be for external sites that use AccessTokens. 
+
 ## TODO
 
 ### General
