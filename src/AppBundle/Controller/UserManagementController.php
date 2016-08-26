@@ -22,13 +22,21 @@ class UserManagementController extends Controller implements iTable
     }
     
     /**
-     * @Route("/manage/users", name="ManagementGetUsers")
-     * @Route("/manage/users/page{pageNumber}", name="ManagementGetUsersWithPage")
-     * @Route("/manage/users/sort={sortBy}-{order}", name="ManagementGetUsersWithSort")
-     * @Route("/manage/users/sort={sortBy}-{order}/page{pageNumber}", name="ManagementGetUsersWithSortAndPage")
-     * @Route("/manage/users/sort={sortBy}-{order}/searchBy={searchBy}/q={query}/page{pageNumber}", name="ManagementGetUsersWithSortAndSearchAndPage")
+     * @Route("token={token}/manage/users", name="ManagementGetUsers")
+     * @Route("token={token}/manage/users/page{pageNumber}", name="ManagementGetUsersWithPage")
+     * @Route("token={token}/manage/users/sort={sortBy}-{order}", name="ManagementGetUsersWithSort")
+     * @Route("token={token}/manage/users/sort={sortBy}-{order}/page{pageNumber}", name="ManagementGetUsersWithSortAndPage")
+     * @Route("token={token}/manage/users/sort={sortBy}-{order}/searchBy={searchBy}/q={query}/page{pageNumber}", name="ManagementGetUsersWithSortAndSearchAndPage")
      */
     public function getAction(Request $request, $sortBy = "id", $order = "ASC", $searchBy = 'id', $searchQuery = '', $pageNumber = 1){   
+        $SitesManager = $this->get('app.SitesManager');
+        $ErrorResponsesManager = $this->get('app.ErrorResponsesManager');
+        
+        $Site = $SitesManager->get(['token' => $token]);
+        if(!$Site){
+            return $ErrorResponsesManager->InvalidToken($request, $token);
+        }
+        
         $UsersManager = $this->get('app.UsersManager');
         $SanitizeInputsManager = $this->get('app.SanitizeInputsManager');
         
@@ -36,7 +44,7 @@ class UserManagementController extends Controller implements iTable
             $sortBy = 'id';
         }
         
-        // If not a valid and non sensitive search column, search by id
+        // If searchBy column is an invalid or sensitive column, search by id
         if($request->get('_route') == "ManagementGetUsersWithSortAndSearchAndPage" && !$this->isColumn($searchBy, 'notSensitive')){
             $searchBy = 'id';
         }
@@ -47,13 +55,21 @@ class UserManagementController extends Controller implements iTable
         $Filters = ['sortBy' => $sortBy, 'order' => $order, 'limit' => 10, 'offset' => 0]; //Show 10 at a time
         $Users = $UsersManager->get($Options, $Filters);
         
-        //echo "Sort By: " . $sortBy . " Page Number: " . $pageNumber;
-        return $this->render('default/manage/users.html.twig', [
-            'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
-            'users' => $Users,
-            'filters' => $Filters,
-            'currentPage' =>$pageNumber
-        ]);
+        if($request->isXmlHttpRequest()){
+            // AJAX request
+            return new JsonResponse([
+                'users' => $Users,
+                'filters' => $Filters,
+                'currentPage' =>$pageNumber
+            ]);
+        }else{
+            return $this->render('default/manage/users.html.twig', [
+                'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
+                'users' => $Users,
+                'filters' => $Filters,
+                'currentPage' =>$pageNumber
+            ]);
+        }
     }
     
     public function addAction(array $item){
