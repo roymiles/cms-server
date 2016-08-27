@@ -26,7 +26,7 @@ class ForumPosts
     
     /**
      * @ORM\ManyToOne(targetEntity="Users", inversedBy="ForumPosts")
-     * @ORM\JoinColumn(name="CreatorId", referencedColumnName="id")
+     * @ORM\JoinColumn(name="CreatorId", referencedColumnName="Id")
      */
     private $Creator;    
 

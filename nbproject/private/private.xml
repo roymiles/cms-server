@@ -1,13 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
-    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1">
+        <file>
+            <url>app/Resources/views/default/tables/users.html.twig</url>
+            <bookmark id="1">
+                <name/>
+                <line>6</line>
+                <key/>
+            </bookmark>
+        </file>
+    </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/xampp/htdocs/zeal/app/Resources/views/base.html.twig</file>
-            <file>file:/C:/xampp/htdocs/zeal/app/Resources/views/default/forms/add-user.html.twig</file>
-            <file>file:/C:/xampp/htdocs/zeal/app/config/config.yml</file>
-            <file>file:/C:/xampp/htdocs/zeal/app/Resources/views/default/manage/users.html.twig</file>
-            <file>file:/C:/xampp/htdocs/zeal/web/js/main.js</file>
+            <file>file:/C:/xampp/htdocs/zeal/vendor/doctrine/orm/lib/Doctrine/ORM/EntityManager.php</file>
+            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Entity/Sites.php</file>
+            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Services/ErrorResponsesManager.php</file>
+            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Controller/UserManagementController.php</file>
+            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Entity/Users.php</file>
+            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Services/UsersManager.php</file>
+            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Services/SitesManager.php</file>
+            <file>file:/C:/xampp/htdocs/zeal/app/Resources/views/default/tables/users.html.twig</file>
         </group>
     </open-files>
 </project-private>

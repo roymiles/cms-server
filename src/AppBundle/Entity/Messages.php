@@ -20,13 +20,13 @@ class Messages
     
     /**
      * @ORM\ManyToOne(targetEntity="Users", inversedBy="Messages")
-     * @ORM\JoinColumn(name="SenderId", referencedColumnName="id")
+     * @ORM\JoinColumn(name="SenderId", referencedColumnName="Id")
      */
     private $Sender;
   
     /**
      * @ORM\ManyToOne(targetEntity="Users", inversedBy="Messages")
-     * @ORM\JoinColumn(name="ReceiverId", referencedColumnName="id")
+     * @ORM\JoinColumn(name="ReceiverId", referencedColumnName="Id")
      */
     private $Receiver;   
     

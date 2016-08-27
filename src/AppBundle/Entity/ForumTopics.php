@@ -20,7 +20,7 @@ class ForumTopics
     
     /**
      * @ORM\ManyToOne(targetEntity="Users", inversedBy="ForumTopics")
-     * @ORM\JoinColumn(name="CreatorId", referencedColumnName="id")
+     * @ORM\JoinColumn(name="CreatorId", referencedColumnName="Id")
      */
     private $Creator;    
 

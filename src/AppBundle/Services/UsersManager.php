@@ -7,6 +7,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityManager;
 
+use AppBundle\Services\Interfaces;
+
 class UsersManager
 {
     private $repository;
@@ -22,13 +24,26 @@ class UsersManager
     
     public function get(array $options, array $filters)
     {
+        // Set default values
+        if(!isset($filters['sortBy'])){
+            $filters['sortBy'] = 'Id';
+        }
+
+        if(!isset($filters['order'])){
+            $filters['order'] = 'ASC';
+        }
+        
+        if(!isset($filters['limit'])){
+            $filters['limit'] = 1;
+        }
+    
+        if(!isset($filters['offset'])){
+            $filters['offset'] = 0;
+        }
+        
         $user = $this->em
                      ->getRepository($this->repository)
-                     ->findBy($options, [$filters['sortBy'] => $filters['order']], $filters['limit'], $filters['offset']);
-    
-        if (!$user) {
-            return false;
-        }
+                     ->findBy($options, array($filters['sortBy'] => $filters['order']), $filters['limit'], $filters['offset']);
     
         return $user; 
     }
@@ -56,7 +71,7 @@ class UsersManager
     //-----------------------------------------------------
     // INSERT actions
     //-----------------------------------------------------       
-    public function add(string $username, string $email, string $password)
+    public function add(array $Options)
     {
         $user = new Users();
         

@@ -20,7 +20,7 @@ class Sites
     
     /**
      * @ORM\ManyToOne(targetEntity="Users", inversedBy="Sites")
-     * @ORM\JoinColumn(name="OwnerId", referencedColumnName="id")
+     * @ORM\JoinColumn(name="OwnerId", referencedColumnName="Id")
      */
     private $Owner;
   

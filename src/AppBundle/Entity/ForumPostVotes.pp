@@ -20,7 +20,7 @@ class ForumPostVotes
     
     /**
      * @ORM\ManyToOne(targetEntity="Users", inversedBy="ForumPostVotes")
-     * @ORM\JoinColumn(name="VoterId", referencedColumnName="id")
+     * @ORM\JoinColumn(name="VoterId", referencedColumnName="Id")
      */
     private $Voter;    
 

@@ -2,6 +2,10 @@ services:
     app.DocumentationManager:
         class: AppBundle\Services\DocumentationManager
         arguments: ['@doctrine.orm.entity_manager']   
+
+    app.ErrorResponsesManager:
+        class: AppBundle\Services\ErrorResponsesManager
+        arguments: ['@doctrine.orm.entity_manager']          
         
     app.ForumCategoriesManager:
         class: AppBundle\Services\ForumCategoriesManager

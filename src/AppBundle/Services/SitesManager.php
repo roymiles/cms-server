@@ -14,76 +14,82 @@ class SitesManager
     public function __construct(EntityManager $em)
     {
         $this->em = $em;
-        $this->repository = 'AppBundle:Entity:Api:Sites';
+        $this->repository = 'AppBundle\Entity\Sites';
     }
+ 
+    //-----------------------------------------------------
+    // SELECT actions
+    //-----------------------------------------------------    
     
-    // Return the site object
-    public function getSiteById(int $id)
+    public function get(array $options, array $filters)
     {
-        $site = $this->getDoctrine()
-            ->getRepository($this->repository)
-            ->find($id);
-    
-        if (!$site) {
-            throw $this->createNotFoundException(
-                'No site found for id '.$id
-            );
+        // Set default values
+        if(!isset($filters['sortBy'])){
+            $filters['sortBy'] = 'Id';
+        }
+
+        if(!isset($filters['order'])){
+            $filters['order'] = 'ASC';
+        }
+        
+        if(!isset($filters['limit'])){
+            $filters['limit'] = 1;
         }
     
-        return $site;
+        if(!isset($filters['offset'])){
+            $filters['offset'] = 0;
+        }        
+        
+        $site = $this->em
+                     ->getRepository($this->repository)
+                     ->findBy($options, array($filters['sortBy'] => $filters['order']), $filters['limit'], $filters['offset']);
+    
+        return $site; 
     }
     
-    public function getSiteByUserID(int $userId)
+    //-----------------------------------------------------
+    // DELETE actions
+    //-----------------------------------------------------        
+    
+    public function delete($User)
     {
-        $site = $this->getDoctrine()
-            ->getRepository($this->repository)
-            ->findByUserId($siteId);
-    
-        if (!$site) {
-            throw $this->createNotFoundException(
-                'No site found for id '.$siteId
-            );
-        }
-    
-        return $site;    
+        $this->em->remove($User);
+        $this->em->flush();
     }
     
-    public function getSiteByToken(string $token)
+    //-----------------------------------------------------
+    // UPDATE actions
+    //----------------------------------------------------- 
+    
+    public function update($User, array $Options)
     {
-        $site = $this->getDoctrine()
-            ->getRepository($this->repository)
-            ->findByToken($token);
+        $User->setUsername($Username);
+        $em->flush();      
+    }
     
-        if (!$site) {
-            throw $this->createNotFoundException(
-                'No site found for id '.$siteId
-            );
-        }
+    //-----------------------------------------------------
+    // INSERT actions
+    //-----------------------------------------------------       
+    public function add(string $username, string $email, string $password)
+    {
+        $user = new Users();
+        
+        $user->setUsername($username);
+        $user->setEmail($email);
+        $user->setPassword(password_hash($password));
+        
+        $this->em = $this->getDoctrine()->getManager();
     
-        return $site;    
+        // Tells Doctrine you want to (eventually) save the User (no queries yet)
+        $this->em->persist($user);
+    
+        // Actually executes the queries (i.e. the INSERT query)
+        $this->em->flush();        
+        
     }    
     
-    public function getSiteByUrl(string $url)
-    {
-        $site = $this->getDoctrine()
-            ->getRepository($this->repository)
-            ->findByURL($url);
+    //-----------------------------------------------------
+    // VALIDATION
+    //-----------------------------------------------------       
     
-        if (!$site) {
-            throw $this->createNotFoundException(
-                'No site found for id '.$siteId
-            );
-        }
-    
-        return $site;    
-    }     
-    
-    public function deleteSiteById(int $id){}
-    public function deleteSiteByUserID(int $userId){}
-    public function deleteSiteByToken(string $token){}
-    public function deleteSiteByUrl(string $url){}
-    
-    public function updateSiteByID(int $id){}
-    public function updateSiteByUserID(int $userId){}
-    public function updateSiteByURL(string $url){}
 }

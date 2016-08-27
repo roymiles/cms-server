@@ -25,7 +25,7 @@ class Badges
     
     /**
      * @ORM\ManyToOne(targetEntity="Users", inversedBy="Badges")
-     * @ORM\JoinColumn(name="CreatorId", referencedColumnName="id")
+     * @ORM\JoinColumn(name="CreatorId", referencedColumnName="Id")
      */
     private $Creator;    
 

@@ -20,13 +20,13 @@ class UserRelationships
     
     /**
      * @ORM\ManyToOne(targetEntity="Users", inversedBy="UserRelationships")
-     * @ORM\JoinColumn(name="RelatingUserId", referencedColumnName="id")
+     * @ORM\JoinColumn(name="RelatingUserId", referencedColumnName="Id")
      */
     private $RelatingUser;  
     
     /**
      * @ORM\ManyToOne(targetEntity="Users", inversedBy="UserRelationships")
-     * @ORM\JoinColumn(name="RelatedUserId", referencedColumnName="id")
+     * @ORM\JoinColumn(name="RelatedUserId", referencedColumnName="Id")
      */
     private $RelatedUser;    
 

@@ -9,7 +9,7 @@
                 </button>
             </div>
             <div class="col-xs-4 pull-right" style="margin-bottom: 20px; padding: 0;">
-                {% include 'default/widgets/table-search.html.twig' with {'filters': filters, 'currentPage': currentPage} only %}
+                {% include 'default/widgets/table-search.html.twig' with {'filters': routeFilters} only %}
             </div>
         </div>
 
@@ -18,13 +18,16 @@
         </div>
 
         <div class="row">
-            {% include 'default/tables/users.html.twig' with {'users': users, 'filters': filters, 'currentPage': currentPage} only %}
+            {% include 'default/tables/users.html.twig' with {
+                'users': users, 
+                'filters': routeFilters,
+                'currentPath': "ManagementGetUsersWithSortAndPage",
+            } only %}
             {% include 'default/widgets/pagination.html.twig' with {
-                currentFilters: { 'sortBy': filters.sortBy, 'order': filters.order },
-                currentPage: currentPage,
-                paginationPath: "ManagementGetUsersWithSortAndPage",
-                lastPage: 10,
-                showAlwaysFirstAndLast: false
+                'currentFilters': routeFilters,
+                'paginationPath': "ManagementGetUsersWithSortAndPage",
+                'lastPage': 10,
+                'showAlwaysFirstAndLast': false
             } only %}
         </div>
         {% include 'default/widgets/updateable-tables.js.twig' %}

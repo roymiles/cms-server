@@ -25,7 +25,7 @@ class Sessions
 
     /**
      * @ORM\ManyToOne(targetEntity="Users", inversedBy="Sessions")
-     * @ORM\JoinColumn(name="UserId", referencedColumnName="id")
+     * @ORM\JoinColumn(name="UserId", referencedColumnName="Id")
      */
     private $User;   
         

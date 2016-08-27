@@ -3,30 +3,64 @@
 
 namespace AppBundle\Entity;
 
-use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="Users")
  */
-class Users extends BaseUser
+class Users
 {
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected $id;
+    protected $Id;  
+
+    /**
+    * @ORM\Column(type="string", length=256)
+    */
+    private $Username;  
     
     /**
-     * @ORM\Column(type="integer")
+    * @ORM\Column(type="string", length=256)
+    */
+    private $Email;  
+    
+    /**
+    * @ORM\Column(type="string", length=256)
+    */
+    private $Salt;  
+    
+    /**
+    * @ORM\Column(type="string", length=256)
+    */
+    private $Password;
+    
+    /**
+    * @ORM\Column(type="boolean")
+    */
+    private $IsVerified;  
+    
+    /**
+    * @ORM\Column(type="string", length=256)
+    */
+    private $VerificationToken;  
+    
+    /**
+    * @ORM\Column(type="integer")
+    */
+    private $Reputation;  
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Sites", inversedBy="Users")
+     * @ORM\JoinColumn(name="Site", referencedColumnName="Id")
      */
-    protected $SiteId;    
-
-    public function __construct()
-    {
-        parent::__construct();
-        $this->SiteId = -1;
-    }
+    private $Site;
+    
+    /**
+    * @ORM\Column(type="datetime")
+    */
+    private $CreationDate;  
 }

@@ -22,4 +22,38 @@ class RelationshipTypes
      * @ORM\Column(type="string", length=256)
      */
     private $TypeName;
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->Id;
+    }
+
+    /**
+     * Set typeName
+     *
+     * @param string $typeName
+     *
+     * @return RelationshipTypes
+     */
+    public function setTypeName($typeName)
+    {
+        $this->TypeName = $typeName;
+
+        return $this;
+    }
+
+    /**
+     * Get typeName
+     *
+     * @return string
+     */
+    public function getTypeName()
+    {
+        return $this->TypeName;
+    }
 }

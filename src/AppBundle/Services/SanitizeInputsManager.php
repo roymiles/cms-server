@@ -12,6 +12,7 @@ namespace AppBundle\Services;
 class SanitizeInputsManager
 {   
     public function getValidOrder($order){
+        if($order === null){ return "ASC"; }
         $order = strtolower($order);
         if($order == "descending"){
             return "DESC";
