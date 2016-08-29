@@ -1,4 +1,8 @@
 services:
+    app.AuthenticationManager:
+        class: AppBundle\Services\AuthenticationManager
+        arguments: ['@doctrine.orm.entity_manager', '@session']       
+    
     app.DocumentationManager:
         class: AppBundle\Services\DocumentationManager
         arguments: ['@doctrine.orm.entity_manager']   

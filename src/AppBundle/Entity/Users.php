@@ -4,12 +4,13 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="Users")
  */
-class Users
+class Users implements UserInterface, \Serializable
 {
     /**
      * @ORM\Id
@@ -288,5 +289,40 @@ class Users
     public function getSite()
     {
         return $this->Site;
+    }
+    
+    
+    // Added manually
+    public function getRoles()
+    {
+        return array('ROLE_USER');
+    }
+
+    public function eraseCredentials()
+    {
+    }
+
+    /** @see \Serializable::serialize() */
+    public function serialize()
+    {
+        return serialize(array(
+            $this->Id,
+            $this->Username,
+            $this->Password,
+            // see section on salt below
+            // $this->salt,
+        ));
+    }
+
+    /** @see \Serializable::unserialize() */
+    public function unserialize($serialized)
+    {
+        list (
+            $this->Id,
+            $this->Username,
+            $this->Password,
+            // see section on salt below
+            // $this->salt
+        ) = unserialize($serialized);
     }
 }

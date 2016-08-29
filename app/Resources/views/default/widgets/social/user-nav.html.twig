@@ -1,1 +1,3 @@
-logged in
+<li class="{% if activeTab == 'manage' %}active{% endif %}">
+    <a href="{{ path('ManagementGetUsers', {'token': 'a'}) }}">Manage</a>
+</li>

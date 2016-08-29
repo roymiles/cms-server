@@ -16,6 +16,7 @@ class UsersManager
     {
         $this->em = $em;
         $this->repository = 'AppBundle\Entity\Users';
+        $this->errorMessages = array();
     }
     
     //-----------------------------------------------------
@@ -93,7 +94,19 @@ class UsersManager
     // VALIDATION
     //-----------------------------------------------------   
  
-    public function isValidEmail(string $Email, int $SiteId){}
+    private $errorMessages;
+    public function getErrorMessages(){
+        return $this->errorMessages;
+    }
+    public function isValidEmail(string $Email, int $SiteId){
+        if(!filter_var($Email, FILTER_VALIDATE_EMAIL)){ 
+            array_push($this->errorMessages, 'Invalid email address');
+            return false;
+        }
+        
+        return true;
+    }
+    
     public function isValidUsername(string $Username, int $SiteId){}
     public function isValidPassword(string $Password){}
     public function isUniqueUsername(string $Username, $SiteId){}
@@ -102,7 +115,7 @@ class UsersManager
     public function verifyCredentials(string $UsernameOrEmail, string $Password, int $SiteId)
     {
         // Check username first
-        $User = $this->getUserByUsername($UsernameOrEmail, $SiteId);
+        $User = $this->get($UsernameOrEmail, $SiteId);
         if(!$UsernameOrEmail){
             // Username doesnt exist
             $User = $this->getUserByEmail($UsernameOrEmail, $SiteId);

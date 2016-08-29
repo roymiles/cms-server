@@ -34,11 +34,11 @@
     <body>
 
         <div id="body-container">
+            <div id="banner-ribbon"></div>
 
-            {% for flash_message in app.session.flashBag.get('notice') %}
-                {{ include('default/flash_message.html.twig') }}
-            {% endfor %}
-
+            {% if app.session.flashbag.has('banner-notice') %}
+                {% include('default/widgets/banner-message.html.twig') %}
+            {% endif %}
 
             <div id="head-nav" class="row">
                 <div class="col-xs-2"></div>
@@ -51,25 +51,23 @@
 
                         <ul class="list-inline">
                             <li class="{% if activeTab == 'home' %}active{% endif %}">
-                                <a href="/">Home</a>
+                                <a href="{{ path('Homepage') }}">Home</a>
                             </li>
                             <li class="{% if activeTab == 'docs' %}active{% endif %}">
-                                <a href="/docs">Documentation</a>
+                                <a href="{{ path('DocumentationHome') }}">Documentation</a>
                             </li>
                             <li> | </li>
                             {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-                                <li>
-                                    {{ include('default/widgets/social/user-nav.html.twig') }}
-                                </li>
+                                {{ include('default/widgets/social/user-nav.html.twig') }}
                             {% else %}
                                 <li class="{% if activeTab == 'login' %}active{% endif %}">
-                                    <a href="{{ path('fos_user_security_login') }}">
+                                    <a href="{{ path('LoginForm') }}">
                                         <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
                                         Log In
                                     </a>
                                 </li>
                                 <li class="{% if activeTab == 'register' %}active{% endif %}">
-                                    <a href="{{ path('fos_user_registration_register') }}">Register</a>
+                                    <a href="{{ path('RegisterForm') }}">Register</a>
                                 </li>
                             {% endif %}
                         </ul>
