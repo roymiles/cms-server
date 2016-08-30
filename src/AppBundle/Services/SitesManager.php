@@ -40,9 +40,16 @@ class SitesManager
             $filters['offset'] = 0;
         }        
         
-        $site = $this->em
-                     ->getRepository($this->repository)
-                     ->findBy($options, array($filters['sortBy'] => $filters['order']), $filters['limit'], $filters['offset']);
+        if($filters['limit'] == 1){
+            // Expecting a single result
+            $site = $this->em
+                         ->getRepository($this->repository)
+                         ->findOneBy($options);
+        }else{
+            $site = $this->em
+                         ->getRepository($this->repository)
+                         ->findBy($options, array($filters['sortBy'] => $filters['order']), $filters['limit'], $filters['offset']);
+        }
     
         return $site; 
     }

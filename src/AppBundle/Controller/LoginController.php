@@ -6,6 +6,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
+use Symfony\Component\HttpFoundation\Session\Session;
+
 class LoginController extends Controller
 {
     /**
@@ -13,12 +15,22 @@ class LoginController extends Controller
      */
     public function loginFormAction(Request $request)
     {
+        /*
+         *  Symfony automatically starts sessions for you
+         *  http://stackoverflow.com/questions/21276048/failed-to-start-the-session-already-started-by-php-session-is-set-500-inte
+         */
+        $session = $request->getSession();
+        
         $AuthenticationManager = $this->get('app.AuthenticationManager');
-        $_csrf_token = $AuthenticationManager::generate('csrf_token');
+        
+        
+        $csrf_token = $AuthenticationManager->csrf_generate('csrf_token');
         return $this->render('default/pages/login.html.twig', [
             'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
             'activeTab' => 'login',
-            '_csrf_token' => $_csrf_token
+            'csrf_token' => $csrf_token,
+            
+            'session_data' => $session->all()
         ]);
     }
     
@@ -30,37 +42,66 @@ class LoginController extends Controller
         $AuthenticationManager = $this->get('app.AuthenticationManager');
         $UsersManager = $this->get('app.UsersManager');
         $SitesManager = $this->get('app.SitesManager');
-        $ErrorResponsesManager = $this->get('app.ErrorResponsesManager');
+        $LoggerManager = $this->get('app.LoggerManager');
         
         // Check if the site token is local or external
-        $isAjax = $ErrorResponsesManager->isAjax = $request->isXmlHttpRequest();
+        $isAjax = $request->isXmlHttpRequest();
         
         // Is there a token in the URL
-        $token = $request->attributes->get('token');
-        if($token ===  null){
-            return $ErrorResponsesManager->nullToken($request, $token);
+        $site_token = $request->request->get('site_token');
+        
+        if($site_token ===  null){
+            // No Token supplied
+            $LoggerManager->error($request, $site_token);
+            $this->addFlash('login-error', "No token given");
+            
+            if($isAjax){
+                // Return json error
+                return $this->jsonError("No token given");
+            }else{
+                return $this->redirectToRoute('LoginForm');
+            }   
         } 
         
         // Does the token correspond to a valid site
-        $Site = $SitesManager->get(['Token' => $token], ['limit' => 1]);
+        $Site = $SitesManager->get(['Token' => $site_token], ['limit' => 1]);
         if(!$Site){
-            return $ErrorResponsesManager->invalidToken($request, $token);
+            // Invalid token
+            $LoggerManager->error($request, $site_token);
+            $this->addFlash('login-error', "Invalid token");
+            
+            if($isAjax){
+                // Return json error
+                return $this->jsonError("Invalid token");
+            }else{
+                return $this->redirectToRoute('LoginForm');
+            }   
         }
     
         // Check if the CSRF token is valid
-        $_csrf_token = $request->attributes->get('_csrf_token');
-        if(!$AuthenticationManager->check($_csrf_token)){
-            $this->addFlash('login-error', 'Invalid CSRF token');
-            return $ErrorResponsesManager->invalidCSRFToken($request, $_csrf_token);   
+        if(!$AuthenticationManager->csrf_check('csrf_token', $request->request->all(), 60*10, false)){
+            // Invalid CSRF token
+            $LoggerManager->error($request, $site_token);
+            $this->addFlash('login-error', $AuthenticationManager->error);
+            
+            if($isAjax){
+                // Return json error
+                return $this->jsonError('Invalid CSRF token');
+            }else{
+                return $this->redirectToRoute('LoginForm');
+            }   
         }
         
         // Now perform error checks on user inputs
         $numErrors = 0;
         
-        $UsernameOrEmail = $request->attributes->get('UsernameOrEmail');
-        $Password = $request->attributes->get('Password');
-        $User = $UsersManager->verifyCredentials($UsernameOrEmail, $Password, $Site->Id);
+        $UsernameOrEmail = $request->request->get('UsernameOrEmail');
+        $Password = $request->request->get('Password');
+        
+        $User = $UsersManager->verifyCredentials($UsernameOrEmail, $Password, $Site);
         if(!$User){
+            $LoggerManager->error($request, $site_token);
+            $this->addFlash('login-error', $UsersManager->getError()); // Development only. SECURITY RISK
             $numErrors++; // Increment the error count
         }
         

@@ -112,22 +112,34 @@ class UsersManager
     public function isUniqueUsername(string $Username, $SiteId){}
     public function isUniqueEmail(string $Email, $SiteId){}
     
-    public function verifyCredentials(string $UsernameOrEmail, string $Password, int $SiteId)
+    private $error;
+    public function getError(){
+        return $this->error;
+    }
+    
+    public function verifyCredentials(string $UsernameOrEmail, string $Password, $Site)
     {
-        // Check username first
-        $User = $this->get($UsernameOrEmail, $SiteId);
-        if(!$UsernameOrEmail){
-            // Username doesnt exist
-            $User = $this->getUserByEmail($UsernameOrEmail, $SiteId);
-            if(!$User){
-                // Email doesnt exist
-                die('Cant find');
-            }
-        }
         
-        if(password_verify($Password, $User->password)){
-            return true;
+        $query = $this->em->createQueryBuilder()
+                ->select('u')
+                ->from('AppBundle\Entity\Users', 'u')
+                ->innerJoin('AppBundle\Entity\Sites', 's', 'WITH', 's.Id = u.Site')
+                ->where('s.Id = :SiteId AND (u.Username = :Username OR u.Email = :Email)')
+                ->setParameters(['SiteId' => $Site->getId(),
+                                 'Username' => $UsernameOrEmail,
+                                 'Email' => $UsernameOrEmail])
+                ->getQuery();
+        
+        $User = $query->getOneOrNullResult();
+        if($User){
+            if(password_verify($Password, $User->getPassword())){
+                return $User;
+            }else{
+                $this->error = "Invalid password";
+                return false;
+            }
         }else{
+            $this->error = "Email or Username does not correspond to a user";
             return false;
         }
     }

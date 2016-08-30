@@ -32,11 +32,6 @@ class Users implements UserInterface, \Serializable
     /**
     * @ORM\Column(type="string", length=256)
     */
-    private $Salt;  
-    
-    /**
-    * @ORM\Column(type="string", length=256)
-    */
     private $Password;
     
     /**

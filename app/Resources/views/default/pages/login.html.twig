@@ -17,29 +17,28 @@
                 <div class="panel-body" style="padding-top:30px">
                     {% if app.session.flashbag.has('login-error') %}
                         <div class="alert alert-danger" id="loginalert">
-                            <p>Error:</p>
                             {% for errorMessage in app.session.flashBag.get('login-error') %}
-                                <span>{{ errorMessage }}</span>
+                                <p>{{ errorMessage }}</p>
                             {% endfor %}
                         </div>
                     {% endif %}
                     <form action="{{ path('ProcessLoginRequest') }}" method="POST" class="form-horizontal" name="loginform" role="form">
-                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-                        <input type="hidden" name="_csrf_tokena" value="{{ _csrf_token }}">
-                        <input type="hidden" name="_site_token" value="{{ local_site_token  }}">
+                        {{ dump(session_data) }}
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                        <input type="hidden" name="site_token" value="{{ local_site_token  }}">
 
                         <div class="input-group" style="margin-bottom: 25px">
                             <span class="input-group-addon"><i class=
                             "glyphicon glyphicon-user"></i></span>
                             <input class="form-control" id="login-username"
-                            name="username" placeholder="username or email"
+                            name="UsernameOrEmail" placeholder="username or email"
                             type="text" value="">
                         </div>
                         <div class="input-group" style="margin-bottom: 25px">
                             <span class="input-group-addon"><i class=
                             "glyphicon glyphicon-lock"></i></span>
                             <input class="form-control" id="login-password"
-                            name="password" placeholder="password" type=
+                            name="Password" placeholder="password" type=
                             "password">
                         </div>
                         <div class="input-group">

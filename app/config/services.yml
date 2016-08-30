@@ -8,12 +8,15 @@ services:
         arguments: ['@doctrine.orm.entity_manager']   
 
     app.ErrorResponsesManager:
-        class: AppBundle\Services\ErrorResponsesManager
-        arguments: ['@doctrine.orm.entity_manager']          
+        class: AppBundle\Services\ErrorResponsesManager        
         
     app.ForumCategoriesManager:
         class: AppBundle\Services\ForumCategoriesManager
         arguments: ['@doctrine.orm.entity_manager']    
+  
+    app.LoggerManager:
+        class: AppBundle\Services\LoggerManager
+        arguments: ['@doctrine.orm.entity_manager']      
   
     app.SanitizeInputsManager:
         class: AppBundle\Services\SanitizeInputsManager

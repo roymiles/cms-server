@@ -15,12 +15,27 @@ class AuthenticationManager
     private $session;
     private $em;
     
-    private $doOriginCheck;
+    /**
+     * Adds extra useragent and remote_addr checks to CSRF protections.
+     */
+    const originCheck = true;
+    
+    public $error;
+    
     public function __construct(EntityManager $em, Session $session)
     {
         $this->em            = $em;
         $this->session       = $session;
-        $this->doOriginCheck = false;
+    }
+    
+    public function isLoggedIn(){
+        if($this->session->has('isLoggedIn')){
+            if($this->session->get('isLoggedIn') == true){
+                return true;
+            }
+        }
+        
+        return false;
     }
     
     /**
@@ -36,72 +51,43 @@ class AuthenticationManager
      * 
      * @return Boolean Returns FALSE if a CSRF attack is detected, TRUE otherwise.
      */
-    public function check($key, $origin, $throwException = false, $timespan = null, $multiple = false)
+    public function csrf_check($key, $origin, $timespan = null, $multiple = false)
     {
-        // REMOVED if ( !isset( $_SESSION[ 'csrf_' . $key ] ) )
-        
-        if (!$this->session->has('csrf_' . $key)){
-            if ($throwException){
-                throw new Exception('Missing CSRF session token.');
-            }else{
-                return false;
-            }
+        if (!$this->session->has($key)){
+            $this->error = "Missing CSRF session token.";
+            return false;
         }    
             
         if (!isset($origin[$key])){
-            if ($throwException){
-                throw new Exception('Missing CSRF form token.');
-            }else{
-                return false;
-            }
+            $this->error = "Missing CSRF form token.";
+            return false;
         }
         // Get valid token from session
-        // REMOVED $hash = $_SESSION[ 'csrf_' . $key ];
-        $hash = $this->session->get('csrf_' . $key);
+        $hash = $this->session->get($key);
         // Free up session token for one-time CSRF token usage.
         
         if (!$multiple){
-            $this->session->set('csrf_' . $key, null);
+            $this->session->set($key, null);
         }
-        // REMOVED $_SESSION[ 'csrf_' . $key ] = null;
-        // Origin checks
-        
-        if ($this->doOriginCheck && sha1($_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT']) != substr(base64_decode($hash), 10, 40)) {
-            
-            if ($throwException){
-                throw new Exception('Form origin does not match token origin.');
-            }else{
-                return false;
-            }
+
+        // Origin checks       
+        if (self::originCheck && sha1($_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT']) != substr(base64_decode($hash), 10, 40)) {
+            $this->error = "Form origin does not match token origin.";
+            return false;
         }
         
         // Check if session token matches form token
-        
         if ($origin[$key] != $hash){
-            if ($throwException){
-                throw new Exception('Invalid CSRF token.');
-            }else{
-                return false;
-            }
+            $this->error = "Invalid CSRF token.";
+            return false;
         }
         
         // Check for token expiration
         if ($timespan != null && is_int($timespan) && intval(substr(base64_decode($hash), 0, 10)) + $timespan < time()){
-            if ($throwException){
-                throw new Exception('CSRF token has expired.');
-            }else{
-                return false;
-            }
+            $this->error = "CSRF token has expired.";
+            return false;
         }
         return true;
-    }
-    
-    /**
-     * Adds extra useragent and remote_addr checks to CSRF protections.
-     */
-    public function enableOriginCheck()
-    {
-        $this->doOriginCheck = true;
     }
     
     /**
@@ -110,19 +96,17 @@ class AuthenticationManager
      * @param String $key The session key where the token will be stored. (Will also be the name of the hidden field name)
      * @return String The generated, base64 encoded token.
      */
-    public function generate($key)
+    public function csrf_generate($key)
     {
-        if($this->doOriginCheck){
+        if(self::originCheck){
             $extra = sha1($_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT']);
         }else{
             $extra = '';
         }
-        //$extra = $this->doOriginCheck ? sha1($_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT']) : '';
         // token generation (basically base64_encode any random complex string, time() is used for token expiration) 
-        $token = base64_encode(time() . $extra . $this->randomString(32));
+        $token = base64_encode(time() . $extra . $this->csrf_randomString(32));
         // store the one-time token in session
-        $this->session->set('csrf_' . $key, $token);
-        // REMOVED $_SESSION[ 'csrf_' . $key ] = $token;
+        $this->session->set($key, $token);
         return $token;
     }
     
@@ -132,7 +116,7 @@ class AuthenticationManager
      * @param Integer $length The string length.
      * @return String The randomly generated string.
      */
-    protected function randomString($length)
+    protected function csrf_randomString($length)
     {
         $seed   = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijqlmnopqrtsuvwxyz0123456789';
         $max    = strlen($seed) - 1;
