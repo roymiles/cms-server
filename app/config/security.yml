@@ -1,8 +1,10 @@
 # app/config/security.yml
 security:
     providers:
-        in_memory:
-            memory: ~
+        db_provider:
+            entity:
+                class: AppBundle:User
+                property: Username
 
     firewalls:
         dev:
@@ -10,10 +12,11 @@ security:
             security: false
 
         default:
-            anonymous: ~
+            pattern: ^/manage
+            guard:
+                authenticators:
+                    - app.token_authenticator
             
-        secured_area:
-            # ...
-            form_login:
-                # ...
-                csrf_token_generator: security.csrf.token_manager
+    access_control:
+        - { path: ^/manage, roles: ROLE_USER }
+        - { path: ^/, roles: IS_AUTHENTICATED_ANONYMOUSLY }

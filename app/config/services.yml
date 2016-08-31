@@ -47,3 +47,7 @@ services:
         public: false
         tags:
             - { name: twig.extension }
+                 
+    app.token_authenticator:
+        class: AppBundle\Security\TokenAuthenticator
+        arguments: ['@doctrine.orm.entity_manager', '@session', '@app.UsersManager', '@router']

@@ -42,10 +42,17 @@ class UsersManager
             $filters['offset'] = 0;
         }
         
-        $user = $this->em
-                     ->getRepository($this->repository)
-                     ->findBy($options, array($filters['sortBy'] => $filters['order']), $filters['limit'], $filters['offset']);
-    
+        if($filters['limit'] == 1){
+            // Expecting a single result
+            $user = $this->em
+                         ->getRepository($this->repository)
+                         ->findOneBy($options);
+        }else{  
+            $user = $this->em
+                         ->getRepository($this->repository)
+                         ->findBy($options, array($filters['sortBy'] => $filters['order']), $filters['limit'], $filters['offset']);
+        }
+        
         return $user; 
     }
     

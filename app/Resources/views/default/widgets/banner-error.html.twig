@@ -1,0 +1,9 @@
+<div id="banner-error" class="row">
+    {% for error in app.session.flashBag.get('banner-error') %}
+        <div class="col-xs-2"></div>
+        <div class="col-xs-8 row-fluid">
+            {{ error }}
+        </div>
+        <div class="col-xs-2"></div>
+    {% endfor %}
+</div>
