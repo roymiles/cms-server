@@ -45,23 +45,23 @@
                         {% endif %}    
 
                         <ul class="list-inline">
-                            <li class="{% if activeTab == 'home' %}active{% endif %}">
+                            <li class="nav-link {% if activeTab == 'home' %}active{% endif %}">
                                 <a href="{{ path('Homepage') }}">Home</a>
                             </li>
-                            <li class="{% if activeTab == 'docs' %}active{% endif %}">
+                            <li class="nav-link {% if activeTab == 'docs' %}active{% endif %}">
                                 <a href="{{ path('DocumentationHome') }}">Documentation</a>
                             </li>
                             <li> | </li>
-                            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                            {% if app.session.get('isLoggedIn') %}
                                 {{ include('default/widgets/social/user-nav.html.twig') }}
                             {% else %}
-                                <li class="{% if activeTab == 'login' %}active{% endif %}">
+                                <li class="nav-link {% if activeTab == 'login' %}active{% endif %}">
                                     <a href="{{ path('LoginForm') }}">
                                         <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
                                         Log In
                                     </a>
                                 </li>
-                                <li class="{% if activeTab == 'register' %}active{% endif %}">
+                                <li class="nav-link {% if activeTab == 'register' %}active{% endif %}">
                                     <a href="{{ path('RegisterForm') }}">Register</a>
                                 </li>
                             {% endif %}
@@ -100,6 +100,7 @@
             <div id="content-container" class="row">
                 <div class="col-xs-2"></div>
                 <div id="content" class="col-xs-8">
+                    {{ dump(app.session) }}
                     {% block body %}{% endblock %}
                 </div>
                 <div class="col-xs-2"></div>

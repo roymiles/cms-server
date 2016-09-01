@@ -113,6 +113,7 @@ class LoginController extends Controller
             // Set the appropriate session variables
             $session = $this->get('session');
             $session->set('User', $User);
+            $session->set('isLoggedIn', true);
             $session->set('LoginString', hash('sha512', $User->getPassword().$_SERVER['HTTP_USER_AGENT']));
             
             return $this->redirectToRoute('Homepage');

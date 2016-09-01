@@ -11,7 +11,6 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Doctrine\ORM\EntityManager;
 
-//use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\HttpFoundation\Session\Session;
 use AppBundle\Services\UsersManager;
 
@@ -20,7 +19,6 @@ use Symfony\Component\Routing\RouterInterface;
 
 class TokenAuthenticator extends AbstractGuardAuthenticator
 {
-    //use ContainerAwareTrait;
     
     private $em;
     private $session;
@@ -42,6 +40,11 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     public function getCredentials(Request $request)
     {
         $User = $this->session->get('User');
+        if(!$User){
+            // User does not exist
+            return null;
+        }
+        
         return array(
             'UserId' => $User->getId(),
             'LoginString' => $this->session->get('LoginString')
@@ -72,6 +75,12 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
         }
         
         if(hash_equals($loginCheck, $loginString)){
+            // update user session object
+            $this->session->set('User', $user);
+            
+            // For easy access in TWIG
+            $this->session->set('isLoggedIn', true);
+            
             // return true to cause authentication success
             return true;
         }else{

@@ -24,6 +24,7 @@
                     {% endif %}
                     <form action="{{ path('ProcessLoginRequest') }}" method="POST" class="form-horizontal" name="loginform" role="form">
                         {{ dump(session_data) }}
+
                         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                         <input type="hidden" name="site_token" value="{{ local_site_token  }}">
 

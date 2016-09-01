@@ -1,3 +1,11 @@
-<li class="{% if activeTab == 'manage' %}active{% endif %}">
+<li>
+    <span style="border-bottom: 1px dotted #000">
+        {{ app.session.get('User').Username() }}
+    </span>
+</li>
+<li class="nav-link {% if activeTab == 'manage' %}active{% endif %}">
     <a href="{{ path('ManagementGetUsers', {'token': 'a'}) }}">Manage</a>
+</li>
+<li>
+    <a class="btn btn-danger" href="{{ path('Logout') }}">Logout</a>
 </li>

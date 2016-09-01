@@ -20,12 +20,12 @@ and open the template in the editor.
     padding: 10px 15px 10px;
 }
 
-#head-nav-links ul li, #head-nav-links ul li a{
+#head-nav-links ul li.nav-link, #head-nav-links ul li.nav-link a{
     color: #818a91;
     text-decoration: none;
 }
 
-#head-nav-links ul li a:hover{
+#head-nav-links ul li.nav-link a:hover{
     color: #000;
     background-color: transparent;  
 }

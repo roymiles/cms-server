@@ -56,6 +56,12 @@ class Users implements UserInterface, \Serializable
     private $Site;
     
     /**
+     * @ORM\ManyToOne(targetEntity="UserRoles", inversedBy="Users")
+     * @ORM\JoinColumn(name="Role", referencedColumnName="Id")
+     */
+    private $Role;
+    
+    /**
     * @ORM\Column(type="datetime")
     */
     private $CreationDate;  
@@ -117,21 +123,7 @@ class Users implements UserInterface, \Serializable
     {
         return $this->Email;
     }
-
-    /**
-     * Set salt
-     *
-     * @param string $salt
-     *
-     * @return Users
-     */
-    public function setSalt($salt)
-    {
-        $this->Salt = $salt;
     
-        return $this;
-    }
-
     /**
      * Get salt
      *
@@ -139,7 +131,8 @@ class Users implements UserInterface, \Serializable
      */
     public function getSalt()
     {
-        return $this->Salt;
+        // Password is encoded with bcrypt, so no salt
+        return null;
     }
 
     /**
@@ -287,10 +280,12 @@ class Users implements UserInterface, \Serializable
     }
     
     
-    // Added manually
-    public function getRoles()
-    {
-        return array('ROLE_USER');
+    // Following added manually...
+    
+    // Abstract method is plural
+    public function getRoles(){
+        // Roles aren't used
+        return array("ROLE_USER");
     }
 
     public function eraseCredentials()
@@ -319,5 +314,31 @@ class Users implements UserInterface, \Serializable
             // see section on salt below
             // $this->salt
         ) = unserialize($serialized);
+    }
+
+    /**
+     * Set role
+     *
+     * @param \AppBundle\Entity\UserRoles $role
+     *
+     * @return Users
+     */
+    public function setRole(\AppBundle\Entity\UserRoles $role = null)
+    {
+        $this->Role = $role;
+    
+        return $this;
+    }
+
+    /**
+     * Get role
+     *
+     * @return \AppBundle\Entity\UserRoles
+     */
+    public function getRole()
+    {
+        var_dump($this->Role->getName());
+        die();
+        return $this->Role->getName();
     }
 }
