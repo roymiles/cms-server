@@ -18,9 +18,9 @@ class Tags
      */
     private $Id;
  
-     /**
-      * @ORM\Column(type="text")
-      */
+    /**
+     * @ORM\Column(type="string", length=256)
+     */
     private $TagName;  
     
     /**

@@ -6,6 +6,8 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 /**
  * @ORM\Entity
  * @ORM\Table(name="Users")
@@ -20,18 +22,40 @@ class Users implements UserInterface, \Serializable
     protected $Id;  
 
     /**
-    * @ORM\Column(type="string", length=256)
-    */
+     * @ORM\Column(type="string", length=256)
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *      min = 4,
+     *      max = 50,
+     *      minMessage = "Username must be at least {{ limit }} characters long",
+     *      maxMessage = "Username name cannot be longer than {{ limit }} characters"
+     * )
+     */
     private $Username;  
     
     /**
-    * @ORM\Column(type="string", length=256)
-    */
+     * @ORM\Column(type="string", length=256)
+     * @Assert\Email()
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 256,
+     *      minMessage = "Email must be at least {{ limit }} characters long",
+     *      maxMessage = "Email cannot be longer than {{ limit }} characters"
+     * )
+     */
     private $Email;  
     
     /**
-    * @ORM\Column(type="string", length=256)
-    */
+     * @ORM\Column(type="string", length=256)
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *      min = 8,
+     *      max = 100,
+     *      minMessage = "Password must be at least {{ limit }} characters long",
+     *      maxMessage = "Password cannot be longer than {{ limit }} characters"
+     * )
+     */
     private $Password;
     
     /**
@@ -52,14 +76,15 @@ class Users implements UserInterface, \Serializable
     /**
      * @ORM\ManyToOne(targetEntity="Sites", inversedBy="Users")
      * @ORM\JoinColumn(name="Site", referencedColumnName="Id")
+     * @Assert\NotBlank()
      */
     private $Site;
     
     /**
      * @ORM\ManyToOne(targetEntity="UserRoles", inversedBy="Users")
-     * @ORM\JoinColumn(name="Role", referencedColumnName="Id")
+     * @ORM\JoinColumn(name="Roles", referencedColumnName="Id")
      */
-    private $Role;
+    private $Roles;
     
     /**
     * @ORM\Column(type="datetime")
@@ -285,11 +310,13 @@ class Users implements UserInterface, \Serializable
     // Abstract method is plural
     public function getRoles(){
         // Roles aren't used
-        return array("ROLE_USER");
+        return array('ROLE_USER');
+        //return [$this->Roles->getName()];
     }
 
     public function eraseCredentials()
     {
+        $this->Id = 0;
     }
 
     /** @see \Serializable::serialize() */
@@ -298,9 +325,14 @@ class Users implements UserInterface, \Serializable
         return serialize(array(
             $this->Id,
             $this->Username,
+            $this->Email,
             $this->Password,
-            // see section on salt below
-            // $this->salt,
+            $this->IsVerified,
+            $this->VerificationToken,
+            $this->Reputation,
+            $this->Site,
+            $this->Roles,
+            $this->CreationDate
         ));
     }
 
@@ -310,35 +342,28 @@ class Users implements UserInterface, \Serializable
         list (
             $this->Id,
             $this->Username,
+            $this->Email,
             $this->Password,
-            // see section on salt below
-            // $this->salt
+            $this->IsVerified,
+            $this->VerificationToken,
+            $this->Reputation,
+            $this->Site,
+            $this->Roles,
+            $this->CreationDate
         ) = unserialize($serialized);
     }
 
     /**
-     * Set role
+     * Set roles
      *
-     * @param \AppBundle\Entity\UserRoles $role
+     * @param \AppBundle\Entity\UserRoles $roles
      *
      * @return Users
      */
-    public function setRole(\AppBundle\Entity\UserRoles $role = null)
+    public function setRoles(\AppBundle\Entity\UserRoles $roles = null)
     {
-        $this->Role = $role;
+        $this->Roles = $roles;
     
         return $this;
-    }
-
-    /**
-     * Get role
-     *
-     * @return \AppBundle\Entity\UserRoles
-     */
-    public function getRole()
-    {
-        var_dump($this->Role->getName());
-        die();
-        return $this->Role->getName();
     }
 }

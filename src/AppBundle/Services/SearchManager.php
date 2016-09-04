@@ -34,7 +34,7 @@ class SearchManager
   
       // Sort the results by rank
       usort($results, function($a, $b) {
-          return $a['rank'] <=> $b['rank'];
+          return $a['rank'] - $b['rank'];
       });
       
       return [
@@ -77,11 +77,11 @@ class SearchManager
             ) AS rank,
             (
               /* Generate a title from the selected row */
-              SELECT "title"
+              SELECT 'title'
             ) AS title,
             (
               /* Generate a description from the selected row */
-              SELECT "description"
+              SELECT 'description'
             ) AS description
           )
         ) AS searchData

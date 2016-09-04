@@ -90,28 +90,4 @@ class Logs
     {
         return $this->DateTime;
     }
-
-    /**
-     * Set data
-     *
-     * @param string $data
-     *
-     * @return Logs
-     */
-    public function setData($data)
-    {
-        $this->Data = $data;
-    
-        return $this;
-    }
-
-    /**
-     * Get data
-     *
-     * @return string
-     */
-    public function getData()
-    {
-        return $this->Data;
-    }
 }

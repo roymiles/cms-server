@@ -49,11 +49,12 @@ class LoginController extends Controller
         
         // Is there a token in the URL
         $site_token = $request->request->get('site_token');
+        $csrf_token = $request->request->get('csrf_token');
         
         if($site_token ===  null){
             // No Token supplied
-            $LoggerManager->error($request, $site_token);
-            $this->addFlash('login-error', "No token given");
+            $LoggerManager->error('No site token supplied', ['site_token' => $site_token]);
+            $this->addFlash('loginErrors', "No token given");
             
             if($isAjax){
                 // Return json error
@@ -67,8 +68,8 @@ class LoginController extends Controller
         $Site = $SitesManager->get(['Token' => $site_token], ['limit' => 1]);
         if(!$Site){
             // Invalid token
-            $LoggerManager->error($request, $site_token);
-            $this->addFlash('login-error', "Invalid token");
+            $LoggerManager->error('Invalid site token', ['site_token' => $site_token]);
+            $this->addFlash('loginErrors', "Invalid token");
             
             if($isAjax){
                 // Return json error
@@ -81,8 +82,8 @@ class LoginController extends Controller
         // Check if the CSRF token is valid
         if(!$AuthenticationManager->csrf_check('csrf_token', $request->request->all(), 60*10, false)){
             // Invalid CSRF token
-            $LoggerManager->error($request, $site_token);
-            $this->addFlash('login-error', $AuthenticationManager->error);
+            $LoggerManager->error('Invalid csrf token', ['csrf_token' => $csrf_token]);
+            $this->addFlash('loginErrors', $AuthenticationManager->error);
             
             if($isAjax){
                 // Return json error
@@ -100,8 +101,13 @@ class LoginController extends Controller
         
         $User = $UsersManager->verifyCredentials($UsernameOrEmail, $Password, $Site);
         if(!$User){
-            $LoggerManager->error($request, $site_token);
-            $this->addFlash('login-error', $UsersManager->getError()); // Development only. SECURITY RISK
+            $LoggerManager->error('Invalid credentials', ['UsernameOrEmail' => $UsernameOrEmail, 'Password' => $Password]);
+            $Errors = $UsersManager->getErrors();
+            foreach($Errors as $Error){
+                // addFlash pushes each element into an array
+                $this->addFlash('loginErrors', $Error);
+            }
+            
             $numErrors++; // Increment the error count
         }
         

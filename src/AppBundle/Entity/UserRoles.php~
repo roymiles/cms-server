@@ -23,4 +23,38 @@ class UserRoles
     * @ORM\Column(type="string", length=256)
     */
     private $Name; 
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->Id;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return UserRoles
+     */
+    public function setName($name)
+    {
+        $this->Name = $name;
+    
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->Name;
+    }
 }

@@ -37,6 +37,7 @@ twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
    # Custom 
+    cache: false
     globals:
        local_site_token: a
 

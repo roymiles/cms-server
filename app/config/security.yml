@@ -13,7 +13,7 @@ security:
     firewalls:
         secured_area:
             pattern: ^/
-            anonymous: ~        
+            anonymous: ~   
         
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -24,10 +24,6 @@ security:
             guard:
                 authenticators:
                     - app.token_authenticator
-                    
-        logout:
-            path:   /logout
-            target: /
-            
+
     access_control:
         - { path: ^/manage, roles: ROLE_USER }

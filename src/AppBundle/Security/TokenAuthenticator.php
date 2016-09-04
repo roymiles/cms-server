@@ -17,6 +17,8 @@ use AppBundle\Services\UsersManager;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\RouterInterface;
 
+use Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken;
+
 class TokenAuthenticator extends AbstractGuardAuthenticator
 {
     
@@ -52,7 +54,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     }
 
     public function getUser($credentials, UserProviderInterface $userProvider)
-    {
+    {   
         $UserId = $credentials['UserId'];
         
         // if null, authentication will fail
@@ -61,7 +63,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     }
 
     public function checkCredentials($credentials, UserInterface $user)
-    {
+    {       
         // check credentials - e.g. make sure the password is valid
         // no credential check is needed in this case
         $loginString = $credentials['LoginString'];
@@ -75,13 +77,13 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
         }
         
         if(hash_equals($loginCheck, $loginString)){
-            // update user session object
+            // Update user session object
             $this->session->set('User', $user);
             
             // For easy access in TWIG
             $this->session->set('isLoggedIn', true);
             
-            // return true to cause authentication success
+            // Return true to cause authentication success
             return true;
         }else{
             return false;

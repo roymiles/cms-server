@@ -57,9 +57,9 @@ class Users implements UserInterface, \Serializable
     
     /**
      * @ORM\ManyToOne(targetEntity="UserRoles", inversedBy="Users")
-     * @ORM\JoinColumn(name="Role", referencedColumnName="Id")
+     * @ORM\JoinColumn(name="Roles", referencedColumnName="Id")
      */
-    private $Role;
+    private $Roles;
     
     /**
     * @ORM\Column(type="datetime")
@@ -123,21 +123,7 @@ class Users implements UserInterface, \Serializable
     {
         return $this->Email;
     }
-
-    /**
-     * Set salt
-     *
-     * @param string $salt
-     *
-     * @return Users
-     */
-    public function setSalt($salt)
-    {
-        $this->Salt = $salt;
     
-        return $this;
-    }
-
     /**
      * Get salt
      *
@@ -145,7 +131,8 @@ class Users implements UserInterface, \Serializable
      */
     public function getSalt()
     {
-        return $this->Salt;
+        // Password is encoded with bcrypt, so no salt
+        return null;
     }
 
     /**
@@ -293,14 +280,18 @@ class Users implements UserInterface, \Serializable
     }
     
     
-    // Added manually
-    public function getRoles()
-    {
+    // Following added manually...
+    
+    // Abstract method is plural
+    public function getRoles(){
+        // Roles aren't used
         return array('ROLE_USER');
+        //return [$this->Roles->getName()];
     }
 
     public function eraseCredentials()
     {
+        $this->Id = 0;
     }
 
     /** @see \Serializable::serialize() */
@@ -309,9 +300,14 @@ class Users implements UserInterface, \Serializable
         return serialize(array(
             $this->Id,
             $this->Username,
+            $this->Email,
             $this->Password,
-            // see section on salt below
-            // $this->salt,
+            $this->IsVerified,
+            $this->VerificationToken,
+            $this->Reputation,
+            $this->Site,
+            $this->Roles,
+            $this->CreationDate
         ));
     }
 
@@ -321,9 +317,28 @@ class Users implements UserInterface, \Serializable
         list (
             $this->Id,
             $this->Username,
+            $this->Email,
             $this->Password,
-            // see section on salt below
-            // $this->salt
+            $this->IsVerified,
+            $this->VerificationToken,
+            $this->Reputation,
+            $this->Site,
+            $this->Roles,
+            $this->CreationDate
         ) = unserialize($serialized);
+    }
+
+    /**
+     * Set roles
+     *
+     * @param \AppBundle\Entity\UserRoles $roles
+     *
+     * @return Users
+     */
+    public function setRoles(\AppBundle\Entity\UserRoles $roles = null)
+    {
+        $this->Roles = $roles;
+    
+        return $this;
     }
 }

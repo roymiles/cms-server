@@ -1,5 +1,5 @@
 <?php
-// src/AppBundle/Services/Api/SitesManager.php
+// src/AppBundle/Services/SitesManager.php
 namespace AppBundle\Services;
 
 use AppBundle\Entity\Sites;

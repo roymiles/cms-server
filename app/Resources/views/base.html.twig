@@ -51,6 +51,12 @@
                             <li class="nav-link {% if activeTab == 'docs' %}active{% endif %}">
                                 <a href="{{ path('DocumentationHome') }}">Documentation</a>
                             </li>
+
+                            <!-- TEMPORARY FOR EASY ACCESS -->
+                            <li class="nav-link">
+                                <a href="http://127.0.0.1/phpmyadmin/sql.php">Database</a>
+                            </li>
+
                             <li> | </li>
                             {% if app.session.get('isLoggedIn') %}
                                 {{ include('default/widgets/social/user-nav.html.twig') }}
@@ -100,7 +106,12 @@
             <div id="content-container" class="row">
                 <div class="col-xs-2"></div>
                 <div id="content" class="col-xs-8">
-                    {{ dump(app.session) }}
+                    <p> User dump: </p>
+                    {{ dump(app.session.get('User')) }}
+                    {% if app.session.get('User').Roles is defined %}
+                        <p> Role dump: </p>
+                        {{ dump(app.session.get('User').Roles) }}
+                    {% endif %}
                     {% block body %}{% endblock %}
                 </div>
                 <div class="col-xs-2"></div>

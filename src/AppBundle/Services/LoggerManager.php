@@ -5,6 +5,8 @@ namespace AppBundle\Services;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityManager;
 
+use AppBundle\Entity\Logs;
+
 class LoggerManager extends Controller
 {   
     private $em;
@@ -26,16 +28,15 @@ class LoggerManager extends Controller
         'DEBUG'     => 7
     );
     
-    private function add($message, $request, $logLevel, $data = null){
-        $log = new Log();
+    private function add($message, $logLevel, $data = null){
+        $log = new Logs();
         
         $message = serialize($message);
-        $request = serialize($request);
+        $data = serialize($data);
         
         $log->setMessage($message);
-        $log->setRequest($request);
-        
-        $this->em = $this->getDoctrine()->getManager();
+        $log->setData($data);
+        $log->setDateTime(new \DateTime());
         
         // Tells Doctrine you want to (eventually) save the Log (no queries yet)
         $this->em->persist($log);
@@ -46,7 +47,7 @@ class LoggerManager extends Controller
         return true;
     }
     
-    public function error($message, $request, $data = null){
-        return $this->add($message, $request, $this->logLevels['ERROR'], $data);
+    public function error($message, $data = null){
+        return $this->add($message, $this->logLevels['ERROR'], $data);
     }
 }

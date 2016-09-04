@@ -13,49 +13,64 @@
                     </div>
                 </div>
                 <div class="panel-body">
-                    <form class="form-horizontal" id="signupform" name="signupform" role="form">
-                        {% if app.session.flashbag.has('registration-error') %}
+                    <form action="{{ path('ProcessRegisterRequest') }}" method="POST" class="form-horizontal" id="signupform" name="signupform" role="form">
+                        {% if app.session.flashbag.has('registrationErrors') %}
                             <div class="alert alert-danger" id="signupalert">
-                                <p>Error:</p>
-                                {% for errorMessage in app.session.flashBag.get('registration-error') %}
-                                    <span>{{ errorMessage }}</span>
-                                {% endfor %}
+                                <p>Please correct the following errors</p>
+                                <ul>
+                                    {% for errorMessage in app.session.flashBag.get('registrationErrors') %}
+                                        <li>{{ errorMessage }}</li>
+                                    {% endfor %}
+                                </ul>
                             </div>
                         {% endif %}
+
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                        <input type="hidden" name="site_token" value="{{ local_site_token  }}">
+
                         <div class="form-group">
-                            <label class="col-md-3 control-label" for="email">Email</label>
+                            <label class="col-md-3 control-label" for="Username">Username</label>
                             <div class="col-md-9">
-                                <input class="form-control" name="email" placeholder="Email Address" type="text">
+                                <input class="form-control" 
+                                       name="Username" 
+                                       placeholder="Username"
+                                       type="text"
+                                       {% if app.session.flashbag.has('registrationFormSubmittedUsername') %}
+                                            value="{{ app.session.flashbag.get('registrationFormSubmittedUsername')|first }}"
+                                       {% endif %}
+                                />
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-3 control-label" for="firstname">First Name</label>
+                            <label class="col-md-3 control-label" for="Email">Email</label>
                             <div class="col-md-9">
-                                <input class="form-control" name="firstname" placeholder="First Name" type="text">
+                                <input class="form-control" 
+                                       name="Email" 
+                                       placeholder="Email Address" 
+                                       type="text"
+                                       {% if app.session.flashbag.has('registrationFormSubmittedEmail') %}
+                                            value="{{ app.session.flashbag.get('registrationFormSubmittedEmail')|first }}"
+                                       {% endif %}
+                                />
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-3 control-label" for="lastname">Last Name</label>
+                            <label class="col-md-3 control-label" for="Password">Password</label>
                             <div class="col-md-9">
-                                <input class="form-control" name="lastname" placeholder="Last Name" type="text">
+                                <input class="form-control" name="Password" placeholder="Password" type="password">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-3 control-label" for="password">Password</label>
+                            <label class="col-md-3 control-label" for="RepeatPassword">Repeat Password</label>
                             <div class="col-md-9">
-                                <input class="form-control" name="passwd" placeholder="Password" type="password">
+                                <input class="form-control" name="RepeatPassword" placeholder="Repeat Password" type="password">
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="col-md-3 control-label" for="icode">Invitation Code</label>
-                            <div class="col-md-9">
-                                <input class="form-control" name="icode" placeholder="" type="text">
-                            </div>
-                        </div>
-                        <div class="form-group">
+
+                        <div class="form-group" style="margin-top:10px">
                             <!-- Button -->
                             <div class="col-md-offset-3 col-md-9">
-                                <button class="btn btn-info" id="btn-signup" type="button"><i class="icon-hand-right"></i> &nbsp; Sign Up</button>
+                                <input id="btn-signup" type="submit" value="Sign Up" class="btn btn-info" id="btn-signup">
                             </div>
                         </div>
                     </form>

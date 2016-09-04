@@ -44,12 +44,13 @@ class RegistrationController extends Controller
         
         // Is there a token in the URL
         $site_token = $request->request->get('site_token');
+        $Username = $request->request->get('Username');
+        $Email = $request->request->get('Email');
         
         $UserDetails = [];
-        $UserDetails['Username'] = $request->request->get('Username');
-        $UserDetails['Email'] = $request->request->get('Email');
+        $UserDetails['Username'] = $Username;
+        $UserDetails['Email'] = $Email;
         
-        $InvitationCode = $request->request->get('InvitationCode');
         $Password = $request->request->get('Password');
         $RepeatPassword = $request->request->get('RepeatPassword');
         
@@ -57,15 +58,14 @@ class RegistrationController extends Controller
          *  Set flash variables to populate registration form on redirect (if there is an error)
          *  - Sanitizing these variables to prevent XSS
          */
-        $this->addFlash('registration-form-submitted-username', htmlentities($UserDetails['Username']));
-        $this->addFlash('registration-form-submitted-email', htmlentities($UserDetails['Email']));
-        $this->addFlash('registration-form-submitted-invitationcode', htmlentities($InvitationCode));
+        $this->addFlash('registrationFormSubmittedUsername', htmlentities($Username));
+        $this->addFlash('registrationFormSubmittedEmail', htmlentities($Email));
         // Don't include the password in the flash variables!
         
-        if($site_token ===  null){
+        if($site_token === null){
             // No Token supplied
-            $LoggerManager->error($request, $site_token);
-            $this->addFlash('registration-error', "No token given");
+            $LoggerManager->error("No token given");
+            $this->addFlash('registrationErrors', "No token given");
             
             if($isAjax){
                 // Return json error
@@ -79,22 +79,31 @@ class RegistrationController extends Controller
         $Site = $SitesManager->get(['Token' => $site_token], ['limit' => 1]);
         if(!$Site){
             // Invalid token
-            $LoggerManager->error($request, $site_token);
-            $this->addFlash('registration-error', "Invalid token");
+            $LoggerManager->error("Invalid token", ['site_token' => $site_token]);
+            $this->addFlash('registrationErrors', "Invalid site token");
             
             if($isAjax){
                 // Return json error
-                return $this->jsonError("Invalid token");
+                return $this->jsonError("Invalid site token");
             }else{
                 return $this->redirectToRoute('RegisterForm');
             }   
         }
+        
+        /*
+         *  There is an extra check in the UsersManager add()
+         *  function to see if the site is valid and so one
+         *  of the checks (either here or there) can be re-
+         *  moved to improve performance
+         */
+        
+        $UserDetails['SiteId'] = $Site->getId();
     
         // Check if the CSRF token is valid
         if(!$AuthenticationManager->csrf_check('csrf_token', $request->request->all(), 60*10, false)){
             // Invalid CSRF token
-            $LoggerManager->error($request, $site_token);
-            $this->addFlash('registration-error', $AuthenticationManager->error);
+            $LoggerManager->error("Invalid csrf token", ['csrf_token' => $request->request->get('csrf_token')]);
+            $this->addFlash('registrationErrors', $AuthenticationManager->error);
             
             if($isAjax){
                 // Return json error
@@ -108,10 +117,12 @@ class RegistrationController extends Controller
         $numErrors = 0;
         
         // Check if passwords match
-        if($Password !== $RepeatPassword){
-            $LoggerManager->error($request, $site_token);
-            $this->addFlash('registration-error', 'Passwords do not match');
+        if($Password != $RepeatPassword){
+            $this->addFlash('registrationErrors', 'Passwords do not match');
             $numErrors++;   
+        }else{
+            // Passwords do match
+            $UserDetails['Password'] = $Password;
         }
         
         // Extra log in checks eg brute force
@@ -122,8 +133,12 @@ class RegistrationController extends Controller
             // Attempt to add the user
             if(!$UsersManager->add($UserDetails)){
                 // Validation error
-                $ValidationErrorString = $UsersManager->getValidationErrorString();
-                $this->addFlash('registration-error', $ValidationErrorString);
+                $Errors = $UsersManager->getErrors();
+                foreach($Errors as $Error){
+                    // addFlash pushes each element into an array
+                    $this->addFlash('registrationErrors', $Error);
+                }
+                
                 return $this->redirectToRoute('RegisterForm');
             }else{           
                 // Set a flash variable saying account has been created

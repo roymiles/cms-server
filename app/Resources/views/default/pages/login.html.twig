@@ -15,15 +15,19 @@
                     </div>
                 </div>
                 <div class="panel-body" style="padding-top:30px">
-                    {% if app.session.flashbag.has('login-error') %}
-                        <div class="alert alert-danger" id="loginalert">
-                            {% for errorMessage in app.session.flashBag.get('login-error') %}
-                                <p>{{ errorMessage }}</p>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
                     <form action="{{ path('ProcessLoginRequest') }}" method="POST" class="form-horizontal" name="loginform" role="form">
                         {{ dump(session_data) }}
+
+                        {% if app.session.flashbag.has('loginErrors') %}
+                            <div class="alert alert-danger" id="signupalert">
+                                <p>Please correct the following errors</p>
+                                <ul>
+                                    {% for errorMessage in app.session.flashBag.get('loginErrors') %}
+                                        <li>{{ errorMessage }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
 
                         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                         <input type="hidden" name="site_token" value="{{ local_site_token  }}">
@@ -42,17 +46,11 @@
                             name="Password" placeholder="password" type=
                             "password">
                         </div>
-                        <div class="input-group">
-                            <div class="checkbox">
-                                <label><input id="login-remember" name=
-                                "remember" type="checkbox" value="1"> Remember me</label>
-                            </div>
-                        </div>
 
                         <div class="form-group" style="margin-top:10px">
                             <!-- Button -->
                             <div class="col-sm-12 controls">
-                                <input type="submit" value="Login" class="btn btn-success">
+                                <input type="submit" name="Login" value="Login" class="btn btn-success">
                             </div>
                         </div>
 
