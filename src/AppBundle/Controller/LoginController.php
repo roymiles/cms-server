@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 use Symfony\Component\HttpFoundation\Session\Session;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 class LoginController extends Controller
 {
@@ -36,6 +37,7 @@ class LoginController extends Controller
     
     /**
      * @Route("/processLogin", name="ProcessLoginRequest")
+     * @Method({"POST"})
      */
     public function processLoginRequestAction(Request $request)
     {
@@ -101,14 +103,22 @@ class LoginController extends Controller
         
         $User = $UsersManager->verifyCredentials($UsernameOrEmail, $Password, $Site);
         if(!$User){
-            $LoggerManager->error('Invalid credentials', ['UsernameOrEmail' => $UsernameOrEmail, 'Password' => $Password]);
-            $Errors = $UsersManager->getErrors();
-            foreach($Errors as $Error){
-                // addFlash pushes each element into an array
-                $this->addFlash('loginErrors', $Error);
+            if($isAjax){
+                      
+            }else{
+                $LoggerManager->error('Invalid credentials', ['UsernameOrEmail' => $UsernameOrEmail, 'Password' => $Password]);
+                $Errors = $UsersManager->getErrors();
+                foreach($Errors as $Error){
+                    // addFlash pushes each element into an array
+                    $this->addFlash('loginErrors', $Error);
+                }
+
+                $numErrors++; // Increment the error count
             }
-            
-            $numErrors++; // Increment the error count
+        }
+        
+        if($isAjax){
+            // Check if valid redirect
         }
         
         // Extra log in checks eg brute force
@@ -116,13 +126,17 @@ class LoginController extends Controller
         if($numErrors == 0){
             // No errors
             
-            // Set the appropriate session variables
-            $session = $this->get('session');
-            $session->set('User', $User);
-            $session->set('isLoggedIn', true);
-            $session->set('LoginString', hash('sha512', $User->getPassword().$_SERVER['HTTP_USER_AGENT']));
-            
-            return $this->redirectToRoute('Homepage');
+            if($isAjax){
+                
+            }else{
+                // Set the appropriate session variables
+                $session = $this->get('session');
+                $session->set('User', $User);
+                $session->set('isLoggedIn', true);
+                $session->set('LoginString', hash('sha512', $User->getPassword().$_SERVER['HTTP_USER_AGENT']));
+
+                return $this->redirectToRoute('Homepage');
+            }
         }else{
             if($isAjax){
                 // Return json error

@@ -6,15 +6,16 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
-class DefaultController extends Controller
+class AboutController extends Controller
 {
     /**
-     * @Route("/", name="Homepage")
+     * @Route("/", name="About")
      */
-    public function indexAction(Request $request)
+    public function aboutAction(Request $request)
     {
-        return $this->render('default/pages/index.html.twig', [
+        return $this->render('default/pages/about.html.twig', [
             'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
+            'activeTab' => 'about',
         ]);
     }
 }

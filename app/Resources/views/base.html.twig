@@ -34,91 +34,87 @@
     <body>
 
         <div id="body-container">
-            <div id="banner-ribbon"></div>
-            <div id="head-nav" class="row">
-                <div class="col-xs-2"></div>
-                <div class="col-xs-8 row-fluid">
-                    <div id="head-nav-links" class="pull-left col-xs-8">
+            <div id="wrapper">
+                <div id="banner-ribbon"></div>
+                <div id="head-nav" class="row">
+                    <div class="col-xs-2"></div>
+                    <div class="col-xs-8 row-fluid">
+                        <div id="head-nav-links" class="pull-left col-xs-8">
 
-                        {% if activeTab is not defined %}
-                            {% set activeTab = 'home' %}
-                        {% endif %}    
+                            {% if activeTab is not defined %}
+                                {% set activeTab = 'home' %}
+                            {% endif %}    
 
-                        <ul class="list-inline">
-                            <li class="nav-link {% if activeTab == 'home' %}active{% endif %}">
-                                <a href="{{ path('Homepage') }}">Home</a>
-                            </li>
-                            <li class="nav-link {% if activeTab == 'docs' %}active{% endif %}">
-                                <a href="{{ path('DocumentationHome') }}">Documentation</a>
-                            </li>
-
-                            <!-- TEMPORARY FOR EASY ACCESS -->
-                            <li class="nav-link">
-                                <a href="http://127.0.0.1/phpmyadmin/sql.php">Database</a>
-                            </li>
-
-                            <li> | </li>
-                            {% if app.session.get('isLoggedIn') %}
-                                {{ include('default/widgets/social/user-nav.html.twig') }}
-                            {% else %}
-                                <li class="nav-link {% if activeTab == 'login' %}active{% endif %}">
-                                    <a href="{{ path('LoginForm') }}">
-                                        <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
-                                        Log In
-                                    </a>
+                            <ul class="list-inline">
+                                <li class="nav-link {% if activeTab == 'home' %}active{% endif %}">
+                                    <a href="{{ path('Homepage') }}">Home</a>
                                 </li>
-                                <li class="nav-link {% if activeTab == 'register' %}active{% endif %}">
-                                    <a href="{{ path('RegisterForm') }}">Register</a>
+                                <li class="nav-link {% if activeTab == 'docs' %}active{% endif %}">
+                                    <a href="{{ path('DocumentationHome') }}">Documentation</a>
                                 </li>
-                            {% endif %}
-                        </ul>
+
+                                <!-- TEMPORARY FOR EASY ACCESS -->
+                                <li class="nav-link">
+                                    <a target='_blank' href="http://127.0.0.1/phpmyadmin/sql.php">Database</a>
+                                </li>
+
+                                <li class="nav-link {% if activeTab == 'about' %}active{% endif %}">
+                                    <a href="{{ path('About') }}">About</a>
+                                </li>
+
+                                <li> | </li>
+                                {% if app.session.get('isLoggedIn') %}
+                                    {{ include('default/widgets/social/user-nav.html.twig') }}
+                                {% else %}
+                                    <li class="nav-link {% if activeTab == 'login' %}active{% endif %}">
+                                        <a href="{{ path('LoginForm') }}">
+                                            <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
+                                            Log In
+                                        </a>
+                                    </li>
+                                    <li class="nav-link {% if activeTab == 'register' %}active{% endif %}">
+                                        <a href="{{ path('RegisterForm') }}">Register</a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                        <div id="search-box" class="col-xs-4 pull-right">
+                            <form action="/search" method="GET">
+                                <input class="form-control" placeholder="Search...">
+                            </form>
+                        </div>
                     </div>
-                    <div id="search-box" class="col-xs-4 pull-right">
-                        <form action="/search" method="GET">
-                            <input class="form-control" placeholder="Search...">
-                        </form>
+                    <div class="col-xs-2">
+                         {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                            {{ include('default/widgets/social/messenger.html.twig') }}
+                         {% endif %}
                     </div>
                 </div>
-                <div class="col-xs-2">
-                     {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-                        {{ include('default/widgets/social/messenger.html.twig') }}
-                     {% endif %}
-                </div>
-            </div>
 
-            {% if app.session.flashbag.has('banner-notice') %}
-                {% include('default/widgets/banner-message.html.twig') %}
-            {% endif %}
+                {% if app.session.flashbag.has('banner-notice') %}
+                    {% include('default/widgets/banner-message.html.twig') %}
+                {% endif %}
 
-            {% if app.session.flashbag.has('banner-error') %}
-                {% include('default/widgets/banner-error.html.twig') %}
-            {% endif %}
+                {% if app.session.flashbag.has('banner-error') %}
+                    {% include('default/widgets/banner-error.html.twig') %}
+                {% endif %}
 
-            <div id="banner" class="row-fluid">
-                <div class="container">
-                    <h1>{{ bannerTitle|default('This is the title') }}</h1>
-                    <p>{{ bannerDescription|default('This is the description') }}</p>
-                </div>
-            </div>
+                {% block banner %}{% endblock %}
 
-            <div class="row row-space"></div>
+                <!-- <div class="row row-space"></div> -->
 
-            <div id="content-container" class="row">
-                <div class="col-xs-2"></div>
-                <div id="content" class="col-xs-8">
-                    <p> User dump: </p>
-                    {{ dump(app.session.get('User')) }}
-                    {% if app.session.get('User').Roles is defined %}
-                        <p> Role dump: </p>
-                        {{ dump(app.session.get('User').Roles) }}
-                    {% endif %}
+                <div id="content-container" class="row">
+                    <div class="col-xs-2"></div>
+
                     {% block body %}{% endblock %}
+
+                    <div class="col-xs-2"></div>
                 </div>
-                <div class="col-xs-2"></div>
-            </div>
 
-            <div class="row row-space"></div>
-
+                <!-- <div class="row row-space"></div> -->
+            
+                <div class="push"></div>
+            </div> <!-- End of wrapper -->
             {{ include('default/footer.html.twig') }}
 
         </div>

@@ -1,9 +1,15 @@
-{% extends 'base.html.twig' %}
+{% extends 'page.html.twig' %}
 
-{% block body %}
+{% block page %}
     <div class="container">
         <div class="row-fluid">
-            Curabitur velit arcu, fringilla ut egestas ac, pellentesque at tellus. Proin varius venenatis convallis. Nam id augue augue. Morbi interdum augue augue. Sed et mauris id lacus blandit sollicitudin. Pellentesque tellus diam, gravida eget magna sed, luctus consectetur elit. Mauris interdum nulla felis, vitae tempus nunc elementum in. Nam vel placerat tortor, vel sodales erat. Integer vel est tellus. Maecenas volutpat, leo sed tempor eleifend, magna felis tincidunt ipsum, eget faucibus felis enim eu mauris. Nulla sem est, euismod sit amet ex et, finibus viverra lorem. Nunc lacus dui, ullamcorper eget imperdiet id, vulputate nec metus. Proin et dolor eros. Suspendisse a ornare nunc. Aliquam erat volutpat. Nam feugiat varius vulputate.
+Zeal is a web development project to allow clients to create fully database driven websites without having any back end code on their web host. This is done through a javascript framework that authenticates a websites request to access, modify and delete different aspects of the their website to enable dynamic webpages.
+<br><br>
+At the moment, this project is in its very early stages and is a mere proof of concept. I may take this project in a different direction as I see fit.
+<br><br>
+The project is written with the Symfony2 framework and has made extensive use of their FOS bundles to speed up development.
+<br><br>
+Main point and goal of this project is that Everything (modules, actions etc) written and used on this site has to be able to be used externally on other websites. All references will be done through the SiteId where SiteId = -1 will be for zela.io directly with local session storage and SiteId != -1 will be for external sites that use AccessTokens. 
         </div>
         <div class="row-fluid">
             <a href="{{ path('Homepage') }}">Homepage</a>

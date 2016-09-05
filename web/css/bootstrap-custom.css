@@ -8,16 +8,42 @@ and open the template in the editor.
     Author     : Roy
 */
 
+* {
+    margin: 0;
+}
+html, body {
+    height: 100%;
+}
+
+body{
+    background: #f1f1f1;
+}
+
+#body-container{
+    height: 100%;
+}
+
+#wrapper{
+    min-height: 100%;
+}
 
 #head-nav{
+    height: 85px;
     background-color: #fff;
     padding: 10px 0;
+    border-bottom: 1px solid #e8e8e8;
 }
 
 #head-nav-links{}
 
+#head-nav-links ul{
+    margin: 0;
+    vertical-align: middle;
+    line-height: 65px;
+}
+
 #head-nav-links ul li{
-    padding: 10px 15px 10px;
+    padding: 0px 15px;
 }
 
 #head-nav-links ul li.nav-link, #head-nav-links ul li.nav-link a{
@@ -36,8 +62,8 @@ and open the template in the editor.
 }
 
 #content-container{
-    
-    
+    overflow:auto;
+    padding-bottom: 180px; /* Must be same height as footer */
 }
 
 #banner{
@@ -65,11 +91,18 @@ and open the template in the editor.
     margin: 5px 0;
 }
 
+#footer, .push {
+    height: 180px; /* .push must be the same height as .footer */
+}
+
 #footer{ 
-    bottom: 0;
-    width: 100%;
-    height: 100px;
-    background-color: #f7f7f7;
+    position: relative;
+    margin-top: -180px; /* Must be same content-container #content-container height */
+    height: 180px;
+    clear: both;
+    
+    background-color: #fff;
+    border-top: 1px solid #e2e2e2;
     color: #818a91;
     padding: 10px 0;
     text-align: center;
@@ -80,8 +113,12 @@ and open the template in the editor.
 }
 
 #content{
-    padding: 20px 0;
-    border: 4px dotted #999999;
+    padding: 20px;
+    border: 0;
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(0,0,0,.1);
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 #breadcrumb{
@@ -124,4 +161,8 @@ textarea:focus, input:focus, .uneditable-input:focus {
 
 .row-space{
     height: 50px;
+}
+
+#search-box form .form-control{
+    margin: 10px 15px 10px;
 }
