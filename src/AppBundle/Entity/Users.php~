@@ -6,6 +6,8 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 /**
  * @ORM\Entity
  * @ORM\Table(name="Users")
@@ -20,18 +22,40 @@ class Users implements UserInterface, \Serializable
     protected $Id;  
 
     /**
-    * @ORM\Column(type="string", length=256)
-    */
+     * @ORM\Column(type="string", length=256)
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *      min = 4,
+     *      max = 50,
+     *      minMessage = "Username must be at least {{ limit }} characters long",
+     *      maxMessage = "Username name cannot be longer than {{ limit }} characters"
+     * )
+     */
     private $Username;  
     
     /**
-    * @ORM\Column(type="string", length=256)
-    */
+     * @ORM\Column(type="string", length=256)
+     * @Assert\Email()
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 256,
+     *      minMessage = "Email must be at least {{ limit }} characters long",
+     *      maxMessage = "Email cannot be longer than {{ limit }} characters"
+     * )
+     */
     private $Email;  
     
     /**
-    * @ORM\Column(type="string", length=256)
-    */
+     * @ORM\Column(type="string", length=256)
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *      min = 8,
+     *      max = 100,
+     *      minMessage = "Password must be at least {{ limit }} characters long",
+     *      maxMessage = "Password cannot be longer than {{ limit }} characters"
+     * )
+     */
     private $Password;
     
     /**
@@ -51,7 +75,8 @@ class Users implements UserInterface, \Serializable
     
     /**
      * @ORM\ManyToOne(targetEntity="Sites", inversedBy="Users")
-     * @ORM\JoinColumn(name="Site", referencedColumnName="Id")
+     * @ORM\JoinColumn(name="SiteId", referencedColumnName="Id")
+     * @Assert\NotBlank()
      */
     private $Site;
     

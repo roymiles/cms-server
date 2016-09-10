@@ -1,3 +1,6 @@
-<form action="/search" method="GET">
-    <input class="form-control" placeholder="Search...">
+<form action="{{ path(currentPath) }}" method="GET">
+    <input name="q" class="form-control" placeholder="Search...">
+    {% for name,value in currentFilters %}
+        <input name="{{ name }}" class="form-control" type="hidden" value="{{ value }}">
+    {% endfor %}
 </form>

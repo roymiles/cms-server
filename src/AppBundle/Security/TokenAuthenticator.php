@@ -17,7 +17,8 @@ use AppBundle\Services\UsersManager;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\RouterInterface;
 
-use Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken;
+//use AppBundle\Entity\Users;
+//use AppBundle\Entity\AnonymousUser;
 
 class TokenAuthenticator extends AbstractGuardAuthenticator
 {
@@ -41,32 +42,69 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
      */
     public function getCredentials(Request $request)
     {
-        $User = $this->session->get('User');
-        if(!$User){
-            // User does not exist
-            return null;
+        //dump($request);die;
+        if($request->getPathInfo() == '/login' && $request->isMethod('POST')){
+            // Login form submission
+            return array(
+              'Username' => $request->request->get('Username'),
+              'Password' => $request->request->get('Password'),
+            ); 
         }
+     
+        $User = $this->session->get('User');   
+        if($User instanceof UserInterface){
+            // User session attribute exists
+            return array(
+                'UserId' => $User->getId(),
+                'LoginString' => $this->session->get('LoginString')
+            );  
+        }    
+            
+        // User does not exist
+        return array();
         
-        return array(
-            'UserId' => $User->getId(),
-            'LoginString' => $this->session->get('LoginString')
-        );
     }
 
     public function getUser($credentials, UserProviderInterface $userProvider)
     {   
-        $UserId = $credentials['UserId'];
+        //dump($credentials);die();
+        /*$UserId = $credentials['UserId'];
         
         // if null, authentication will fail
         // if a User object, checkCredentials() is called
-        return $this->UsersManager->get(['Id' => $UserId], ['limit' => 1]);
+        return $this->UsersManager->get(['Id' => $UserId], ['limit' => 1]);*/
+        
+        if(empty($credentials)){
+            return new AnonymousUser();
+        }
+        
+        if(array_key_exists('Username', $credentials) && array_key_exists('Password', $credentials)){
+            // Login form
+            return $this->UsersManager->get(['Username' => $credentials['Username']], ['limit' => 1]);
+        }
+        
+        if(array_key_exists('UserId', $credentials)){
+            // Login form
+            return $this->UsersManager->get(['Id' => $credentials['UserId']], ['limit' => 1]);
+        }    
+        
+        /*try {
+          //return $userProvider->loadUserByUsername($credentials['username']);
+          return $this->UsersManager->get(['Username' => $credentials['Username']], ['limit' => 1]);
+        }
+        catch (UsernameNotFoundException $e) {
+          throw new CustomUserMessageAuthenticationException("eh");
+        }*/
     }
 
     public function checkCredentials($credentials, UserInterface $user)
-    {       
+    {     
+        //$this->session->set('User', $user);
+        return true;
+        //dump($user, $credentials);die();
         // check credentials - e.g. make sure the password is valid
         // no credential check is needed in this case
-        $loginString = $credentials['LoginString'];
+        /*$loginString = $credentials['LoginString'];
         $UserId = $credentials['UserId'];
         
         $password = $this->UsersManager->get(['Id' => $UserId], ['limit' => 1])->getPassword();
@@ -77,6 +115,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
         }
         
         if(hash_equals($loginCheck, $loginString)){
+            //dump($user);die;
             // Update user session object
             $this->session->set('User', $user);
             
@@ -87,9 +126,14 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
             return true;
         }else{
             return false;
+        }*/
+        /*if ($user->getPassword() === $credentials['Password']) {
+            return true;
         }
+            throw new CustomUserMessageAuthenticationException("beh");
+        }*/
     }
-
+    
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
         // on success, let the request continue
@@ -98,8 +142,9 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
+        die('error');
         $this->session->getFlashBag()->add('banner-error', strtr($exception->getMessageKey(), $exception->getMessageData()));
-        return new RedirectResponse($this->router->generate('Homepage'));
+        return new RedirectResponse($this->router->generate('Login'));
     }
 
     /**

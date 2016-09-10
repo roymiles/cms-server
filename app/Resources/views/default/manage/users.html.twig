@@ -1,6 +1,6 @@
-{% extends 'base.html.twig' %}
+{% extends 'page.html.twig' %}
 
-{% block body %}
+{% block page %}
     <div class="container">
         <div class="row">
             <div class="col-xs-4 pull-left" style="margin-bottom: 20px; padding: 0">
@@ -9,7 +9,10 @@
                 </button>
             </div>
             <div class="col-xs-4 pull-right" style="margin-bottom: 20px; padding: 0;">
-                {% include 'default/widgets/table-search.html.twig' with {'filters': routeFilters} only %}
+                {% include 'default/widgets/table-search.html.twig' with {
+                    'currentFilters': routeFilters,
+                    'currentPath': "ManagementGetUsers",
+                } only %}
             </div>
         </div>
 
@@ -20,12 +23,12 @@
         <div class="row">
             {% include 'default/tables/users.html.twig' with {
                 'users': users, 
-                'filters': routeFilters,
-                'currentPath': "ManagementGetUsersWithSortAndPage",
+                'currentFilters': routeFilters,
+                'currentPath': "ManagementGetUsers",
             } only %}
             {% include 'default/widgets/pagination.html.twig' with {
                 'currentFilters': routeFilters,
-                'paginationPath': "ManagementGetUsersWithSortAndPage",
+                'paginationPath': "ManagementGetUsers",
                 'lastPage': 10,
                 'showAlwaysFirstAndLast': false
             } only %}

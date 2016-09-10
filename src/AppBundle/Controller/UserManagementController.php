@@ -23,32 +23,38 @@ class UserManagementController extends Controller
     }
     
     /**
-     * @Route("/token={token}/manage/users", name="ManagementGetUsers")
-     * @Route("/token={token}/manage/users/page{pageNumber}", name="ManagementGetUsersWithPage")
-     * @Route("/token={token}/manage/users/sort={sortBy}/{order}", name="ManagementGetUsersWithSort")
-     * @Route("/token={token}/manage/users/sort={sortBy}/{order}/page{pageNumber}", name="ManagementGetUsersWithSortAndPage")
+     * @Route("/manage/users", name="ManagementGetUsers")
      */
     public function getAction(Request $request){
         $SitesManager = $this->get('app.SitesManager');
-        $ErrorResponsesManager = $this->get('app.ErrorResponsesManager');
         
+        // Retrieve and define default filter parameters from $_GET vars (if not supplied)
+        $pageNumber = $request->query->get('pageNumber', 1);
+        $sortBy = $request->query->get('sortBy', 'Id');    
+        $order = $request->query->get('order', 'ASC');
+
         // Is there a token in the URL?
-        $token = $request->attributes->get('token');
+        $token = $request->query->get('token');
         if($token ===  null){
-            return $ErrorResponsesManager->nullToken($request, $token);
+            return $this->render('default/error-response.html.twig', [
+                'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
+                'ErrorResponse' => "No token supplied"
+            ]);
         }  
 
         // Does the token correspond to a valid site
-        $Site = $SitesManager->get(['Token' => $token], ['sortBy' => 'Id', 'order' => 'ASC', 'limit' => 1, 'offset' => 0]);
+        $Site = $SitesManager->get(['Token' => $token], ['limit' => 1]);
         if(!$Site){
-            return $ErrorResponsesManager->invalidToken($request, $token);
+            return $this->render('default/error-response.html.twig', [
+                'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
+                'ErrorResponse' => "Invalid token"
+            ]);
         }
         
         $UsersManager = $this->get('app.UsersManager');
         $SanitizeInputsManager = $this->get('app.SanitizeInputsManager');
           
-        // Validate the sortBy parameter
-        $sortBy = $request->attributes->get('sortBy');    
+        // Validate the sortBy parameter   
         if(!$this->isColumn($sortBy, 'notSensitive')){
             $sortBy = 'Id';
         }
@@ -61,16 +67,21 @@ class UserManagementController extends Controller
         }
         
         // Validate the order parameter (will convert ascending -> ASC etc)
-        $order = $request->attributes->get('order');
         $order = $SanitizeInputsManager->getValidOrder($order);
         
         $Options = [];
         $Filters = ['sortBy' => $sortBy, 'order' => $order, 'limit' => 10, 'offset' => 0]; //Show 10 at a time
         $Users = $UsersManager->get($Options, $Filters);
         
+        if(!$this->isGranted('GET', $Users)){
+            return $this->render('default/error-response.html.twig', [
+                'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
+                'ErrorResponse' => "You are not granted to perform this action"
+            ]);
+        }
+        
         // Validate the pageNumber parameter
-        $pageNumber = $request->attributes->get('pageNumber');
-        if($pageNumber === null){ $pageNumber = 1; }
+        // ...
         
         $routeFilters = ['sortBy' => $sortBy, 'order' => $order, 'token' => $token, 'pageNumber' => $pageNumber];
         

@@ -67,7 +67,7 @@
                                     {{ include('default/widgets/social/user-nav.html.twig') }}
                                 {% else %}
                                     <li class="nav-link {% if activeTab == 'login' %}active{% endif %}">
-                                        <a href="{{ path('LoginForm') }}">
+                                        <a href="{{ path('Login') }}">
                                             <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
                                             Log In
                                         </a>
@@ -80,7 +80,7 @@
                         </div>
                         <div id="search-box" class="col-xs-4 pull-right">
                             <form action="/search" method="GET">
-                                <input class="form-control" placeholder="Search...">
+                                <input name="q" class="form-control" placeholder="Search...">
                             </form>
                         </div>
                     </div>

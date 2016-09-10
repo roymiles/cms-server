@@ -15,19 +15,20 @@
                     </div>
                 </div>
                 <div class="panel-body" style="padding-top:30px">
-                    <form action="{{ path('ProcessLoginRequest') }}" method="POST" class="form-horizontal" name="loginform" role="form">
-                        {{ dump(session_data) }}
+                    {{ dump(session_data) }}
+                    {{ error }}
+                    {% if app.session.flashbag.has('loginErrors') %}
+                        <div class="alert alert-danger" id="signupalert">
+                            <p>Please correct the following errors</p>
+                            <ul>
+                                {% for errorMessage in app.session.flashBag.get('loginErrors') %}
+                                    <li>{{ errorMessage }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
 
-                        {% if app.session.flashbag.has('loginErrors') %}
-                            <div class="alert alert-danger" id="signupalert">
-                                <p>Please correct the following errors</p>
-                                <ul>
-                                    {% for errorMessage in app.session.flashBag.get('loginErrors') %}
-                                        <li>{{ errorMessage }}</li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
-                        {% endif %}
+                    <form action="{{ path('Login') }}" method="POST" class="form-horizontal" name="loginform" role="form">
 
                         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                         <input type="hidden" name="site_token" value="{{ local_site_token  }}">
@@ -36,7 +37,7 @@
                             <span class="input-group-addon"><i class=
                             "glyphicon glyphicon-user"></i></span>
                             <input class="form-control" id="login-username"
-                            name="UsernameOrEmail" placeholder="username or email"
+                            name="Username" placeholder="username"
                             type="text" value="">
                         </div>
                         <div class="input-group" style="margin-bottom: 25px">

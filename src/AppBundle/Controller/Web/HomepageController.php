@@ -1,21 +1,21 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace AppBundle\Controller\Web;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
-class AboutController extends Controller
+class HomepageController extends Controller
 {
     /**
-     * @Route("/", name="About")
+     * @Route("/", name="Homepage")
      */
-    public function aboutAction(Request $request)
+    public function homepageAction(Request $request)
     {
-        return $this->render('default/pages/about.html.twig', [
+        return $this->render('default/pages/index.html.twig', [
             'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
-            'activeTab' => 'about',
+            'activeTab' => 'home',
         ]);
     }
 }

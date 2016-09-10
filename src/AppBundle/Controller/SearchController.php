@@ -9,22 +9,23 @@ use Symfony\Component\HttpFoundation\Request;
 class SearchController extends Controller
 {
     /**
-     * @Route("/search/{query}", name="search")
+     * @Route("/search", name="Search")
      */
-    public function searchAction(Request $request, $query)
+    public function searchAction(Request $request)
     {
         $searchManager = $this->get('app.SearchManager');
-        $results = $searchManager->search(['limit' => 10]);
+        $query = $request->query->get('q');
+        $results = $searchManager->search($query, ['Users'], 10);
         
-        if(!empty($search)){
-          return $this->render('default/search/index.html.twig', [
-              'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
-              'results' => $results
-          ]);
+        if(!empty($results)){
+            return $this->render('default/search.html.twig', [
+                'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
+                'results' => $results
+            ]);
         }else{
-          return $this->render('default/search/404.html.twig', [
-            'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..')
-          ]);
+            return $this->render('default/search.html.twig', [
+              'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..')
+            ]);
         }
     }
     

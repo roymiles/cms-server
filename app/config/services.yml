@@ -21,6 +21,10 @@ services:
     app.SanitizeInputsManager:
         class: AppBundle\Services\SanitizeInputsManager
         arguments: ['@doctrine.orm.entity_manager']          
+ 
+    app.SearchManager:
+        class: AppBundle\Services\SearchManager
+        arguments: ['@doctrine.orm.entity_manager']          
         
     app.SessionsManager:
         class: AppBundle\Services\SessionsManager
@@ -51,3 +55,11 @@ services:
     app.token_authenticator:
         class: AppBundle\Security\TokenAuthenticator
         arguments: ['@doctrine.orm.entity_manager', '@session', '@app.UsersManager', '@router']
+        
+    app.UserVoter:
+        class: AppBundle\Security\UserVoter
+        tags:
+            - { name: security.voter }
+            
+    app.anonymous_user_provider:
+        class: AppBundle\Security\AnonymousUserProvider

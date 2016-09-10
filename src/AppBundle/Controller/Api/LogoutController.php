@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace AppBundle\Controller\Api;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -15,8 +15,8 @@ class LogoutController extends Controller
      */
     public function logoutAction(Request $request)
     {
-        $this->get('security.token_storage')->setToken(null);
-        $request->getSession()->invalidate();
+        $session = $this->get('session');
+        $session->clear(); // Clear all attributes
         return $this->redirectToRoute('Homepage');
     }
 }

@@ -1,39 +1,39 @@
-{{ dump(filters) }}
+{{ dump(currentFilters) }}
 <table id="sql-table" class="table table-hover table-bordered">
   <thead>
     <tr>
         <th>
-            {% if filters.sortBy == 'Id' and (filters.order == 'ascending' or filters.order == 'ASC') %}
-                <a href="{{ path(currentPath, filters|merge({'sortBy': 'Id', 'order': 'descending'})) }}">
+            {% if currentFilters.sortBy == 'Id' and (currentFilters.order == 'ascending' or currentFilters.order == 'ASC') %}
+                <a href="{{ path(currentPath, currentFilters|merge({'sortBy': 'Id', 'order': 'descending'})) }}">
             {% else %}
-                <a href="{{ path(currentPath, filters|merge({'sortBy': 'Id', 'order': 'ascending'})) }}">
+                <a href="{{ path(currentPath, currentFilters|merge({'sortBy': 'Id', 'order': 'ascending'})) }}">
             {% endif %}
-            {% if filters.sortBy == 'Id' %}
-                <span class="glyphicon {% if filters.order == 'ascending' or filters.order == 'ASC' %}glyphicon-chevron-up{% else %}glyphicon-chevron-down{% endif %}" aria-hidden="true"></span>
+            {% if currentFilters.sortBy == 'Id' %}
+                <span class="glyphicon {% if currentFilters.order == 'ascending' or currentFilters.order == 'ASC' %}glyphicon-chevron-up{% else %}glyphicon-chevron-down{% endif %}" aria-hidden="true"></span>
             {% endif %}
             Id
                 </a>
         </th>
         <th>
-          {% if filters.sortBy == 'Username' and (filters.order == 'ascending' or filters.order == 'ASC') %}
-              <a href="{{ path(currentPath, filters|merge({'sortBy': 'Username', 'order': 'descending'})) }}">
+          {% if currentFilters.sortBy == 'Username' and (currentFilters.order == 'ascending' or currentFilters.order == 'ASC') %}
+              <a href="{{ path(currentPath, currentFilters|merge({'sortBy': 'Username', 'order': 'descending'})) }}">
           {% else %}
-              <a href="{{ path(currentPath, filters|merge({'sortBy': 'Username', 'order': 'ascending'})) }}">
+              <a href="{{ path(currentPath, currentFilters|merge({'sortBy': 'Username', 'order': 'ascending'})) }}">
           {% endif %}
-          {% if filters.sortBy == 'Username' %}
-              <span class="glyphicon {% if filters.order == 'ascending' or filters.order == 'ASC' %}glyphicon-chevron-up{% else %}glyphicon-chevron-down{% endif %}" aria-hidden="true"></span>
+          {% if currentFilters.sortBy == 'Username' %}
+              <span class="glyphicon {% if currentFilters.order == 'ascending' or currentFilters.order == 'ASC' %}glyphicon-chevron-up{% else %}glyphicon-chevron-down{% endif %}" aria-hidden="true"></span>
           {% endif %}
           Username
               </a>
         </th>
         <th>
-          {% if filters.sortBy == 'Email' and (filters.order == 'ascending' or filters.order == 'ASC') %}
-              <a href="{{ path(currentPath, filters|merge({'sortBy': 'Email', 'order': 'descending'})) }}">
+          {% if currentFilters.sortBy == 'Email' and (currentFilters.order == 'ascending' or currentFilters.order == 'ASC') %}
+              <a href="{{ path(currentPath, currentFilters|merge({'sortBy': 'Email', 'order': 'descending'})) }}">
           {% else %}
-              <a href="{{ path(currentPath, filters|merge({'sortBy': 'Email', 'order': 'ascending'})) }}">
+              <a href="{{ path(currentPath, currentFilters|merge({'sortBy': 'Email', 'order': 'ascending'})) }}">
           {% endif %}
-          {% if filters.sortBy == 'Email' %}
-              <span class="glyphicon {% if filters.order == 'ascending' or filters.order == 'ASC' %}glyphicon-chevron-up{% else %}glyphicon-chevron-down{% endif %}" aria-hidden="true"></span>
+          {% if currentFilters.sortBy == 'Email' %}
+              <span class="glyphicon {% if currentFilters.order == 'ascending' or currentFilters.order == 'ASC' %}glyphicon-chevron-up{% else %}glyphicon-chevron-down{% endif %}" aria-hidden="true"></span>
           {% endif %}
           Email
               </a>
@@ -49,7 +49,7 @@
             <td data-column="Username" data-id="{{ user.Id }}">{{ user.Username }}</td>
             <td data-column="Email" data-id="{{ user.Id }}">{{ user.Email }}</td>
             <td style="width: 31px">
-                <a class="delete-column-text" href="{{ path("ManagementDeleteUser", {'UserId': user.Id}) }}">
+                <a class="delete-column-text" href="{{ path("ManagementDeleteUser", {'UserId': user.Id, 'token': currentFilters.token}) }}">
                     <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                 </a>
             </td>

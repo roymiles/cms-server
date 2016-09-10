@@ -40,6 +40,8 @@ The project is written with the [Symfony2](https://symfony.com/) framework and h
 - [ ] Try out the built in symfony2 logging system
 
 
+- [ ] Try and ensure all controllers methods have minimal number of attached routes
+
 
 *By Roy Miles*
 

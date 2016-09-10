@@ -12,7 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 class LoginController extends Controller
 {
     /**
-     * @Route("/login", name="LoginForm")
+     * @Route("/login", name="Login")
      */
     public function loginFormAction(Request $request)
     {
@@ -24,6 +24,15 @@ class LoginController extends Controller
         
         $AuthenticationManager = $this->get('app.AuthenticationManager');
         
+        $user = $this->getUser();
+        if($user instanceof UserInterface){
+            return $this->redirectToRoute('Homepage');
+        }
+
+        /** @var AuthenticationException $exception */
+        $exception = $this->get('security.authentication_utils')
+          ->getLastAuthenticationError();
+        
         
         $csrf_token = $AuthenticationManager->csrf_generate('csrf_token');
         return $this->render('default/pages/login.html.twig', [
@@ -31,7 +40,8 @@ class LoginController extends Controller
             'activeTab' => 'login',
             'csrf_token' => $csrf_token,
             
-            'session_data' => $session->all()
+            'session_data' => $session->all(),
+            'error' => $exception ? $exception->getMessage() : NULL,
         ]);
     }
     
@@ -39,7 +49,7 @@ class LoginController extends Controller
      * @Route("/processLogin", name="ProcessLoginRequest")
      * @Method({"POST"})
      */
-    public function processLoginRequestAction(Request $request)
+    /*public function processLoginRequestAction(Request $request)
     {
         $AuthenticationManager = $this->get('app.AuthenticationManager');
         $UsersManager = $this->get('app.UsersManager');
@@ -131,6 +141,7 @@ class LoginController extends Controller
             }else{
                 // Set the appropriate session variables
                 $session = $this->get('session');
+               // dump($User);die();
                 $session->set('User', $User);
                 $session->set('isLoggedIn', true);
                 $session->set('LoginString', hash('sha512', $User->getPassword().$_SERVER['HTTP_USER_AGENT']));
@@ -144,5 +155,5 @@ class LoginController extends Controller
                 return $this->redirectToRoute('LoginForm');
             }
         }
-    }    
+    } */   
 }
