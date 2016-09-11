@@ -313,6 +313,10 @@ class UsersManager
     }
     
     public function isEqual($user1, $user2){
+        if(!$user1 instanceof Users || !$user2 instanceof Users){
+            return false;
+        }
+        
         if($user1->getId() == $user2->getId()){
             return true;
         }else{

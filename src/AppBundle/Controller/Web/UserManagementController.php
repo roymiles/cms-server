@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace AppBundle\Controller\Web;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -60,11 +60,11 @@ class UserManagementController extends Controller
         }
         
         // Validate the searchBy $_GET parameter 
-        $searchBy = $request->query->get('searchBy');  
-        $searchQuery = $request->query->get('searchQuery');  
+        /*$searchBy = $request->query->get('searchBy');  
+        $searchQuery = $request->query->get('q');  
         if($this->isColumn($searchBy, 'notSensitive')){
             $searchBy = 'Username';
-        }
+        }*/
         
         // Validate the order parameter (will convert ascending -> ASC etc)
         $order = $SanitizeInputsManager->getValidOrder($order);
@@ -83,7 +83,7 @@ class UserManagementController extends Controller
         // Validate the pageNumber parameter
         // ...
         
-        $routeFilters = ['sortBy' => $sortBy, 'order' => $order, 'siteToken' => $SiteToken, 'pageNumber' => $pageNumber];
+        $routeFilters = ['sortBy' => $sortBy, 'order' => $order, 'site_token' => $SiteToken, 'pageNumber' => $pageNumber];
         
         if($request->isXmlHttpRequest()){
             // AJAX request
@@ -94,6 +94,7 @@ class UserManagementController extends Controller
         }else{
             return $this->render('default/manage/users.html.twig', [
                 'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
+                'activeTab' => 'manage',
                 'users' => $Users,
                 'routeFilters' => $routeFilters
             ]);
@@ -105,7 +106,7 @@ class UserManagementController extends Controller
     }
     
     /**
-     * @Route("/token={token}/manage/users/delete/UserId={UserId}", name="ManagementDeleteUser")
+     * @Route("/manage/users/delete", name="ManagementDeleteUser")
      */
     public function deleteAction(Request $request){
         $UsersManager = $this->get('app.UsersManager');     
@@ -117,13 +118,13 @@ class UserManagementController extends Controller
          *  This is needed for redirect to user management console and
          *  as extra verification. Check if user matches the site
          */
-        $token = $request->attributes->get('token');
+        $token = $request->query->get('site_token');
         if($token ===  null){
             return $ErrorResponsesManager->nullToken($request, $token);
         } 
         
         // Is there a user id in the URL?
-        $UserId = $request->attributes->get('UserId');
+        $UserId = $request->query->get('UserId');
         if($UserId ===  null){
             return $ErrorResponsesManager->nullParameter($request, 'User Id');
         }  

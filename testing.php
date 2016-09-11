@@ -8,13 +8,8 @@
 
 require __DIR__.'/vendor/autoload.php';
 
-// NOT INSTALLED YET
-$client = new \GuzzleHttp\Client([
-    'base_url' => 'http://localhost:8000',
-    'defaults' => [
-        'exceptions' => false
-    ]
-]);
+// Does not work
+$client = $this->get('guzzle.client');
 
 $response = $client->post('/login');
 echo $response;

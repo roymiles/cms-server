@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace AppBundle\Controller\Web;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -22,7 +22,7 @@ class LoginController extends Controller
          */
         $session = $request->getSession();
         
-        $AuthenticationManager = $this->get('app.AuthenticationManager');
+        //$AuthenticationManager = $this->get('app.AuthenticationManager');
         
         $user = $this->getUser();
         if($user instanceof UserInterface){
@@ -34,11 +34,11 @@ class LoginController extends Controller
           ->getLastAuthenticationError();
         
         
-        $csrf_token = $AuthenticationManager->csrf_generate('csrf_token');
+        //$csrf_token = $AuthenticationManager->csrf_generate('csrf_token');
         return $this->render('default/pages/login.html.twig', [
             'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
             'activeTab' => 'login',
-            'csrf_token' => $csrf_token,
+            //'csrf_token' => $csrf_token,
             
             'session_data' => $session->all(),
             'error' => $exception ? $exception->getMessage() : NULL,

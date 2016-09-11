@@ -4,7 +4,7 @@
     </span>
 </li>
 <li class="nav-link {% if activeTab == 'manage' %}active{% endif %}">
-    <a href="{{ path('ManagementGetUsers', {'token': 'a'}) }}">Manage</a>
+    <a href="{{ path('ManagementGetUsers', {'site_token': 'a'}) }}">Manage</a>
 </li>
 <li>
     <a class="btn btn-danger" href="{{ path('Logout') }}">Logout</a>

@@ -61,6 +61,10 @@ class UserVoter extends Voter
     }
     
     private function canGet($subject, $user){
+        // Anonymous users dont have privileges
+        if ($user instanceof AnonymousUser) {
+            return false;
+        }
         // All the users in the $object should be of the same site
         if (!$subject instanceof Users) {
             if (is_array($subject)) {

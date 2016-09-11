@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Controller\Api;
+namespace AppBundle\Controller\Web;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -11,10 +11,12 @@ use Symfony\Component\HttpFoundation\Session\Session;
 class LogoutController extends Controller
 {
     /**
-     * @Route("/api/logout", name="ApiLogout")
+     * @Route("/logout", name="Logout")
      */
     public function logoutAction(Request $request)
     {
-        // Remove access token...
+        $session = $this->get('session');
+        $session->clear(); // Clear all attributes
+        return $this->redirectToRoute('Homepage');
     }
 }

@@ -49,7 +49,7 @@
             <td data-column="Username" data-id="{{ user.Id }}">{{ user.Username }}</td>
             <td data-column="Email" data-id="{{ user.Id }}">{{ user.Email }}</td>
             <td style="width: 31px">
-                <a class="delete-column-text" href="{{ path("ManagementDeleteUser", {'UserId': user.Id, 'token': currentFilters.token}) }}">
+                <a class="delete-column-text" href="{{ path("ManagementDeleteUser", {'UserId': user.Id, 'site_token': currentFilters.site_token}) }}">
                     <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                 </a>
             </td>

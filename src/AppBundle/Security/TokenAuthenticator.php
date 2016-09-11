@@ -97,6 +97,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     public function checkCredentials($credentials, UserInterface $user)
     {     
         if($user instanceof AnonymousUser){
+            //echo "AnonymousUser";
             return true;
         }
         
@@ -147,7 +148,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
-        die('error');
+        die('onAuthenticationFailure');
         $this->session->getFlashBag()->add('banner-error', strtr($exception->getMessageKey(), $exception->getMessageData()));
         return new RedirectResponse($this->router->generate('Login'));
     }
