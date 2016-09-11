@@ -54,10 +54,11 @@ services:
                  
     app.token_authenticator:
         class: AppBundle\Security\TokenAuthenticator
-        arguments: ['@doctrine.orm.entity_manager', '@session', '@app.UsersManager', '@router']
+        arguments: ['@doctrine.orm.entity_manager', '@session', '@app.UsersManager', '@app.SitesManager', '@router']
         
     app.UserVoter:
         class: AppBundle\Security\UserVoter
+        arguments: ['@app.UsersManager', '@app.SitesManager']
         tags:
             - { name: security.voter }
             

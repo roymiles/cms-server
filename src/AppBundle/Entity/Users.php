@@ -305,23 +305,23 @@ class Users implements UserInterface, \Serializable
     }
     
     
-    // Following added manually...
-    
-    // Abstract method is plural
     public function getRoles(){
-        // Roles aren't used
         return array('ROLE_USER');
-        //return [$this->Roles->getName()];
     }
 
+    // This is for removing sensitive credentials
+    // http://stackoverflow.com/questions/8455398/symfony-2-logout-userinterfaceerasecredentials
     public function eraseCredentials()
     {
-        $this->Id = 0;
     }
 
     /** @see \Serializable::serialize() */
     public function serialize()
     {
+        /*
+         *  Does not need all these fields - can be removed later
+         *   http://symfony.com/doc/current/security/entity_provider.html#what-do-the-serialize-and-unserialize-methods-do
+         */
         return serialize(array(
             $this->Id,
             $this->Username,

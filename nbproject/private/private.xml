@@ -13,11 +13,13 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/xampp/htdocs/zeal/app/config/services.yml</file>
-            <file>file:/C:/xampp/htdocs/zeal/app/Resources/views/default/pages/login.html.twig</file>
-            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Controller/LogoutController.php</file>
+            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Security/AnonymousUserProvider.php</file>
+            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Controller/Api/LogoutController.php</file>
             <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Security/TokenAuthenticator.php</file>
             <file>file:/C:/xampp/htdocs/zeal/app/config/security.yml</file>
-            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Security/UserVoter.php</file>
+            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Controller/UserManagementController.php</file>
+            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Entity/Users.php</file>
+            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Security/AnonymousUser.php</file>
             <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Controller/LoginController.php</file>
         </group>
     </open-files>

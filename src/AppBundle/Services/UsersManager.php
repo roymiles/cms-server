@@ -311,6 +311,30 @@ class UsersManager
             return false;
         }
     }
+    
+    public function isEqual($user1, $user2){
+        if($user1->getId() == $user2->getId()){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    
+    public function serialize($user){
+        // Some of these fields may be sensitive, perhaps remove them
+        return array(
+            "Id" => $user->getId(),
+            "Username" => $user->getUsername(),
+            "Email" => $user->getEmail(),
+            "Password" => $user->getPassword(),
+            "IsVerified" => $user->getIsVerified(),
+            "VerificationToken" => $user->getVerificationToken(),
+            "Reputation" => $user->getReputation(),
+            "Site" => $user->getSite(),
+            "Roles" => $user->getRoles(),
+            "CreationDate" => $user->getCreationDate()
+        );
+    }
 
     
 }

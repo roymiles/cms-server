@@ -34,20 +34,20 @@ class UserManagementController extends Controller
         $order = $request->query->get('order', 'ASC');
 
         // Is there a token in the URL?
-        $token = $request->query->get('token');
-        if($token ===  null){
+        $SiteToken = $request->query->get('site_token');
+        if($SiteToken ===  null){
             return $this->render('default/error-response.html.twig', [
                 'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
-                'ErrorResponse' => "No token supplied"
+                'error' => "No token supplied"
             ]);
         }  
 
         // Does the token correspond to a valid site
-        $Site = $SitesManager->get(['Token' => $token], ['limit' => 1]);
+        $Site = $SitesManager->get(['Token' => $SiteToken], ['limit' => 1]);
         if(!$Site){
             return $this->render('default/error-response.html.twig', [
                 'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
-                'ErrorResponse' => "Invalid token"
+                'error' => "Invalid token"
             ]);
         }
         
@@ -76,14 +76,14 @@ class UserManagementController extends Controller
         if(!$this->isGranted('GET', $Users)){
             return $this->render('default/error-response.html.twig', [
                 'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
-                'ErrorResponse' => "You are not granted to perform this action"
+                'error' => "You are not granted to perform this action"
             ]);
         }
         
         // Validate the pageNumber parameter
         // ...
         
-        $routeFilters = ['sortBy' => $sortBy, 'order' => $order, 'token' => $token, 'pageNumber' => $pageNumber];
+        $routeFilters = ['sortBy' => $sortBy, 'order' => $order, 'siteToken' => $SiteToken, 'pageNumber' => $pageNumber];
         
         if($request->isXmlHttpRequest()){
             // AJAX request

@@ -1,0 +1,35 @@
+<?php
+// src/AppBundle/Entity/AccessTokens.php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="AccessTokens")
+ */
+class AccessTokens
+{
+    /**
+     * @ORM\Column(type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $Id;
+    
+    /**
+     * @ORM\Column(type="string", length=256)
+     * @Assert\NotBlank()
+     */
+    private $Token;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Users", inversedBy="AccessTokens")
+     * @ORM\JoinColumn(name="UserId", referencedColumnName="Id")
+     * @Assert\NotBlank()
+     */
+    private $User;
+
+}

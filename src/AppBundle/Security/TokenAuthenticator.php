@@ -13,6 +13,7 @@ use Doctrine\ORM\EntityManager;
 
 use Symfony\Component\HttpFoundation\Session\Session;
 use AppBundle\Services\UsersManager;
+use AppBundle\Services\SitesManager;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\RouterInterface;
@@ -26,13 +27,19 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     private $em;
     private $session;
     private $UsersManager;
+    private $SitesManager;
     private $router;
     
-    public function __construct(EntityManager $em, Session $session, UsersManager $UsersManager, RouterInterface $router)
+    public function __construct(EntityManager $em, 
+                                Session $session, 
+                                UsersManager $UsersManager, 
+                                SitesManager $SitesManager, 
+                                RouterInterface $router)
     {
         $this->em = $em;
         $this->session = $session;
         $this->UsersManager = $UsersManager;
+        $this->SitesManager = $SitesManager;
         $this->router = $router;
     }
 
@@ -42,12 +49,12 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
      */
     public function getCredentials(Request $request)
     {
-        //dump($request);die;
         if($request->getPathInfo() == '/login' && $request->isMethod('POST')){
             // Login form submission
             return array(
               'Username' => $request->request->get('Username'),
               'Password' => $request->request->get('Password'),
+              'SiteToken' => $request->request->get('site_token'),
             ); 
         }
      
@@ -65,73 +72,71 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
         
     }
 
+    private $isSession = false;
     public function getUser($credentials, UserProviderInterface $userProvider)
     {   
-        //dump($credentials);die();
-        /*$UserId = $credentials['UserId'];
-        
-        // if null, authentication will fail
-        // if a User object, checkCredentials() is called
-        return $this->UsersManager->get(['Id' => $UserId], ['limit' => 1]);*/
-        
+        // if null, authentication will fail   
         if(empty($credentials)){
             return new AnonymousUser();
         }
         
         if(array_key_exists('Username', $credentials) && array_key_exists('Password', $credentials)){
+            // Get site ID
+            $SiteID = $this->SitesManager->get(['Token' => $credentials['SiteToken']], ['limit' => 1]);
             // Login form
-            return $this->UsersManager->get(['Username' => $credentials['Username']], ['limit' => 1]);
+            return $this->UsersManager->get(['Username' => $credentials['Username'], 'Site' => $SiteID], ['limit' => 1]);
         }
         
         if(array_key_exists('UserId', $credentials)){
-            // Login form
+            // Session credentials
+            $this->isSession = true;
             return $this->UsersManager->get(['Id' => $credentials['UserId']], ['limit' => 1]);
         }    
-        
-        /*try {
-          //return $userProvider->loadUserByUsername($credentials['username']);
-          return $this->UsersManager->get(['Username' => $credentials['Username']], ['limit' => 1]);
-        }
-        catch (UsernameNotFoundException $e) {
-          throw new CustomUserMessageAuthenticationException("eh");
-        }*/
     }
 
     public function checkCredentials($credentials, UserInterface $user)
     {     
-        //$this->session->set('User', $user);
-        return true;
-        //dump($user, $credentials);die();
-        // check credentials - e.g. make sure the password is valid
-        // no credential check is needed in this case
-        /*$loginString = $credentials['LoginString'];
-        $UserId = $credentials['UserId'];
-        
-        $password = $this->UsersManager->get(['Id' => $UserId], ['limit' => 1])->getPassword();
-        $loginCheck = hash('sha512', $password.$_SERVER['HTTP_USER_AGENT']);
-        
-        if($loginString === null){
-            return false;
-        }
-        
-        if(hash_equals($loginCheck, $loginString)){
-            //dump($user);die;
-            // Update user session object
-            $this->session->set('User', $user);
-            
-            // For easy access in TWIG
-            $this->session->set('isLoggedIn', true);
-            
-            // Return true to cause authentication success
-            return true;
-        }else{
-            return false;
-        }*/
-        /*if ($user->getPassword() === $credentials['Password']) {
+        if($user instanceof AnonymousUser){
             return true;
         }
-            throw new CustomUserMessageAuthenticationException("beh");
-        }*/
+        
+        if(array_key_exists('Password', $credentials)){
+            if(password_verify($credentials['Password'], $user->getPassword())){
+                // Valid credentials
+                $this->session->set('User', $user);
+                $this->session->set('isLoggedIn', true);
+                $this->session->set('LoginString', hash('sha512', $user->getPassword().$_SERVER['HTTP_USER_AGENT']));
+                return true;
+            }
+        }
+        
+        if($this->isSession){
+            $Password = $user->getPassword();
+            $loginCheck = hash('sha512', $Password.$_SERVER['HTTP_USER_AGENT']);
+            
+            $UserId = $credentials['UserId'];
+            $loginString = $credentials['LoginString'];
+            
+            if($UserId == null || $loginString == null || $loginCheck == null){
+                return false;
+            }
+            
+            if(hash_equals($loginCheck, $loginString)){
+                // Update user session object
+                $this->session->set('User', $user);
+
+                // For easy access in TWIG
+                $this->session->set('isLoggedIn', true);
+
+                // Return true to cause authentication success
+                return true;
+            }else{
+                return false;
+            }     
+        }
+        
+        return false;
+
     }
     
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
