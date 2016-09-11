@@ -14,6 +14,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Users implements UserInterface, \Serializable
 {
+    public function __construct()
+    {
+        $this->CreationDate = new \DateTime(); 
+    }
+    
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -365,5 +370,5 @@ class Users implements UserInterface, \Serializable
         $this->Roles = $roles;
     
         return $this;
-    }
+    }  
 }

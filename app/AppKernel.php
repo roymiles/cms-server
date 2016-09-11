@@ -20,8 +20,8 @@ class AppKernel extends Kernel
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             /*new FOS\UserBundle\FOSUserBundle(),
             new FOS\RestBundle\FOSRestBundle(),*/
-            new JMS\SerializerBundle\JMSSerializerBundle(),
-            new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
+            new JMS\SerializerBundle\JMSSerializerBundle()
+            //new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
             /*new Misd\GuzzleBundle\MisdGuzzleBundle() needs to be installed again */
         ];
 
@@ -30,6 +30,9 @@ class AppKernel extends Kernel
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
             $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
+            
+            //$bundles[] = new Hautelook\AliceBundle\HautelookAliceBundle();
+            //$bundles[] = new Bazinga\Bundle\FakerBundle\BazingaFakerBundle();
         }
 
         return $bundles;

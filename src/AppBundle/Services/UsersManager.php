@@ -11,16 +11,14 @@ use Symfony\Component\Validator\Validator\RecursiveValidator;
 use Doctrine\ORM\EntityManager;
 
 use AppBundle\Services\Interfaces;
-use AppBundle\Services\SitesManager;
 
 class UsersManager
 {
     private $repository;
-    public function __construct(EntityManager $em, RecursiveValidator $validator, SitesManager $SitesManager)
+    public function __construct(EntityManager $em, RecursiveValidator $validator)
     {
         $this->em = $em;
         $this->validator = $validator;
-        $this->SitesManager = $SitesManager;
         
         $this->repository = 'AppBundle\Entity\Users';
         $this->errorMessages = array();
@@ -119,9 +117,21 @@ class UsersManager
         $User->setEmail($Email);
         $User->setPassword($Password);
         
+        // Unless specified, the new user will not be verified automatically
+        $isVerified = isset($Options['isVerified']) ? $Options['isVerified'] : 0;
+        $User->setIsVerified($isVerified);
+        
+        // The verification token will be a hash of a securely generated sequence of 10 bytes
+        $verificationToken = md5(random_bytes(10));
+        $User->setVerificationToken($verificationToken);
+        
+        // Unless specified, the new user will start with 1 reputation
+        $Reputation = isset($Options['Reputation']) ? $Options['Reputation'] : 1;
+        $User->setReputation($Reputation);    
+        
         // Get the site
-        $SiteId = $Options['SiteId'];
-        $Site = $this->SitesManager->get(['Id' => $SiteId], ['limit' => 1]);
+        $Site = $Options['Site'];
+        $User->setSite($Site);
         $numErrors = 0;
 
         // Check if a user doesnt already exist for the given username or email
@@ -167,7 +177,7 @@ class UsersManager
         
         if($numErrors == 0){
             // Passed validation
-            $this->em = $this->getDoctrine()->getManager();
+            //$this->em = $this->getDoctrine()->getManager();
 
             // Tells Doctrine you want to (eventually) save the User (no queries yet)
             $this->em->persist($User);
