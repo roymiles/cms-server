@@ -10,11 +10,14 @@
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add
                 </button>
             </div>
-            <div class="col-xs-4 pull-right" style="margin-bottom: 20px; padding: 0;">
-                {% include 'default/widgets/table-search.html.twig' with {
-                    'currentFilters': routeFilters,
-                    'currentPath': "ManagementGetUsers",
-                } only %}
+            <div class="col-xs-4 pull-right" style="margin-bottom: 20px; padding: 0">
+                <div style="float:right">
+                    {% include 'default/widgets/table-search.html.twig' with {
+                        'currentFilters': routeFilters,
+                        'currentPath': "ManagementGetUsers",
+                        'columns': ['Id','Username','Email']
+                    } only %}
+                </div>
             </div>
         </div>
 

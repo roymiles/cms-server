@@ -44,14 +44,18 @@
   </thead>
   <tbody>
     {% for user in users %}
-        <tr>
+        <tr{% if app.session.get('User').Id == user.Id %} style="background:#dddddd"{% endif %}>
             <th scope="row">{{ user.Id }}</th>
             <td data-column="Username" data-id="{{ user.Id }}">{{ user.Username }}</td>
             <td data-column="Email" data-id="{{ user.Id }}">{{ user.Email }}</td>
             <td style="width: 31px">
-                <a class="delete-column-text" href="{{ path("ManagementDeleteUser", {'UserId': user.Id, 'site_token': currentFilters.site_token}) }}">
-                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                </a>
+                {% if app.session.get('User').Id != user.Id %}
+                    <a class="delete-column-text" 
+                       href="{{ path("ManagementDeleteUser", {'UserId': user.Id, 'site_token': currentFilters.site_token}) }}"
+                       onclick="return confirm('Are you sure?')">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                    </a>
+                {% endif %}
             </td>
         </tr>
     {% endfor %}

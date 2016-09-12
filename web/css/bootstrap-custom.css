@@ -156,7 +156,13 @@ textarea:focus, input:focus, .uneditable-input:focus {
 #banner-error{
     background: #C0392B;
     color: #ecf0f1;
-    padding: 10px 0;
+    padding: 10px;
+}
+
+#banner-message{
+    padding: 10px;
+    background-color: #e39a23;
+    color: black;
 }
 
 .row-space{

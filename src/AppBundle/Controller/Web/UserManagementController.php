@@ -88,6 +88,14 @@ class UserManagementController extends Controller
         
         $routeFilters = ['sortBy' => $sortBy, 'order' => $order, 'site_token' => $SiteToken, 'pageNumber' => $pageNumber];
         
+        if($request->query->has('searchBy')){
+            $routeFilters['searchBy'] =$request->query->get('searchBy');
+        }
+        
+        if($request->query->has('q')){
+            $routeFilters['q'] =$request->query->get('q');
+        }        
+        
         if($request->isXmlHttpRequest()){
             // AJAX request
             return new JsonResponse([
@@ -136,8 +144,8 @@ class UserManagementController extends Controller
             return $ErrorResponsesManager->nullParameter($request, 'User Id');
         }  
         
-        $Users = $UsersManager->get(['Id' => $UserId], ['limit' => 1]);
-        if(!$Users){
+        $User = $UsersManager->get(['Id' => $UserId], ['limit' => 1]);
+        if(!$User instanceof Users){
             return $ErrorResponsesManager->noUserFound($request);
         }
         
@@ -147,14 +155,18 @@ class UserManagementController extends Controller
             return $ErrorResponsesManager->invalidToken($request, $token);
         }
         
-        var_dump($Users->getId());
-        var_dump($Site->getId());
+        if(!$this->isGranted('DELETE', $User)){
+            return $this->render('default/blank.html.twig', [
+                'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
+                'content' => "You are not granted to perform this action"
+            ]);
+        }
         
-        //$Options = ['id' => $id];
-        //$Filters = ['limit' => 1];
-        //$User = $UsersManager->get($Options, $Filters);
+        $Options = ['Id' => $User->getId()];
+        $Filters = ['limit' => 1];
+        $User = $UsersManager->get($Options, $Filters);
 
-        //$UsersManager->delete($User);
+        $UsersManager->delete($User);
         
         if($request->isXmlHttpRequest()){
             // AJAX request
@@ -163,10 +175,10 @@ class UserManagementController extends Controller
             ]);
         }else{
             $this->addFlash(
-                'notice',
+                'banner-notice',
                 'User deleted successfully'
             );
-            return $this->redirectToRoute($this->generateUrl('ManagementGetUsers', array('token' => $token)));
+            return $this->redirect($this->generateUrl('ManagementGetUsers', array('site_token' => $token)));
         }  
     }
     

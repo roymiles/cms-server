@@ -84,15 +84,10 @@
                             </form>
                         </div>
                     </div>
-                    <div class="col-xs-2">
-                         {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-                            {{ include('default/widgets/social/messenger.html.twig') }}
-                         {% endif %}
-                    </div>
                 </div>
 
                 {% if app.session.flashbag.has('banner-notice') %}
-                    {% include('default/widgets/banner-message.html.twig') %}
+                    {% include('default/widgets/banner-notice.html.twig') %}
                 {% endif %}
 
                 {% if app.session.flashbag.has('banner-error') %}

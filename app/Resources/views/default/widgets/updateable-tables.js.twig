@@ -20,19 +20,19 @@
         request.open('POST', '{{ path('ManagementUpdateUser')|raw }}', true);
 
         request.onload = function(){
-          if(request.status >= 200 && request.status < 400){
-            // Success!
-            alertify.error('Updated user');
-            var resp = request.responseText;
-          }else{
-            alertify.error('Failed to update. #1');
-            // We reached our target server, but it returned an error
-          }
+            if(request.status >= 200 && request.status < 400){
+              // Success!
+              alertify.error('Updated user');
+              var resp = request.responseText;
+            }else{
+              alertify.error('Failed to update. #1');
+              // We reached our target server, but it returned an error
+            }
         };
 
         request.onerror = function(){
-          // There was a connection error of some sort
-          alertify.error('Failed to update. #2');
+            // There was a connection error of some sort
+            alertify.error('Failed to update. #2');
         };
 
         request.send(data);

@@ -1,6 +1,23 @@
+{% if currentFilters['searchBy'] is defined %}
+    {% set searchBy = currentFilters['searchBy'] %}
+{% else %}
+    {% set searchBy = '' %}
+{% endif %}
+
 <form action="{{ path(currentPath) }}" method="GET">
-    <input name="q" class="form-control" placeholder="Search...">
     {% for name,value in currentFilters %}
-        <input name="{{ name }}" class="form-control" type="hidden" value="{{ value }}">
+        {% if name != 'q' and name != 'searchBy' %}
+            <input name="{{ name }}" type="hidden" value="{{ value }}">
+        {% endif %}
     {% endfor %}
+    <div class="input-group">
+        <select class="form-control" name="searchBy">
+            {% for column in columns %}
+                <option{% if searchBy == column %} selected{% endif %}>{{ column }}</option>
+            {% endfor %}
+        </select>
+        <!-- This line aligns the form components -->
+        <span class="input-group-addon" style="width:0px; padding-left:0px; padding-right:0px; border:none;"></span>
+        <input type="text" name="q" class="form-control" placeholder="Search...">
+    </div><!-- /input-group -->
 </form>

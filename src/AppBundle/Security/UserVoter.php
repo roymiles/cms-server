@@ -95,4 +95,43 @@ class UserVoter extends Voter
             return false;
         }
     }
+
+
+    private function canDelete(Users $subject, $user){
+        // Anonymous users dont have privileges
+        if ($user instanceof AnonymousUser) {
+            return false;
+        }
+        
+        // Cant delete themself
+        if($subject->getId() == $user->getId()){
+            return false;
+        }
+        
+        // Get the site the user belongs to
+        $SiteID = $subject->getSite()->getId();
+        
+        // user should be the owner of the site corresponding to the user subjects
+        $owner = $this->SitesManager->get(['Id' => $SiteID], ['limit' => 1])->getOwner();
+        if($this->UsersManager->isEqual($owner, $user)){
+            // the user is the owner of the site
+            return true;
+        }else{
+            return false;
+        }
+    }    
+    
+    /*private function isArrayOfObjectType($subject, $instance){
+        if (is_array($subject)) {
+            // array of User objects
+            foreach($subject as $s){
+                // check if each array element is a User object
+                if (!$s instanceof $instance) {
+                    return false;
+                }
+            }
+        }else{
+            return false;
+        }
+    }*/
 }
