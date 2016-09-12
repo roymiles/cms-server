@@ -32,4 +32,62 @@ class AccessTokens
      */
     private $User;
 
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->Id;
+    }
+
+    /**
+     * Set token
+     *
+     * @param string $token
+     *
+     * @return AccessTokens
+     */
+    public function setToken($token)
+    {
+        $this->Token = $token;
+    
+        return $this;
+    }
+
+    /**
+     * Get token
+     *
+     * @return string
+     */
+    public function getToken()
+    {
+        return $this->Token;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \AppBundle\Entity\Users $user
+     *
+     * @return AccessTokens
+     */
+    public function setUser(\AppBundle\Entity\Users $user = null)
+    {
+        $this->User = $user;
+    
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \AppBundle\Entity\Users
+     */
+    public function getUser()
+    {
+        return $this->User;
+    }
 }

@@ -17,7 +17,9 @@
         </div>
 
         <div id="add-user-form" class="row" style="margin-bottom: 20px; display: none">
-            {% include 'default/forms/add-user.html.twig' %}
+            {% include 'default/forms/add-user.html.twig' with {
+                'form': addUserForm
+            } only %}
         </div>
 
         <div class="row">

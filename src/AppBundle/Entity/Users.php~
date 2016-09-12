@@ -14,6 +14,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Users implements UserInterface, \Serializable
 {
+    public function __construct()
+    {
+        $this->CreationDate = new \DateTime(); 
+    }
+    
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -318,6 +323,10 @@ class Users implements UserInterface, \Serializable
     /** @see \Serializable::serialize() */
     public function serialize()
     {
+        /*
+         *  Does not need all these fields - can be removed later
+         *   http://symfony.com/doc/current/security/entity_provider.html#what-do-the-serialize-and-unserialize-methods-do
+         */
         return serialize(array(
             $this->Id,
             $this->Username,
@@ -361,5 +370,5 @@ class Users implements UserInterface, \Serializable
         $this->Roles = $roles;
     
         return $this;
-    }
+    }  
 }

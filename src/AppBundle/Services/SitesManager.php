@@ -58,9 +58,9 @@ class SitesManager
     // DELETE actions
     //-----------------------------------------------------        
     
-    public function delete($User)
+    public function delete($Site)
     {
-        $this->em->remove($User);
+        $this->em->remove($Site);
         $this->em->flush();
     }
     
@@ -68,30 +68,15 @@ class SitesManager
     // UPDATE actions
     //----------------------------------------------------- 
     
-    public function update($User, array $Options)
-    {
-        $User->setUsername($Username);
-        $em->flush();      
+    public function update($Site, array $Options)
+    {    
     }
     
     //-----------------------------------------------------
     // INSERT actions
     //-----------------------------------------------------       
-    public function add(string $username, string $email, string $password)
-    {
-        $user = new Users();
-        
-        $user->setUsername($username);
-        $user->setEmail($email);
-        $user->setPassword(password_hash($password));
-        
-        $this->em = $this->getDoctrine()->getManager();
-    
-        // Tells Doctrine you want to (eventually) save the User (no queries yet)
-        $this->em->persist($user);
-    
-        // Actually executes the queries (i.e. the INSERT query)
-        $this->em->flush();        
+    public function add(array $Options)
+    {      
         
     }    
     

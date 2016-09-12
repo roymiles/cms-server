@@ -1,4 +1,5 @@
 services:
+    # Generic services
     app.AuthenticationManager:
         class: AppBundle\Services\AuthenticationManager
         arguments: ['@doctrine.orm.entity_manager', '@session']       
@@ -46,21 +47,25 @@ services:
         class: AppBundle\Services\UsersManager
         arguments: ['@doctrine.orm.entity_manager', '@validator', '@app.SitesManager']
         
+    # Twig     
     app.twig_extension:
         class: AppBundle\Twig\AppExtension
         public: false
         tags:
             - { name: twig.extension }
                  
+    # Security             
     app.token_authenticator:
         class: AppBundle\Security\TokenAuthenticator
         arguments: ['@doctrine.orm.entity_manager', '@session', '@app.UsersManager', '@app.SitesManager', '@router']
         
+    # Security Voteers    
     app.UserVoter:
         class: AppBundle\Security\UserVoter
         arguments: ['@app.UsersManager', '@app.SitesManager']
         tags:
             - { name: security.voter }
-            
+         
+    # Providers
     app.anonymous_user_provider:
         class: AppBundle\Security\AnonymousUserProvider

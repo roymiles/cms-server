@@ -6,6 +6,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
+use AppBundle\Entity\Users;
+use AppBundle\Forms\UserType;
+
 class RegistrationController extends Controller
 {
     /**
@@ -19,13 +22,17 @@ class RegistrationController extends Controller
          */
         $session = $request->getSession();
         
-        $AuthenticationManager = $this->get('app.AuthenticationManager');
-        
+        $AuthenticationManager = $this->get('app.AuthenticationManager');     
         $csrf_token = $AuthenticationManager->csrf_generate('csrf_token');
+        
+        $User = new Users();
+        $form = $this->createForm(UserType::class, $User, array('action' => 'whatever you want'));
+        
         return $this->render('default/pages/register.html.twig', [
             'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
             'activeTab' => 'register',
             'csrf_token' => $csrf_token,
+            'addUserForm' => $form->createView()
         ]);
     }
     

@@ -11,6 +11,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Sites
 {
+    public function __construct()
+    {
+        $this->CreationDate = new \DateTime(); 
+    }
+    
     /**
      * @ORM\Column(type="integer")
      * @ORM\Id
@@ -37,7 +42,7 @@ class Sites
     /**
      * @ORM\Column(type="string", length=256)
      */
-    private $Url;
+    private $DomainName;
 
     /**
      * Get id
@@ -104,9 +109,9 @@ class Sites
      *
      * @return Sites
      */
-    public function setUrl($url)
+    public function setDomainName($domainName)
     {
-        $this->Url = $url;
+        $this->DomainName = $domainName;
 
         return $this;
     }
@@ -116,9 +121,9 @@ class Sites
      *
      * @return string
      */
-    public function getUrl()
+    public function getDomainName()
     {
-        return $this->Url;
+        return $this->DomainName;
     }
 
     /**

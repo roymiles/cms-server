@@ -334,9 +334,8 @@ class UsersManager
         }
     }
     
-    public function serialize($user){
-        // Some of these fields may be sensitive, perhaps remove them
-        return array(
+    public function serialize($user, $removeSensitiveFields = false){
+        $u = array(
             "Id" => $user->getId(),
             "Username" => $user->getUsername(),
             "Email" => $user->getEmail(),
@@ -348,6 +347,13 @@ class UsersManager
             "Roles" => $user->getRoles(),
             "CreationDate" => $user->getCreationDate()
         );
+        
+        if($removeSensitiveFields){
+            unset($u['Password']);
+            unset($u['VerificationToken']);
+        }
+        
+        return $u;
     }
 
     

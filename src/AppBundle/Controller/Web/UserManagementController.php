@@ -9,6 +9,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use AppBundle\Controller\Interfaces\iTable;
 
+use AppBundle\Entity\Users;
+use AppBundle\Forms\UserType;
+
 class UserManagementController extends Controller
 {  
     
@@ -92,11 +95,15 @@ class UserManagementController extends Controller
                 'routeFilters' => $routeFilters
             ]);
         }else{
+            $User = new Users();
+            $form = $this->createForm(UserType::class, $User, array('action' => 'whatever you want'));
+            
             return $this->render('default/manage/users.html.twig', [
                 'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
                 'activeTab' => 'manage',
                 'users' => $Users,
-                'routeFilters' => $routeFilters
+                'routeFilters' => $routeFilters,
+                'addUserForm' => $form->createView()
             ]);
         }
     }

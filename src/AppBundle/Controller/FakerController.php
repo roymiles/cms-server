@@ -57,4 +57,34 @@ class FakerController extends Controller
             'content' => "Added " . $numEntries . " users into the database"
         ]);
     }
+    
+    /**
+     * @Route("/faker/sites", name="FakerSites")
+     */
+    public function sitesAction(Request $request)
+    {
+        $SitesManager = $this->get('app.SitesManager');  
+        $UsersManager = $this->get('app.UsersManager');
+        
+        require_once dirname(__FILE__).'/../Libraries/Faker/autoload.php';
+        $faker = \Faker\Factory::create();
+        
+        // Make the user "admin" the owner of the randomly generated site
+        $User = $UsersManager->get(['Id' => 1], ['limit' => 1]);
+        
+        $numEntries = $request->query->get('numEntries', 5);
+        
+        for($i = 0; $i < $numEntries; $i++){
+            $Options = array();
+            $Options['Owner'] = $User;
+            $Options['DomainName'] = $faker->domainName;
+            
+            $SitesManager->add($Options);
+        }
+        
+        return $this->render('default/blank.html.twig', [
+            'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
+            'content' => "Added " . $numEntries . " sites into the database"
+        ]);
+    }    
 }
