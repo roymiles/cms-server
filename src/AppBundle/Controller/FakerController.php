@@ -52,10 +52,18 @@ class FakerController extends Controller
             $UsersManager->add($Options);
         }
         
-        return $this->render('default/blank.html.twig', [
-            'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
-            'content' => "Added " . $numEntries . " users into the database"
-        ]);
+        if($request->isXmlHttpRequest()){
+            // AJAX request
+            return new JsonResponse([
+                'success' => 1
+            ]);
+        }else{
+            $this->addFlash(
+                'banner-notice',
+                "Added " . $numEntries . " users into the database"
+            );
+            return $this->redirect($this->generateUrl('ManagementGetUsers', array('site_token' => $SiteToken)));
+        }         
     }
     
     /**

@@ -9,6 +9,10 @@
                 <button id="add-user-buttom" type="button" class="btn btn-default" onclick="showFormToggle();">
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add
                 </button>
+                &nbsp;&nbsp;&nbsp;
+                or
+                &nbsp;&nbsp;&nbsp;
+                <a href="{{ path('FakerUsers', {'site_token': routeFilters['site_token']}) }}" onclick="return confirm('Are you sure?')">generate random users</a>
             </div>
             <div class="col-xs-4 pull-right" style="margin-bottom: 20px; padding: 0">
                 <div style="float:right">
@@ -39,7 +43,7 @@
             {% include 'default/widgets/pagination.html.twig' with {
                 'currentFilters': routeFilters,
                 'paginationPath': "ManagementGetUsers",
-                'lastPage': 10,
+                'lastPage': lastPage,
                 'showAlwaysFirstAndLast': false
             } only %}
         </div>

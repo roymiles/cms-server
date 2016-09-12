@@ -72,8 +72,15 @@ class UserManagementController extends Controller
         // Validate the order parameter (will convert ascending -> ASC etc)
         $order = $SanitizeInputsManager->getValidOrder($order);
         
+        $usersPerPage = 10;        
+        $totalResults = $UsersManager->count($Site->getId());
+        $lastPage = ceil($totalResults / $usersPerPage);    
+        
+        // See: http://stackoverflow.com/questions/3520996/calculating-item-offset-for-pagination
+        $offset = ($pageNumber - 1) * $usersPerPage + 1;
+        
         $Options = [];
-        $Filters = ['sortBy' => $sortBy, 'order' => $order, 'limit' => 10, 'offset' => 0]; //Show 10 at a time
+        $Filters = ['sortBy' => $sortBy, 'order' => $order, 'limit' => $usersPerPage, 'offset' => $offset];
         $Users = $UsersManager->get($Options, $Filters);
         
         if(!$this->isGranted('GET', $Users)){
@@ -111,7 +118,8 @@ class UserManagementController extends Controller
                 'activeTab' => 'manage',
                 'users' => $Users,
                 'routeFilters' => $routeFilters,
-                'addUserForm' => $form->createView()
+                'addUserForm' => $form->createView(),
+                'lastPage' => $lastPage
             ]);
         }
     }

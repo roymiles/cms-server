@@ -61,6 +61,18 @@ class UsersManager
         return $user; 
     }
     
+    public function count($SiteId){
+        // See: http://stackoverflow.com/questions/9214471/count-rows-in-doctrine-querybuilder
+        return $this->em
+                    ->getRepository($this->repository)
+                    ->createQueryBuilder('u')
+                    ->select('count(u.Id)')
+                    ->where('u.Site = :SiteId')
+                    ->setParameter('SiteId', $SiteId)
+                    ->getQuery()
+                    ->getSingleScalarResult();
+    }
+    
     //-----------------------------------------------------
     // DELETE actions
     //-----------------------------------------------------        
