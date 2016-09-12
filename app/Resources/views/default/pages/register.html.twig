@@ -1,5 +1,30 @@
 {% extends 'base.html.twig' %}
 
+{% form_theme form _self %}
+{% use "form_div_layout.html.twig" %}
+
+{% block form_row -%}
+    <div class="form-group{% if (not compound or force_error|default(false)) and not valid %} has-error{% endif %}">
+        {{- form_label(form) -}}
+        {{- form_widget(form) -}}
+        {{- form_errors(form) -}}
+    </div>
+{%- endblock form_row %}
+
+{% block form_label -%}
+    {%- set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' control-label col-md-3')|trim}) -%}
+    {{- parent() -}}
+{%- endblock form_label %}
+
+{% block form_widget_simple -%}
+    <div class="col-md-9">
+        {% if type is not defined or type not in ['file', 'hidden'] %}
+            {%- set attr = attr|merge({class: (attr.class|default('') ~ ' form-control')|trim}) -%}
+        {% endif %}
+        {{- parent() -}}
+    </div>
+{%- endblock form_widget_simple %}
+
 {% block body %}
     <div class="container">
         <div class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2" id="signupbox" style="margin-top:50px">
@@ -13,72 +38,18 @@
                     </div>
                 </div>
                 <div class="panel-body">
-                    <!-- <form action="{{ path('ProcessRegisterRequest') }}" method="POST" class="form-horizontal" id="signupform" name="signupform" role="form">
-                        {% if app.session.flashbag.has('registrationErrors') %}
-                            <div class="alert alert-danger" id="signupalert">
-                                <p>Please correct the following errors</p>
-                                <ul>
-                                    {% for errorMessage in app.session.flashBag.get('registrationErrors') %}
-                                        <li>{{ errorMessage }}</li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
-                        {% endif %} -->
- 
-                        <!-- <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                        <input type="hidden" name="site_token" value="{{ local_site_token  }}"> -->
-
-                        {% include 'default/forms/add-user.html.twig' with {
-                            'form': addUserForm
-                        } only %}
-
-                        <!-- <div class="form-group">
-                            <label class="col-md-3 control-label" for="Username">Username</label>
-                            <div class="col-md-9">
-                                <input class="form-control" 
-                                       name="Username" 
-                                       placeholder="Username"
-                                       type="text"
-                                       {% if app.session.flashbag.has('registrationFormSubmittedUsername') %}
-                                            value="{{ app.session.flashbag.get('registrationFormSubmittedUsername')|first }}"
-                                       {% endif %}
-                                />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-3 control-label" for="Email">Email</label>
-                            <div class="col-md-9">
-                                <input class="form-control" 
-                                       name="Email" 
-                                       placeholder="Email Address" 
-                                       type="text"
-                                       {% if app.session.flashbag.has('registrationFormSubmittedEmail') %}
-                                            value="{{ app.session.flashbag.get('registrationFormSubmittedEmail')|first }}"
-                                       {% endif %}
-                                />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-3 control-label" for="Password">Password</label>
-                            <div class="col-md-9">
-                                <input class="form-control" name="Password" placeholder="Password" type="password">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-3 control-label" for="RepeatPassword">Repeat Password</label>
-                            <div class="col-md-9">
-                                <input class="form-control" name="RepeatPassword" placeholder="Repeat Password" type="password">
-                            </div>
-                        </div> -->
-
-                        <!-- 
+                    {{ form_start(form, {'attr': {'class': 'form-horizontal', 'id': 'signupform', 'role': 'form'}}) }}
+                        {{ form_row(form.Username) }}
+                        {{ form_row(form.Email) }}
+                        {{ form_row(form.Password) }}
+                        <input type="hidden" name="site_token" value="{{ local_site_token  }}">
                         <div class="form-group" style="margin-top:10px">
-                            <!-- Button --> <!--
+                            <!-- Button -->
                             <div class="col-md-offset-3 col-md-9">
                                 <input id="btn-signup" type="submit" value="Sign Up" class="btn btn-info" id="btn-signup">
                             </div>
                         </div>
-                    </form> -->
+                    {{ form_end(form) }}
                 </div>
             </div>
         </div>

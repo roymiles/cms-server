@@ -40,8 +40,6 @@ twig:
     cache: false
     globals:
        local_site_token: a
-    form_themes:
-        - 'bootstrap_3_layout.html.twig'
 
 # Doctrine Configuration
 doctrine:

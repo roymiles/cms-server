@@ -32,7 +32,7 @@ class RegistrationController extends Controller
             'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
             'activeTab' => 'register',
             'csrf_token' => $csrf_token,
-            'addUserForm' => $form->createView()
+            'form' => $form->createView()
         ]);
     }
     
