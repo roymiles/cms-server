@@ -1,15 +1,16 @@
 services:
     # Generic services
+    app.AccessTokensManager:
+        class: AppBundle\Services\AccessTokensManager
+        arguments: ['@doctrine.orm.entity_manager']       
+    
     app.AuthenticationManager:
         class: AppBundle\Services\AuthenticationManager
         arguments: ['@doctrine.orm.entity_manager', '@session']       
     
     app.DocumentationManager:
         class: AppBundle\Services\DocumentationManager
-        arguments: ['@doctrine.orm.entity_manager']   
-
-    app.ErrorResponsesManager:
-        class: AppBundle\Services\ErrorResponsesManager        
+        arguments: ['@doctrine.orm.entity_manager']         
         
     app.ForumCategoriesManager:
         class: AppBundle\Services\ForumCategoriesManager
@@ -57,7 +58,7 @@ services:
     # Security             
     app.token_authenticator:
         class: AppBundle\Security\TokenAuthenticator
-        arguments: ['@doctrine.orm.entity_manager', '@session', '@app.UsersManager', '@app.SitesManager', '@router']
+        arguments: ['@doctrine.orm.entity_manager', '@session', '@app.UsersManager', '@app.SitesManager', '@app.AccessTokensManager', '@router']
         
     # Security Voteers    
     app.UserVoter:

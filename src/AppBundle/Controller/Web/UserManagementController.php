@@ -72,6 +72,16 @@ class UserManagementController extends Controller
         // Validate the order parameter (will convert ascending -> ASC etc)
         $order = $SanitizeInputsManager->getValidOrder($order);
         
+        $UserType = new Users();
+        $UserType->setSite($Site);
+        
+        if(!$this->isGranted('GET', $UserType)){
+            return $this->render('default/error-response.html.twig', [
+                'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
+                'error' => "You are not granted to perform this action"
+            ]);
+        }
+        
         $usersPerPage = 10;        
         $totalResults = $UsersManager->count($Site->getId());
         $lastPage = ceil($totalResults / $usersPerPage);    
@@ -80,15 +90,8 @@ class UserManagementController extends Controller
         $offset = ($pageNumber - 1) * $usersPerPage + 1;
         
         $Options = [];
-        $Filters = ['sortBy' => $sortBy, 'order' => $order, 'limit' => $usersPerPage, 'offset' => $offset];
-        $Users = $UsersManager->get($Options, $Filters);
-        
-        if(!$this->isGranted('GET', $Users)){
-            return $this->render('default/error-response.html.twig', [
-                'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
-                'error' => "You are not granted to perform this action"
-            ]);
-        }
+        $Filters = ['sortBy' => $sortBy, 'order' => $order, 'limit' => $usersPerPage, 'offset' => $offset, 'Site' => $Site];
+        $Users = $UsersManager->get($Options, $Filters);        
         
         // Validate the pageNumber parameter
         // ...

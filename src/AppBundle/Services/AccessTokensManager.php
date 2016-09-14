@@ -54,4 +54,24 @@ class AccessTokensManager
         
         return $accessToken; 
     }
+    
+    //-----------------------------------------------------
+    // INSERT actions
+    //-----------------------------------------------------      
+    public function add($user)
+    {
+        $accessToken = new AccessTokens();
+        $token = md5(random_bytes(10));
+        
+        $accessToken->setToken($token);
+        $accessToken->setUser($user);
+        
+        // Tells Doctrine you want to (eventually) save the User (no queries yet)
+        $this->em->persist($accessToken);
+
+        // Actually executes the queries (i.e. the INSERT query)
+        $this->em->flush();
+        
+        return $token;       
+    }        
 }

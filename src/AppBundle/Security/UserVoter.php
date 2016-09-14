@@ -26,21 +26,10 @@ class UserVoter extends Voter
         if (!in_array($attribute, array(self::GET, self::DELETE))) {
             return false;
         }
-        //dump($attribute, $subject);die;
 
         // only vote on User objects inside this voter
         if (!$subject instanceof Users) {
-            if (is_array($subject)) {
-                // array of User objects
-                foreach($subject as $s){
-                    // check if each array element is a User object
-                    if (!$s instanceof Users) {
-                        return false;
-                    }
-                }
-            }else{
-                return false;
-            }
+            return false;
         }
   
         return true;
@@ -66,24 +55,10 @@ class UserVoter extends Voter
             return false;
         }
         // All the users in the $object should be of the same site
-        if (!$subject instanceof Users) {
-            if (is_array($subject)) {
-                // array of User objects
-                $SiteID = $subject[0]->getSite()->getId();
-                foreach($subject as $s){
-                    // all users should be part of same site
-                    // + a single user can only have access to 1 site
-                    if($s->getSite()->getId() != $SiteID){
-                        // different site, so return false
-                        return false;
-                    }
-                }
-            }else{
-                // Unknown error
-                throw new \LogicException('This code should not be reached! 2.');
-            }
-        }else{
+        if ($subject instanceof Users) {
             $SiteID = $subject->getSite()->getID();
+        }else{
+            return false;
         }
         
         // user should be the owner of the site corresponding to the user subjects

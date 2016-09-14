@@ -79,7 +79,7 @@ class FakerController extends Controller
         
         // Make the user "admin" the owner of the randomly generated site
         $User = $UsersManager->get(['Id' => 1], ['limit' => 1]);
-        
+
         $numEntries = $request->query->get('numEntries', 5);
         
         for($i = 0; $i < $numEntries; $i++){

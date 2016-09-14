@@ -10,9 +10,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Validator\Validator\RecursiveValidator;
 use Doctrine\ORM\EntityManager;
 
-use AppBundle\Services\Interfaces;
+use AppBundle\Services\Interfaces\iTable;
 
-class UsersManager
+class UsersManager implements iTable
 {
     private $repository;
     public function __construct(EntityManager $em, RecursiveValidator $validator)
@@ -61,14 +61,17 @@ class UsersManager
         return $user; 
     }
     
-    public function count($SiteId){
+    public function count(array $options){
+        if(!array_key_exists('SiteId', $options)){
+            return false;
+        }
         // See: http://stackoverflow.com/questions/9214471/count-rows-in-doctrine-querybuilder
         return $this->em
                     ->getRepository($this->repository)
                     ->createQueryBuilder('u')
                     ->select('count(u.Id)')
                     ->where('u.Site = :SiteId')
-                    ->setParameter('SiteId', $SiteId)
+                    ->setParameter('SiteId', $options['SiteId'])
                     ->getQuery()
                     ->getSingleScalarResult();
     }
@@ -158,12 +161,12 @@ class UsersManager
         }
         
         // Validate with entity annotation constraints
-        // Temporary removal as cant seem to print friendly error messages
-        /*$errors = $this->validator->validate($User);    
+        $errors = $this->validator->validate($User);    
         if(count($errors) > 0){
             $this->EntityConstraintErrors = $errors;
+            dump('Annotation error: ', $errors);die;
             return false;
-        }*/
+        }
         
         // Check if username is valid
         if(!$this->isValidUsername($Username)){
@@ -189,8 +192,6 @@ class UsersManager
         
         if($numErrors == 0){
             // Passed validation
-            //$this->em = $this->getDoctrine()->getManager();
-
             // Tells Doctrine you want to (eventually) save the User (no queries yet)
             $this->em->persist($User);
 

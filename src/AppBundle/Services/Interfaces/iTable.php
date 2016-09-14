@@ -8,4 +8,5 @@ interface iTable
     public function add(array $item);
     public function delete($obj);
     public function update($obj, array $options);
+    public function count(array $options);
 }

@@ -30,7 +30,7 @@ class DocumentationController extends Controller
     }
 
     /**
-     * @Route("/docs", name="DocumentationHome")
+     * @Route("/documentation", name="DocumentationHome")
      */
     public function docsAction(Request $request)
     {
@@ -40,7 +40,7 @@ class DocumentationController extends Controller
     }
     
     /**
-     * @Route("/docs/modules", name="DocumentationModuleHome")
+     * @Route("/documentation/modules", name="DocumentationModuleHome")
      */
     public function docsModuleAction(Request $request)
     {
@@ -50,7 +50,7 @@ class DocumentationController extends Controller
     }    
     
     /**
-     * @Route("/docs/modules/{moduleName}", name="DocumentationModulePage")
+     * @Route("/documentation/modules/{moduleName}", name="DocumentationModulePage")
      */
     public function docsModulePageAction(Request $request, $moduleName)
     {

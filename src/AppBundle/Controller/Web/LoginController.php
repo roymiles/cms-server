@@ -22,6 +22,14 @@ class LoginController extends Controller
          */
         $session = $request->getSession();
         
+        $SiteToken = $request->query->get('site_token', 'a');
+        if($SiteToken ===  null){
+            return $this->render('default/blank.html.twig', [
+                'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
+                'content' => "No token supplied"
+            ]);
+        }  
+        
         //$AuthenticationManager = $this->get('app.AuthenticationManager');
         
         $user = $this->getUser();
@@ -39,6 +47,7 @@ class LoginController extends Controller
             'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
             'activeTab' => 'login',
             //'csrf_token' => $csrf_token,
+            'site_token' => $SiteToken,
             
             'session_data' => $session->all(),
             'error' => $exception ? $exception->getMessage() : NULL,

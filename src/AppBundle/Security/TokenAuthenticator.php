@@ -14,6 +14,7 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Session\Session;
 use AppBundle\Services\UsersManager;
 use AppBundle\Services\SitesManager;
+use AppBundle\Services\AccessTokensManager;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\RouterInterface;
@@ -28,18 +29,21 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     private $session;
     private $UsersManager;
     private $SitesManager;
+    private $AccessTokensManager;
     private $router;
     
     public function __construct(EntityManager $em, 
                                 Session $session, 
                                 UsersManager $UsersManager, 
-                                SitesManager $SitesManager, 
+                                SitesManager $SitesManager,
+                                AccessTokensManager $AccessTokensManager,
                                 RouterInterface $router)
     {
         $this->em = $em;
         $this->session = $session;
         $this->UsersManager = $UsersManager;
         $this->SitesManager = $SitesManager;
+        $this->AccessTokensManager = $AccessTokensManager;
         $this->router = $router;
     }
 
@@ -57,15 +61,22 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
               'SiteToken' => $request->request->get('site_token'),
             ); 
         }
-     
-        $User = $this->session->get('User');   
-        if($User instanceof UserInterface){
-            // User session attribute exists
+        
+        if($request->request->has('AccessToken')){
             return array(
-                'UserId' => $User->getId(),
-                'LoginString' => $this->session->get('LoginString')
-            );  
-        }    
+                'AccessToken' => $request->request->get('AccessToken')  
+            );
+        }else{
+            //$csrf_token = $request->request->get('csrf_token', '');
+            $User = $this->session->get('User');   
+            if($User instanceof UserInterface /*&& valid($csrf_token)*/){
+                // User session attribute exists
+                return array(
+                    'UserId' => $User->getId(),
+                    'LoginString' => $this->session->get('LoginString')
+                );  
+            } 
+        }
             
         // User does not exist
         return array();
@@ -73,6 +84,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     }
 
     private $isSession = false;
+    private $accessToken = false;
     public function getUser($credentials, UserProviderInterface $userProvider)
     {   
         // if null, authentication will fail   
@@ -82,16 +94,23 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
         
         if(array_key_exists('Username', $credentials) && array_key_exists('Password', $credentials)){
             // Get site ID
-            $SiteID = $this->SitesManager->get(['Token' => $credentials['SiteToken']], ['limit' => 1]);
+            $Site = $this->SitesManager->get(['Token' => $credentials['SiteToken']], ['limit' => 1]);
             // Login form
-            return $this->UsersManager->get(['Username' => $credentials['Username'], 'Site' => $SiteID], ['limit' => 1]);
+            return $this->UsersManager->get(['Username' => $credentials['Username'], 'Site' => $Site], ['limit' => 1]);
         }
         
+        // Local site maintaining login state through session variables
         if(array_key_exists('UserId', $credentials)){
             // Session credentials
             $this->isSession = true;
             return $this->UsersManager->get(['Id' => $credentials['UserId']], ['limit' => 1]);
         }    
+        
+        // External site maintaining login state through access token
+        if(array_key_exists('AccessToken', $credentials)){
+            $this->accessToken = true;
+            return $this->AccessTokensManager->get(['Token' => $credentials['AccessToken']], ['limit' => 1])->getUser();
+        }
     }
 
     public function checkCredentials($credentials, UserInterface $user)
@@ -104,10 +123,17 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
         if(array_key_exists('Password', $credentials)){
             if(password_verify($credentials['Password'], $user->getPassword())){
                 // Valid credentials
-                $this->session->set('User', $user);
-                $this->session->set('isLoggedIn', true);
-                $this->session->set('LoginString', hash('sha512', $user->getPassword().$_SERVER['HTTP_USER_AGENT']));
-                return true;
+                if($user->getSite()->getId() != -1){
+                    // External site, so set access token
+                    $this->accessToken = $this->AccessTokensManager->add($user);
+                    dump($this->accessToken);die;
+                    return true;
+                }else{
+                    $this->session->set('User', $user);
+                    $this->session->set('isLoggedIn', true);
+                    $this->session->set('LoginString', hash('sha512', $user->getPassword().$_SERVER['HTTP_USER_AGENT']));
+                    return true;
+                }
             }
         }
         
@@ -123,6 +149,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
             }
             
             if(hash_equals($loginCheck, $loginString)){
+                
                 // Update user session object
                 $this->session->set('User', $user);
 
@@ -134,6 +161,14 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
             }else{
                 return false;
             }     
+        }
+          
+        if($this->accessToken){
+            if($user instanceof Users){
+                return true;
+            }else{
+                return false;
+            }
         }
         
         return false;

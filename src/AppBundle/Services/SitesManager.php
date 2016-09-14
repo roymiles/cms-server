@@ -3,12 +3,13 @@
 namespace AppBundle\Services;
 
 use AppBundle\Entity\Sites;
+use AppBundle\Entity\Users;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
 use Doctrine\ORM\EntityManager;
+use AppBundle\Services\Interfaces\iTable;
 
-class SitesManager
+class SitesManager implements iTable
 {
     private $repository;
     public function __construct(EntityManager $em)
@@ -54,6 +55,16 @@ class SitesManager
         return $site; 
     }
     
+    public function count(array $options = null){
+        // See: http://stackoverflow.com/questions/9214471/count-rows-in-doctrine-querybuilder
+        return $this->em
+                    ->getRepository($this->repository)
+                    ->createQueryBuilder('s')
+                    ->select('count(s.Id)')
+                    ->getQuery()
+                    ->getSingleScalarResult();
+    }
+    
     //-----------------------------------------------------
     // DELETE actions
     //-----------------------------------------------------        
@@ -77,7 +88,28 @@ class SitesManager
     //-----------------------------------------------------       
     public function add(array $Options)
     {      
+        $Site = new Sites();
         
+        $Owner = $Options['Owner'];
+        if(!$Owner instanceof Users){
+            throw new \Exception('Owner is not an instance of Users');
+        }
+        
+        $DomainName = $Options['DomainName'];
+        
+        $Site->setOwner($Owner);
+        $Site->setDomainName($DomainName);
+        
+        $token = md5(random_bytes(10));
+        $Site->setToken($token);
+
+        // Tells Doctrine you want to (eventually) save the User (no queries yet)
+        $this->em->persist($Site);
+
+        // Actually executes the queries (i.e. the INSERT query)
+        $this->em->flush();   
+
+        return $Site;     
     }    
     
     //-----------------------------------------------------
