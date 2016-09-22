@@ -1,0 +1,9 @@
+{% use "form_div_layout.html.twig" %}
+
+{{ form_start(form, {'attr': {'id': 'registerform', 'role': 'form'}}) }}
+    {{ form_row(form.Username) }}
+    {{ form_row(form.Email) }}
+    {{ form_row(form.Password) }}
+    <input type="hidden" name="site_token" value="{{ site_token  }}">
+    <input id="register-button" type="submit" value="Sign Up">
+{{ form_end(form) }}

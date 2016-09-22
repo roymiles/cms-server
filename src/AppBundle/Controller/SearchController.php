@@ -17,16 +17,10 @@ class SearchController extends Controller
         $query = $request->query->get('q');
         $results = $searchManager->search($query, ['Users'], 10);
         
-        if(!empty($results)){
-            return $this->render('default/search.html.twig', [
-                'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
-                'results' => $results
-            ]);
-        }else{
-            return $this->render('default/search.html.twig', [
-              'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..')
-            ]);
-        }
+        return $this->render('default/search.html.twig', [
+            'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
+            'results' => $results
+        ]);
     }
     
 }

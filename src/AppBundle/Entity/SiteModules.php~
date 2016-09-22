@@ -20,13 +20,13 @@ class SiteModules
     
     /**
      * @ORM\ManyToOne(targetEntity="Modules", inversedBy="SiteModules")
-     * @ORM\JoinColumn(name="ModuleId", referencedColumnName="Id")
+     * @ORM\JoinColumn(name="Module", referencedColumnName="Id")
      */
     private $Module;
   
     /**
      * @ORM\ManyToOne(targetEntity="Sites", inversedBy="Modules")
-     * @ORM\JoinColumn(name="SiteId", referencedColumnName="Id")
+     * @ORM\JoinColumn(name="Site", referencedColumnName="Id")
      */
     private $Site; 
 

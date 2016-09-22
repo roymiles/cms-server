@@ -56,8 +56,12 @@ services:
             - { name: twig.extension }
                  
     # Security             
-    app.token_authenticator:
-        class: AppBundle\Security\TokenAuthenticator
+    web.token_authenticator:
+        class: AppBundle\Security\Web\TokenAuthenticator
+        arguments: ['@doctrine.orm.entity_manager', '@session', '@app.UsersManager', '@app.SitesManager', '@router']
+        
+    api.token_authenticator:
+        class: AppBundle\Security\Api\TokenAuthenticator
         arguments: ['@doctrine.orm.entity_manager', '@session', '@app.UsersManager', '@app.SitesManager', '@app.AccessTokensManager', '@router']
         
     # Security Voteers    

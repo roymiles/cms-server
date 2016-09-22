@@ -12,11 +12,11 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/xampp/htdocs/zeal/vendor/symfony/symfony/src/Symfony/Bundle/FrameworkBundle/Controller/Controller.php</file>
-            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Security/UserVoter.php</file>
+            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Controller/Api/UserManagementController.php</file>
+            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Entity/AccessTokens.php</file>
+            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Security/Api/TokenAuthenticator.php</file>
             <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Entity/Users.php</file>
-            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Services/UsersManager.php</file>
-            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Controller/Web/UserManagementController.php</file>
+            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Services/AccessTokensManager.php</file>
         </group>
     </open-files>
 </project-private>

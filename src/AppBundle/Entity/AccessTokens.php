@@ -27,7 +27,7 @@ class AccessTokens
     
     /**
      * @ORM\ManyToOne(targetEntity="Users", inversedBy="AccessTokens")
-     * @ORM\JoinColumn(name="UserId", referencedColumnName="Id")
+     * @ORM\JoinColumn(name="User", referencedColumnName="Id")
      * @Assert\NotBlank()
      */
     private $User;

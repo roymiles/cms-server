@@ -9,6 +9,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityManager;
 
+use AppBundle\Entity\AccessTokens;
+
 class AccessTokensManager
 {
     public function __construct(EntityManager $em)

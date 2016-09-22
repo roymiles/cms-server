@@ -74,7 +74,6 @@ class UserManagementController extends Controller
         
         $UserType = new Users();
         $UserType->setSite($Site);
-        
         if(!$this->isGranted('GET', $UserType)){
             return $this->render('default/error-response.html.twig', [
                 'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
@@ -83,7 +82,7 @@ class UserManagementController extends Controller
         }
         
         $usersPerPage = 10;        
-        $totalResults = $UsersManager->count($Site->getId());
+        $totalResults = $UsersManager->count(['SiteId' => $Site->getId()]);
         $lastPage = ceil($totalResults / $usersPerPage);    
         
         // See: http://stackoverflow.com/questions/3520996/calculating-item-offset-for-pagination

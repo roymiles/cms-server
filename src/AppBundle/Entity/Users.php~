@@ -80,7 +80,7 @@ class Users implements UserInterface, \Serializable
     
     /**
      * @ORM\ManyToOne(targetEntity="Sites", inversedBy="Users")
-     * @ORM\JoinColumn(name="SiteId", referencedColumnName="Id")
+     * @ORM\JoinColumn(name="Site", referencedColumnName="Id")
      * @Assert\NotBlank()
      */
     private $Site;

@@ -9,8 +9,10 @@
 
 namespace AppBundle\Services;
 
+// To be removed...
 class SanitizeInputsManager
 {   
+    // Is this class really needed anymore?
     public function getValidOrder($order){
         if($order === null){ return "ASC"; }
         $order = strtolower($order);

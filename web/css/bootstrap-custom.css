@@ -29,9 +29,9 @@ body{
 
 #head-nav{
     height: 85px;
-    background-color: #fff;
+    background: #4F5D95;
     padding: 10px 0;
-    border-bottom: 1px solid #e8e8e8;
+    border-bottom: 5px solid #80a6cd;
 }
 
 #head-nav-links{}
@@ -46,18 +46,18 @@ body{
     padding: 0px 15px;
 }
 
-#head-nav-links ul li.nav-link, #head-nav-links ul li.nav-link a{
-    color: #818a91;
+#head-nav-links ul li.nav-link a{
+    color: #80a6cd;
     text-decoration: none;
 }
 
 #head-nav-links ul li.nav-link a:hover{
-    color: #000;
+    color: #fff;
     background-color: transparent;  
 }
 
 #head-nav-links ul li.active a{
-    color: #000;
+    color: #fff;
     font-weight: bold;
 }
 

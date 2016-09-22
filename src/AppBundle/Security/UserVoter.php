@@ -22,6 +22,7 @@ class UserVoter extends Voter
     
     public function supports($attribute, $subject)
     {
+        //dump($attribute, $subject);die;
         // if the attribute isn't one we support, return false
         if (!in_array($attribute, array(self::GET, self::DELETE))) {
             return false;
@@ -38,7 +39,6 @@ class UserVoter extends Voter
     protected function voteOnAttribute($attribute, $object, TokenInterface $token)
     {
         $user = $token->getUser();
-        
         switch ($attribute) {
             case self::GET:
                 return $this->canGet($object, $user);

@@ -1,0 +1,12 @@
+{{ dump(site) }}
+{% if app.session.flashbag.has('login-errors') %}
+    {% for errorMessage in app.session.flashBag.get('login-errors') %}
+        {{ errorMessage }}
+    {% endfor %}
+{% endif %}
+<form action="{{ path('ApiLogin') }}" method="POST" name="loginform">
+    <input type="hidden" name="site_token" value="{{ site_token }}">
+    <input id="login-username" name="Username" placeholder="Username" type="text">
+    <input id="login-password" name="Password" placeholder="Password" type="password">
+    <input type="submit" name="Login" value="Login" class="btn btn-success">
+</form>

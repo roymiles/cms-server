@@ -116,4 +116,17 @@ class SitesManager implements iTable
     // VALIDATION
     //-----------------------------------------------------       
     
+    
+    public function isEqual($site1, $site2){
+        if(!$site1 instanceof Sites || !$site2 instanceof Sites){
+            return false;
+        }
+        
+        if($site1->getId() == $site2->getId()){
+            return true;
+        }else{
+            return false;
+        }
+    }    
+    
 }

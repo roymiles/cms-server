@@ -3,10 +3,10 @@ var zeal = (function() {
 	this.url = 'http://92.232.235.0/api/';
 	this._api = this.url + this.token ;	
 	
-	this._isLoggedIn = 0; // Bool for to determine users state
-	this._user; // Object to hold users details
-	this._accessToken; // Users session ID
-	this._cachedUsers; // Cached user information  
+	this._isLoggedIn = 0; /* Bool for to determine users state */
+	this._user; /* Object to hold users details */
+	this._accessToken; /* Users session ID */
+	this._cachedUsers; /* Cached user information */  
 	
 	this.modules = {}
 	
@@ -53,29 +53,29 @@ var zeal = (function() {
 	
 	this._loginCheck = function() {
 		if (document.cookie.indexOf("AccessToken") >= 0) {
-		    // Validate this token throught the API
+		    /* Validate this token throught the API */
 		    var request = new XMLHttpRequest();
 		    request.open('GET', this._API + '/' + this._readCookie('AccessToken'), true);
 		
 		    request.onload = function() {
 		        if (request.status >= 200 && request.status < 400) {
-		            // Success!
+		            /* Success! */
 		            _user = JSON.parse(request.responseText);
 		            _isLoggedIn = true;
 		        } else {
-		            // We reached our target server, but it returned an error
+		            /* We reached our target server, but it returned an error */
 		            console.log('Failed to validate access token. #1');
 		        }
 		    };
 		
 		    request.onerror = function() {
-		        // There was a connection error of some sort
+		        /* There was a connection error of some sort */
 		    };
 		
 		    request.send();
 		} else {
 		    console.log("No session ID cookie");
-		    // Check if got an access token
+		    /* Check if got an access token */
 		    var accessToken = this._getQueryVariable("AccessToken");
 		    if(accessToken) {
 		    	this._createCookie('AccessToken', accessToken, 7);
@@ -85,26 +85,26 @@ var zeal = (function() {
 	}    
 	
 	this._renderTemplates = function() {
-		// Find all nodes with the 'zeal' class
+		/* Find all nodes with the 'zeal' class */
 		var obj = document.getElementsByClassName('zeal');
 		var items = [].slice.call(obj);
 		console.log(items.length + " templates to render");
 		for (var i = 0, ilen = items.length; i < ilen; i++) {
 		    console.log('Rendering a template...');
 		    
-		    // Get module name
+		    /* Get module name */
 		    var moduleName = items[i].dataset.module;
 		
-		    // Check if module is imported and if so call the function
+		    /* Check if module is imported and if so call the function */
 		    for (var j = 0, jlen = this.modules.length; j < jlen; j++){
 			    if (this.modules[j].name == moduleName && typeof this.modules[j].construct == 'function') {
-			        this.modules[j].construct(items[i]); // Pass the node dependancy into the module 
+			        this.modules[j].construct(items[i]); /* Pass the node dependancy into the module */
 			    } else {
 			        console.log(this.modules[j] + ' module does not exist');
 			    }
 		    }
 		
-		    // Check to see if this module is installed...
+		    /* Check to see if this module is installed... */
 		}
 	}
 	

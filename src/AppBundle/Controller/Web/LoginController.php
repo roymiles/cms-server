@@ -9,12 +9,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
+use AppBundle\Entity\Sites;
+
 class LoginController extends Controller
 {
     /**
      * @Route("/login", name="Login")
      */
-    public function loginFormAction(Request $request)
+    public function loginAction(Request $request)
     {
         /*
          *  Symfony automatically starts sessions for you
@@ -30,7 +32,23 @@ class LoginController extends Controller
             ]);
         }  
         
-        //$AuthenticationManager = $this->get('app.AuthenticationManager');
+        $SitesManager = $this->get('app.SitesManager');
+        $Site = $SitesManager->get(['Token' => $SiteToken], ['limit' => 1]);
+        if(!$Site instanceof Sites){
+            return $this->render('default/blank.html.twig', [
+                'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
+                'content' => "Site token does not correspond to a site"
+            ]);
+        }
+        
+        if($Site->getId() != -1){
+            // External website login
+            return $this->render('default/api/pages/login.html.twig', [
+                'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
+                'site_token' => $SiteToken,
+                'site' => $Site
+            ]);
+        }
         
         $user = $this->getUser();
         if($user instanceof UserInterface){
