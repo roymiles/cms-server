@@ -39,18 +39,18 @@ class UserManagementController extends Controller
         // Is there a token in the URL?
         $SiteToken = $request->query->get('site_token');
         if($SiteToken ===  null){
-            return $this->render('default/error-response.html.twig', [
+            return $this->render('default/blank.html.twig', [
                 'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
-                'error' => "No token supplied"
+                'content' => "No token supplied"
             ]);
         }  
 
         // Does the token correspond to a valid site
         $Site = $SitesManager->get(['Token' => $SiteToken], ['limit' => 1]);
         if(!$Site){
-            return $this->render('default/error-response.html.twig', [
+            return $this->render('default/blank.html.twig', [
                 'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
-                'error' => "Invalid token"
+                'content' => "Invalid token"
             ]);
         }
         
@@ -75,9 +75,9 @@ class UserManagementController extends Controller
         $UserType = new Users();
         $UserType->setSite($Site);
         if(!$this->isGranted('GET', $UserType)){
-            return $this->render('default/error-response.html.twig', [
+            return $this->render('default/blank.html.twig', [
                 'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
-                'error' => "You are not granted to perform this action"
+                'content' => "You are not granted to perform this action"
             ]);
         }
         
@@ -112,8 +112,14 @@ class UserManagementController extends Controller
                 'routeFilters' => $routeFilters
             ]);
         }else{
+            // Add new users form
             $User = new Users();
             $form = $this->createForm(UserType::class, $User, array('action' => 'whatever you want'));
+            
+            // Create breadcrumb links
+            $breadcrumbs = array();
+            array_push($breadcrumbs, array('active' => false, 'path' => 'Manage', 'name' => 'Home'));
+            array_push($breadcrumbs, array('active' => true, 'path' => 'ManagementGetUsers', 'name' => 'Users'));            
             
             return $this->render('default/manage/users.html.twig', [
                 'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
@@ -121,7 +127,9 @@ class UserManagementController extends Controller
                 'users' => $Users,
                 'routeFilters' => $routeFilters,
                 'addUserForm' => $form->createView(),
-                'lastPage' => $lastPage
+                'lastPage' => $lastPage, // Used for pagination
+                'totalResults' => $totalResults, // Used to display to user how many results returned
+                'breadcrumbs' => $breadcrumbs // Links for the breadcrumbs at the top
             ]);
         }
     }
@@ -135,7 +143,6 @@ class UserManagementController extends Controller
      */
     public function deleteAction(Request $request){
         $UsersManager = $this->get('app.UsersManager');     
-        $ErrorResponsesManager = $this->get('app.ErrorResponsesManager');
         $SitesManager = $this->get('app.SitesManager');
         
         /*
@@ -145,24 +152,36 @@ class UserManagementController extends Controller
          */
         $token = $request->query->get('site_token');
         if($token ===  null){
-            return $ErrorResponsesManager->nullToken($request, $token);
+            return $this->render('default/blank.html.twig', [
+                'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
+                'content' => "No token supplied"
+            ]);
         } 
         
         // Is there a user id in the URL?
         $UserId = $request->query->get('UserId');
         if($UserId ===  null){
-            return $ErrorResponsesManager->nullParameter($request, 'User Id');
+            return $this->render('default/blank.html.twig', [
+                'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
+                'content' => "No user supplied"
+            ]);
         }  
         
         $User = $UsersManager->get(['Id' => $UserId], ['limit' => 1]);
         if(!$User instanceof Users){
-            return $ErrorResponsesManager->noUserFound($request);
+            return $this->render('default/blank.html.twig', [
+                'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
+                'content' => "User not found"
+            ]);
         }
         
         // Does the token correspond to a valid site
         $Site = $SitesManager->get(['Token' => $token], ['limit' => 1]);
         if(!$Site){
-            return $ErrorResponsesManager->invalidToken($request, $token);
+            return $this->render('default/blank.html.twig', [
+                'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
+                'content' => "Invalid site token"
+            ]);
         }
         
         if(!$this->isGranted('DELETE', $User)){

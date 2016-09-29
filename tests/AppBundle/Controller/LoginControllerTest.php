@@ -66,9 +66,12 @@ class LoginControllerTest extends WebTestCase
         $form['Password'] = 'admin';
 
         $crawler = $client->submit($form);
+        dump($error);
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
         $client->followRedirect(); // Will redirect back to login form
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        
+        dump($client->getResponse());
         
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Manage")')->count());
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Logout")')->count());

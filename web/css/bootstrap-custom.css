@@ -23,10 +23,6 @@ body{
     height: 100%;
 }
 
-.container{
-    width: 100% !important;
-}
-
 #wrapper{
     min-height: 100%;
 }
@@ -117,7 +113,7 @@ body{
 }
 
 #content{
-    padding: 20px;
+    padding: 50px;
     border: 0;
     background: #fff;
     box-shadow: 0 1px 2px rgba(0,0,0,.1);
@@ -168,4 +164,9 @@ textarea:focus, input:focus, .uneditable-input:focus {
 
 #search-box form .form-control{
     margin: 10px 15px 10px;
+}
+
+.col-center{
+    float: none;
+    margin: 0 auto;
 }

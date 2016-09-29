@@ -95,18 +95,4 @@ class UserVoter extends Voter
             return false;
         }
     }    
-    
-    /*private function isArrayOfObjectType($subject, $instance){
-        if (is_array($subject)) {
-            // array of User objects
-            foreach($subject as $s){
-                // check if each array element is a User object
-                if (!$s instanceof $instance) {
-                    return false;
-                }
-            }
-        }else{
-            return false;
-        }
-    }*/
 }

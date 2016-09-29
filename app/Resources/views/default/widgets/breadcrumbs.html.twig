@@ -1,0 +1,11 @@
+<div id="breadcrumb" class="row-fluid">
+    <ol class="breadcrumb" style="margin-bottom: 5px">
+        {% for link in links %}
+            {% if link.active == true %}
+                <li class="active">{{ link.name }}</li>
+            {% else %}
+                <li><a href="{{ path(link.path) }}">{{ link.name }}</a></li>
+            {% endif %}
+        {% endfor %}
+    </ol>
+</div>

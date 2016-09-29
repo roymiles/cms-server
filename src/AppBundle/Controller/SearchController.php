@@ -17,7 +17,7 @@ class SearchController extends Controller
         $query = $request->query->get('q');
         $results = $searchManager->search($query, ['Users'], 10);
         
-        return $this->render('default/search.html.twig', [
+        return $this->render('default/pages/search.html.twig', [
             'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
             'results' => $results
         ]);
