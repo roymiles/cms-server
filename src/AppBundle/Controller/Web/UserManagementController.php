@@ -12,6 +12,12 @@ use AppBundle\Controller\Interfaces\iTable;
 use AppBundle\Entity\Users;
 use AppBundle\Forms\UserType;
 
+use AppBundle\Exception\NoSiteTokenSupplied;
+use AppBundle\Exception\InvalidSiteToken;
+use AppBundle\Exception\AuthorisationError;
+
+use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+
 class UserManagementController extends Controller
 {  
     
@@ -26,6 +32,21 @@ class UserManagementController extends Controller
     }
     
     /**
+     * @ApiDoc(
+     *  description="Returns a collection of Object",
+     *  requirements={
+     *      {
+     *          "name"="limit",
+     *          "dataType"="integer",
+     *          "requirement"="\d+",
+     *          "description"="how many objects to return"
+     *      }
+     *  },
+     *  parameters={
+     *      {"name"="categoryId", "dataType"="integer", "required"=true, "description"="category id"}
+     *  }
+     * )
+     * 
      * @Route("/manage/users", name="ManagementGetUsers")
      */
     public function getAction(Request $request){
@@ -39,19 +60,17 @@ class UserManagementController extends Controller
         // Is there a token in the URL?
         $SiteToken = $request->query->get('site_token');
         if($SiteToken ===  null){
-            return $this->render('default/blank.html.twig', [
-                'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
-                'content' => "No token supplied"
-            ]);
+            throw new NoSiteTokenSupplied(
+                'No site token supplied'
+            );
         }  
 
         // Does the token correspond to a valid site
         $Site = $SitesManager->get(['Token' => $SiteToken], ['limit' => 1]);
         if(!$Site){
-            return $this->render('default/blank.html.twig', [
-                'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
-                'content' => "Invalid token"
-            ]);
+            throw new InvalidSiteToken(
+                'Invalid site token'
+            );
         }
         
         $UsersManager = $this->get('app.UsersManager');
@@ -75,10 +94,9 @@ class UserManagementController extends Controller
         $UserType = new Users();
         $UserType->setSite($Site);
         if(!$this->isGranted('GET', $UserType)){
-            return $this->render('default/blank.html.twig', [
-                'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
-                'content' => "You are not granted to perform this action"
-            ]);
+            throw new AuthorisationError(
+                'You are not granted to perform this action'
+            );
         }
         
         $usersPerPage = 10;        

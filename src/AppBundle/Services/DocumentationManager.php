@@ -17,15 +17,35 @@ class DocumentationManager
         $this->repository = 'AppBundle\Entity\Documentation';
     }
     
-    public function get(array $options){
-        $doc = $this->em
-                    ->getRepository($this->repository)
-                    ->findBy($options);
+    public function get(array $options, array $filters){
+        // Set default values
+        if(!isset($filters['sortBy'])){
+            $filters['sortBy'] = 'Id';
+        }
 
-        if (!$doc) {
-            return false;
+        if(!isset($filters['order'])){
+            $filters['order'] = 'ASC';
+        }
+        
+        if(!isset($filters['limit'])){
+            $filters['limit'] = 1;
         }
     
+        if(!isset($filters['offset'])){
+            $filters['offset'] = 0;
+        }
+        
+        if($filters['limit'] == 1){
+            // Expecting a single result
+            $doc = $this->em
+                         ->getRepository($this->repository)
+                         ->findOneBy($options);
+        }else{  
+            $doc = $this->em
+                         ->getRepository($this->repository)
+                         ->findBy($options, array($filters['sortBy'] => $filters['order']), $filters['limit'], $filters['offset']);
+        }
+        
         return $doc; 
     }
 }

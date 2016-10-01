@@ -1,15 +1,23 @@
 {% extends 'default/docs/base.html.twig' %}
 
 {% block breadcrumb %}
-    <div id="breadcrumb" class="row-fluid">
-        <ol class="breadcrumb" style="margin-bottom: 5px;">
-          <li class="active"><a href="#">Home</a></li>
-        </ol>
-    </div>
+    {% include 'default/widgets/breadcrumbs.html.twig' with {
+        'links': breadcrumbs
+    } only %}
 {% endblock %}
 
 {% block content %}
-    {% filter bbcode|raw %}
-        {{ documentation[0].pageContent|raw }}
-    {% endfilter %}
+
+    {% include 'default/widgets/updateable-content.js.twig' with {
+        'id': 'documentation-content',
+        'update-path': 'this is the update path'
+    } only %}
+
+    <textarea id="page-editor" style="display: none">{{ documentation.pageContent|raw }}</textarea>
+
+    <div id="documentation-content">
+        {% filter bbcode|raw %}
+            {{ documentation.pageContent|raw }}
+        {% endfilter %}
+    </div>
 {% endblock %}

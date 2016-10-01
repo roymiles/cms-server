@@ -55,7 +55,13 @@ class UsersManager implements iTable
         }else{  
             $user = $this->em
                          ->getRepository($this->repository)
+                         //->createQueryBuilder('cat')
+                         //->andWhere('cat.name LIKE :searchTerm')
+                         //->setParameter('searchTerm', '%ad%')
+
                          ->findBy($options, array($filters['sortBy'] => $filters['order']), $filters['limit'], $filters['offset']);
+        
+            //dump($user);die;
         }
         
         return $user; 

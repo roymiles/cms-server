@@ -3,7 +3,6 @@
 {% form_theme addUserForm 'bootstrap_3_layout.html.twig' %}
 
 {% block page %}
-    {{ dump(app.request) }}
     {% include 'default/widgets/breadcrumbs.html.twig' with {
         'links': breadcrumbs
     } only %}

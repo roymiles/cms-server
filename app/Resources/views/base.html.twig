@@ -6,18 +6,26 @@
         <title>{{ title|default('Zeal') }} - TB</title>
         <meta name="description" content="{{ description|default() }}">
 
+        <!-- Bootstrap and jQuery -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
         <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-        <script src="http://cdn.intercoolerjs.org/intercooler-0.9.7.min.js"></script>
   
+        <!-- Load WysiBB JS and Theme -->
+        <script src="http://cdn.wysibb.com/js/jquery.wysibb.min.js"></script>
+        <link rel="stylesheet" href="http://cdn.wysibb.com/css/default/wbbtheme.css" />
+
+        <!-- css assets -->
         {% stylesheets 
             'css/bootstrap-custom.css'
+            'css/minified/themes/sceditor-default.min.css'
             filter='cssrewrite' %}
             <link rel="stylesheet" href="{{ asset_url }}" />
         {% endstylesheets %}
         
+        <!--  javascript assets -->
         {% javascripts 
-            'js/main.js' %}
+            'js/main.js'
+            'js/minified/jquery.sceditor.bbcode.min.js' %}
             <script href="{{ asset_url }}"></script>
         {% endjavascripts %}
 
@@ -26,7 +34,6 @@
         <!-- Alertify js -->
         <script src="//cdn.jsdelivr.net/alertifyjs/1.8.0/alertify.min.js"></script>
         <link rel="stylesheet" href="//cdn.jsdelivr.net/alertifyjs/1.8.0/css/alertify.min.css"/>
-        <!-- Default theme -->
         <link rel="stylesheet" href="//cdn.jsdelivr.net/alertifyjs/1.8.0/css/themes/default.min.css"/>
         
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
