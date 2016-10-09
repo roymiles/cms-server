@@ -1,0 +1,37 @@
+{% extends 'default/docs/base.html.twig' %}
+
+{% block breadcrumb %}
+    {% include 'default/widgets/breadcrumbs.html.twig' with {
+        'links': breadcrumbs
+    } only %}
+{% endblock %}
+
+{% block content %}
+    <div id="documentation-content" class="col-md-9 pull-right">
+        <div style="position: absolute; width: 100px; right: 0px">
+            <a href="">
+                <button type="button" class="btn btn-default btn-xs" aria-label="Left Align">
+                    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                    Edit this page
+                </button>
+            </a>
+        </div>
+        {% filter bbcode|raw %}
+            {{ documentation.pageContent|raw }}
+        {% endfilter %}
+    </div>
+{% endblock %}
+
+{% block quicklinks %}
+    <!-- include/quicklinks -->
+    <div id="quicklinks" class="col-md-3 pull-left">
+        <h4>Table of Contents</h3>
+        <ul>
+        {% for link in quicklinks %}
+            {% include 'default/docs/quicklinks.html.twig' with {
+                'link': link
+            } only %}
+        {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

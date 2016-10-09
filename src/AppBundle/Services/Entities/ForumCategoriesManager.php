@@ -1,7 +1,7 @@
 <?php
-// src/AppBundle/Services/ForumManager.php
+// src/AppBundle/Services/Entities/ForumManager.php
 
-namespace AppBundle\Services;
+namespace AppBundle\Services\Entities;
 
 use AppBundle\Entity\Sites;
 use Symfony\Component\HttpFoundation\Response;

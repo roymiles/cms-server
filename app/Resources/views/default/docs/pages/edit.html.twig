@@ -1,0 +1,19 @@
+{% extends 'default/docs/base.html.twig' %}
+
+{% block breadcrumb %}
+    {% include 'default/widgets/breadcrumbs.html.twig' with {
+        'links': breadcrumbs
+    } only %}
+{% endblock %}
+
+{% block content %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var wbbOpt = {
+                buttons: "bold,italic,underline,|,img,link,|,code,quote"
+            }
+            $("#page-editor").wysibb(wbbOpt);
+        });
+    </script>
+    <textarea id="page-editor">{{ documentation.pageContent|raw }}</textarea>
+{% endblock %}

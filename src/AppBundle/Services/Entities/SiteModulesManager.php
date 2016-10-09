@@ -1,7 +1,7 @@
 <?php
-// src/AppBundle/Services/SiteModulesManager.php
+// src/AppBundle/Services/Entities/SiteModulesManager.php
 
-namespace AppBundle\Services;
+namespace AppBundle\Services\Entities;
 
 use AppBundle\Entity\Sites;
 use Symfony\Component\HttpFoundation\Response;

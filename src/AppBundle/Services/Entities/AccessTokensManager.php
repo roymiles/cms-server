@@ -1,7 +1,7 @@
 <?php
-// src/AppBundle/Services/AccessTokensManager.php
+// src/AppBundle/Services/Entities/AccessTokensManager.php
 
-namespace AppBundle\Services;
+namespace AppBundle\Services\Entities;
 
 use AppBundle\Entity\Documentation;
 

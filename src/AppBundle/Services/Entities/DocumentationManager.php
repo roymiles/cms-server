@@ -1,7 +1,7 @@
 <?php
-// src/AppBundle/Services/DocumentationManager.php
+// src/AppBundle/Services/Entities/DocumentationManager.php
 
-namespace AppBundle\Services;
+namespace AppBundle\Services\Entities;
 
 use AppBundle\Entity\Documentation;
 

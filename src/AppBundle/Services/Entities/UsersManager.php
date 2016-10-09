@@ -1,7 +1,8 @@
 <?php
-// src/AppBundle/Services/UsersManager.php
 
-namespace AppBundle\Services;
+// src/AppBundle/Services/Entities/UsersManager.php
+
+namespace AppBundle\Services\Entities;
 
 use AppBundle\Entity\Users;
 use Symfony\Component\HttpFoundation\Response;

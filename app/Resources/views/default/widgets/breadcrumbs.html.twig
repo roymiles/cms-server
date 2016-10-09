@@ -1,11 +1,19 @@
 <div id="breadcrumb" class="row-fluid">
     <ol class="breadcrumb" style="margin-bottom: 5px">
-        {% for link in links %}
-            {% if link.active == true %}
-                <li class="active">{{ link.name }}</li>
-            {% else %}
-                <li><a href="{{ path(link.path) }}">{{ link.name }}</a></li>
-            {% endif %}
-        {% endfor %}
+        {% if links is empty %}
+            <li><a href="{{ path('DocumentationHome') }}">Home</a></li>
+        {% else %}
+            {% for link in links %}
+                {% if link.active == true %}
+                    <li class="active">{{ link.name }}</li>
+                {% else %}
+                    {% if link.parameters is defined %}
+                        <li><a href="{{ path(link.path, link.parameters) }}">{{ link.name }}</a></li>
+                    {% else %}
+                        <li><a href="{{ path(link.path) }}">{{ link.name }}</a></li>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
     </ol>
 </div>

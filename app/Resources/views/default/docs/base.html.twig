@@ -10,24 +10,14 @@
         filter='cssrewrite' %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
-
-    <style>
-        .markdown-body {
-            box-sizing: border-box;
-            min-width: 200px;
-            max-width: 980px;
-            margin: 0 auto;
-            padding: 45px;
-        }
-    </style>
 {% endblock %}
 
 {% block page %}
-    {% block breadcrumb %}
-    {% endblock %}
+    {% block breadcrumb %}{% endblock %}
     <div class="row-fluid">
+    {% block quicklinks %}{% endblock %}
         {% block content %}
-            No content D:
+            No content
         {% endblock %}
     </div>
 {% endblock %}

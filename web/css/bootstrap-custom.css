@@ -113,6 +113,7 @@ body{
 }
 
 #content{
+    overflow: hidden; /* So it keeps floated elements inside */
     padding: 50px;
     border: 0;
     background: #fff;
@@ -169,4 +170,12 @@ textarea:focus, input:focus, .uneditable-input:focus {
 .col-center{
     float: none;
     margin: 0 auto;
+}
+
+#quicklinks{
+    padding: 10px;
+    background-color: #f5f5f5;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
 }

@@ -6,8 +6,8 @@ use AppBundle\Entity\Users;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
-use AppBundle\Services\UsersManager;
-use AppBundle\Services\SitesManager;
+use AppBundle\Services\Entities\UsersManager;
+use AppBundle\Services\Entities\SitesManager;
 
 class UserVoter extends Voter
 {

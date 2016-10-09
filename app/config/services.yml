@@ -1,28 +1,41 @@
 services:
-    # Generic services
+    # Entity services
     app.AccessTokensManager:
-        class: AppBundle\Services\AccessTokensManager
+        class: AppBundle\Services\Entities\AccessTokensManager
+        arguments: ['@doctrine.orm.entity_manager']   
+        
+    app.DocumentationManager:
+        class: AppBundle\Services\Entities\DocumentationManager
         arguments: ['@doctrine.orm.entity_manager']       
-    
+       
+    app.ForumCategoriesManager:
+        class: AppBundle\Services\Entities\ForumCategoriesManager
+        arguments: ['@doctrine.orm.entity_manager']   
+        
+    app.SiteModulesManager:
+        class: AppBundle\Services\Entities\SiteModulesManager
+        arguments: ['@doctrine.orm.entity_manager']   
+        
+    app.SitesManager:
+        class: AppBundle\Services\Entities\SitesManager
+        arguments: ['@doctrine.orm.entity_manager'] 
+        
+    app.UserRelationshipsManager:
+        class: AppBundle\Services\Entities\UserRelationshipsManager
+        arguments: ['@doctrine.orm.entity_manager']        
+        
+    app.UsersManager:
+        class: AppBundle\Services\Entities\UsersManager
+        arguments: ['@doctrine.orm.entity_manager', '@validator', '@app.SitesManager'] 
+        
+    # Generic services  
     app.AuthenticationManager:
         class: AppBundle\Services\AuthenticationManager
-        arguments: ['@doctrine.orm.entity_manager', '@session']       
-    
-    app.DocumentationManager:
-        class: AppBundle\Services\DocumentationManager
-        arguments: ['@doctrine.orm.entity_manager']         
-        
-    app.ForumCategoriesManager:
-        class: AppBundle\Services\ForumCategoriesManager
-        arguments: ['@doctrine.orm.entity_manager']    
+        arguments: ['@doctrine.orm.entity_manager', '@session']         
   
     app.LoggerManager:
         class: AppBundle\Services\LoggerManager
-        arguments: ['@doctrine.orm.entity_manager']      
-  
-    app.SanitizeInputsManager:
-        class: AppBundle\Services\SanitizeInputsManager
-        arguments: ['@doctrine.orm.entity_manager']          
+        arguments: ['@doctrine.orm.entity_manager']           
  
     app.SearchManager:
         class: AppBundle\Services\SearchManager
@@ -31,22 +44,10 @@ services:
     app.SessionsManager:
         class: AppBundle\Services\SessionsManager
         arguments: ['@doctrine.orm.entity_manager']  
-        
-    app.SiteModulesManager:
-        class: AppBundle\Services\SiteModulesManager
-        arguments: ['@doctrine.orm.entity_manager']   
-        
-    app.SitesManager:
-        class: AppBundle\Services\SitesManager
-        arguments: ['@doctrine.orm.entity_manager']         
-
-    app.UserRelationshipsManager:
-        class: AppBundle\Services\UserRelationshipsManager
-        arguments: ['@doctrine.orm.entity_manager']        
-        
-    app.UsersManager:
-        class: AppBundle\Services\UsersManager
-        arguments: ['@doctrine.orm.entity_manager', '@validator', '@app.SitesManager']
+     
+    # For generating hierarchical structures from doctrines array of entity objects
+    app.TreeManager:
+        class: AppBundle\Services\TreeManager 
         
     # Twig     
     app.twig_extension:

@@ -14,9 +14,9 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Doctrine\ORM\EntityManager;
 
 use Symfony\Component\HttpFoundation\Session\Session;
-use AppBundle\Services\UsersManager;
-use AppBundle\Services\SitesManager;
-use AppBundle\Services\AccessTokensManager;
+use AppBundle\Services\Entities\UsersManager;
+use AppBundle\Services\Entities\SitesManager;
+use AppBundle\Services\Entities\AccessTokensManager;
 
 use Symfony\Component\Routing\RouterInterface;
 

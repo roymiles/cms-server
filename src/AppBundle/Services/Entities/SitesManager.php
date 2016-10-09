@@ -1,6 +1,8 @@
 <?php
-// src/AppBundle/Services/SitesManager.php
-namespace AppBundle\Services;
+
+// src/AppBundle/Services/Entities/SitesManager.php
+
+namespace AppBundle\Services\Entities;
 
 use AppBundle\Entity\Sites;
 use AppBundle\Entity\Users;

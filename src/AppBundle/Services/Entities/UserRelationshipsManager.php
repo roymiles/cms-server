@@ -1,7 +1,7 @@
 <?php
-// src/AppBundle/Services/UserRelationshipsManager.php
+// src/AppBundle/Services/Entities/UserRelationshipsManager.php
 
-namespace AppBundle\Services;
+namespace AppBundle\Services\Entities;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;

@@ -12,16 +12,14 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/xampp/htdocs/zeal/app/Resources/views/default/docs/pages/view.html.twig</file>
+            <file>file:/C:/xampp/htdocs/zeal/app/Resources/views/default/widgets/breadcrumbs.html.twig</file>
             <file>file:/C:/xampp/htdocs/zeal/app/Resources/views/base.html.twig</file>
+            <file>file:/C:/xampp/htdocs/zeal/app/Resources/views/page.html.twig</file>
             <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Controller/Web/DocumentationController.php</file>
-            <file>file:/C:/xampp/htdocs/zeal/app/Resources/views/default/widgets/updateable-content.js.twig</file>
-            <file>file:/C:/xampp/htdocs/zeal/app/Resources/views/default/widgets/updateable-tables.js.twig</file>
-            <file>file:/C:/xampp/htdocs/zeal/app/Resources/views/default/manage/users.html.twig</file>
-            <file>file:/C:/xampp/htdocs/zeal/app/Resources/views/default/docs/markup/index.html.twig</file>
-            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Services/UsersManager.php</file>
-            <file>file:/C:/xampp/htdocs/zeal/app/Resources/views/default/tables/users.html.twig</file>
-            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Controller/Web/UserManagementController.php</file>
-            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Services/DocumentationManager.php</file>
+            <file>file:/C:/xampp/htdocs/zeal/app/Resources/views/default/docs/base.html.twig</file>
+            <file>file:/C:/xampp/htdocs/zeal/web/css/bootstrap-custom.css</file>
+            <file>file:/C:/xampp/htdocs/zeal/app/Resources/views/default/docs/pages/edit.html.twig</file>
         </group>
     </open-files>
 </project-private>

@@ -12,8 +12,8 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Doctrine\ORM\EntityManager;
 
 use Symfony\Component\HttpFoundation\Session\Session;
-use AppBundle\Services\UsersManager;
-use AppBundle\Services\SitesManager;
+use AppBundle\Services\Entities\UsersManager;
+use AppBundle\Services\Entities\SitesManager;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\RouterInterface;
@@ -98,7 +98,6 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     public function checkCredentials($credentials, UserInterface $user)
     {     
         if($user instanceof AnonymousUser){
-            //echo "AnonymousUser";
             return true;
         }
         
