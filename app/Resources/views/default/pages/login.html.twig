@@ -1,72 +1,70 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="container">
-        <div class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2"
-        id="loginbox" style="margin-top:50px;">
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <div class="panel-title">
-                        Sign In
-                    </div>
-                    <div style=
-                    "float:right; font-size: 80%; position: relative; top:-10px">
-                    <a href="{{ path('ForgotPasswordForm') }}">Forgot password?</a>
-                    </div>
+    <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2"
+    id="loginbox" style="margin-top:50px;">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <div class="panel-title">
+                    Sign In
                 </div>
-                <div class="panel-body" style="padding-top:30px">
-                    {{ dump(session_data) }}
-                    {{ error }}
-                    {% if app.session.flashbag.has('loginErrors') %}
-                        <div class="alert alert-danger" id="signupalert">
-                            <p>Please correct the following errors</p>
-                            <ul>
-                                {% for errorMessage in app.session.flashBag.get('loginErrors') %}
-                                    <li>{{ errorMessage }}</li>
-                                {% endfor %}
-                            </ul>
+                <div style=
+                "float:right; font-size: 80%; position: relative; top:-10px">
+                <a href="{{ path('ForgotPasswordForm') }}">Forgot password?</a>
+                </div>
+            </div>
+            <div class="panel-body" style="padding-top:30px">
+                {{ dump(session_data) }}
+                {{ error }}
+                {% if app.session.flashbag.has('loginErrors') %}
+                    <div class="alert alert-danger" id="signupalert">
+                        <p>Please correct the following errors</p>
+                        <ul>
+                            {% for errorMessage in app.session.flashBag.get('loginErrors') %}
+                                <li>{{ errorMessage }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+
+                <form action="{{ path('Login') }}" method="POST" class="form-horizontal" name="loginform" role="form">
+
+                    {# <input type="hidden" name="csrf_token" value="{{ csrf_token }}"> #}
+                    <input type="hidden" name="site_token" value="{{ site_token  }}">
+
+                    <div class="input-group" style="margin-bottom: 25px">
+                        <span class="input-group-addon"><i class=
+                        "glyphicon glyphicon-user"></i></span>
+                        <input class="form-control" id="login-username"
+                        name="Username" placeholder="username"
+                        type="text" value="">
+                    </div>
+                    <div class="input-group" style="margin-bottom: 25px">
+                        <span class="input-group-addon"><i class=
+                        "glyphicon glyphicon-lock"></i></span>
+                        <input class="form-control" id="login-password"
+                        name="Password" placeholder="password" type=
+                        "password">
+                    </div>
+
+                    <div class="form-group" style="margin-top:10px">
+                        <!-- Button -->
+                        <div class="col-sm-12 controls">
+                            <input type="submit" name="Login" value="Login" class="btn btn-success">
                         </div>
-                    {% endif %}
+                    </div>
 
-                    <form action="{{ path('Login') }}" method="POST" class="form-horizontal" name="loginform" role="form">
-
-                        {# <input type="hidden" name="csrf_token" value="{{ csrf_token }}"> #}
-                        <input type="hidden" name="site_token" value="{{ site_token  }}">
-
-                        <div class="input-group" style="margin-bottom: 25px">
-                            <span class="input-group-addon"><i class=
-                            "glyphicon glyphicon-user"></i></span>
-                            <input class="form-control" id="login-username"
-                            name="Username" placeholder="username"
-                            type="text" value="">
-                        </div>
-                        <div class="input-group" style="margin-bottom: 25px">
-                            <span class="input-group-addon"><i class=
-                            "glyphicon glyphicon-lock"></i></span>
-                            <input class="form-control" id="login-password"
-                            name="Password" placeholder="password" type=
-                            "password">
-                        </div>
-
-                        <div class="form-group" style="margin-top:10px">
-                            <!-- Button -->
-                            <div class="col-sm-12 controls">
-                                <input type="submit" name="Login" value="Login" class="btn btn-success">
+                    <div class="form-group">
+                        <div class="col-md-12 control">
+                            <div style=
+                            "border-top: 1px solid #888; padding-top:15px; font-size:85%">
+                            Don't have an account! 
+                            <a href="{{ path('RegisterForm') }}">
+                                Sign Up Here</a>
                             </div>
                         </div>
-
-                        <div class="form-group">
-                            <div class="col-md-12 control">
-                                <div style=
-                                "border-top: 1px solid #888; padding-top:15px; font-size:85%">
-                                Don't have an account! 
-                                <a href="{{ path('RegisterForm') }}">
-                                    Sign Up Here</a>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

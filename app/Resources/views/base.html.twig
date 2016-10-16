@@ -29,7 +29,13 @@
             <script href="{{ asset_url }}"></script>
         {% endjavascripts %}
 
-        {% block stylesheets %}{% endblock %}
+        <style type="text/css">
+            {% block css %}{% endblock %}
+        </style>
+
+        <script type="text/javascript">
+            {% block js %}{% endblock %}
+        </script>
 
         <!-- Alertify js -->
         <script src="//cdn.jsdelivr.net/alertifyjs/1.8.0/alertify.min.js"></script>
@@ -44,7 +50,7 @@
             <div id="wrapper">
                 <!--<div id="banner-ribbon"></div>-->
                 <div id="head-nav" class="row">
-                    <div class="col-xs-8 col-center">
+                    <div style="margin: 0 10%">
                         <div id="head-nav-links" class="pull-left">
 
                             {% if activeTab is not defined %}
@@ -55,8 +61,13 @@
                                 <li class="nav-link {% if activeTab == 'home' %}active{% endif %}">
                                     <a href="{{ path('Homepage') }}">Home</a>
                                 </li>
+
                                 <li class="nav-link {% if activeTab == 'documentation' %}active{% endif %}">
                                     <a href="{{ path('DocumentationHome') }}">Documentation</a>
+                                </li>
+
+                                <li class="nav-link {% if activeTab == 'API' %}active{% endif %}">
+                                    <a href="/api/documentation">API</a>
                                 </li>
 
                                 <!-- TEMPORARY FOR EASY ACCESS -->
@@ -104,7 +115,7 @@
 
                 <!-- <div class="row row-space"></div> -->
 
-                <div id="content-container" class="row row col-xs-8 col-center">
+                <div id="content-container" class="row row col-xs-10 col-center">
                     {% block body %}{% endblock %}
                 </div>
 
@@ -115,8 +126,6 @@
             {{ include('default/footer.html.twig') }}
 
         </div>
-
-        {% block javascripts %}{% endblock %}
 
     </body>
 </html>

@@ -74,23 +74,27 @@ class UserManagementController extends Controller
         }
         
         $UsersManager = $this->get('app.UsersManager');
-        $SanitizeInputsManager = $this->get('app.SanitizeInputsManager');
           
         // Validate the sortBy parameter   
         if(!$this->isColumn($sortBy, 'notSensitive')){
             $sortBy = 'Id';
         }
-        
-        // Validate the searchBy $_GET parameter 
-        /*$searchBy = $request->query->get('searchBy');  
+
+        // Search if not implemented yet!!!
+        $searchBy = $request->query->get('searchBy');  
         $searchQuery = $request->query->get('q');  
+        // Validate the searchBy parameter 
         if($this->isColumn($searchBy, 'notSensitive')){
             $searchBy = 'Username';
-        }*/
+        }
         
-        // Validate the order parameter (will convert ascending -> ASC etc)
-        $order = $SanitizeInputsManager->getValidOrder($order);
+        // If a search query is supplied
+        if(!$searchQuery){
+            
+        }
         
+        
+        // Check if user has privileges to see these users details
         $UserType = new Users();
         $UserType->setSite($Site);
         if(!$this->isGranted('GET', $UserType)){
@@ -136,8 +140,8 @@ class UserManagementController extends Controller
             
             // Create breadcrumb links
             $breadcrumbs = array();
-            array_push($breadcrumbs, array('active' => false, 'path' => 'Manage', 'name' => 'Home'));
-            array_push($breadcrumbs, array('active' => true, 'path' => 'ManagementGetUsers', 'name' => 'Users'));            
+            array_push($breadcrumbs, array('enabled' => false, 'path' => 'Manage', 'name' => 'Home'));
+            array_push($breadcrumbs, array('enabled' => true, 'path' => 'ManagementGetUsers', 'name' => 'Users'));            
             
             return $this->render('default/manage/users.html.twig', [
                 'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),

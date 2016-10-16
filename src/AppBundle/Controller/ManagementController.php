@@ -8,6 +8,12 @@ use Symfony\Component\HttpFoundation\Request;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
+use AppBundle\Entity\Sites;
+
+use AppBundle\Exception\NoSiteTokenSupplied;
+use AppBundle\Exception\InvalidSiteToken;
+use AppBundle\Exception\AuthorisationError;
+
 class ManagementController extends Controller
 {
 
@@ -16,6 +22,31 @@ class ManagementController extends Controller
      */
     public function manageAction(Request $request)
     {
+        $SitesManager = $this->get('app.SitesManager');
+
+        // Is there a token in the URL?
+        $SiteToken = $request->query->get('site_token');
+        if($SiteToken ===  null){
+            throw new NoSiteTokenSupplied(
+                'No site token supplied'
+            );
+        }  
+
+        // Does the token correspond to a valid site
+        $Site = $SitesManager->get(['Token' => $SiteToken], ['limit' => 1]);
+        if(!$Site){
+            throw new InvalidSiteToken(
+                'Invalid site token'
+            );
+        }
+        
+        $SiteType = new Sites();
+        $SiteType->setToken($SiteToken);
+        if(!$this->isGranted('GET', $SiteType)){
+            throw new AuthorisationError(
+                'You are not granted to perform this action'
+            );
+        }
         // Check if logged in
         // Check if own a site with framework
         // Is their website verified?

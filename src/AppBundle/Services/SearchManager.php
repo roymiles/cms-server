@@ -29,7 +29,7 @@ class SearchManager
       $tablesToSearch = array_intersect($tables, array_keys($this->searchableTables));
       $results = array();
       foreach($tablesToSearch as $table){
-        array_push($results, call_user_func($searchableTables[$table]));
+        array_push($results, call_user_func($this->searchableTables[$table]));
       }
   
       // Sort the results by rank

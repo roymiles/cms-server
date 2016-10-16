@@ -26,31 +26,29 @@
 {%- endblock form_widget_simple %}
 
 {% block body %}
-    <div class="container">
-        <div class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2" id="signupbox" style="margin-top:50px">
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <div class="panel-title">
-                        Sign Up
-                    </div>
-                    <div style="float:right; font-size: 85%; position: relative; top:-10px">
-                        <a href="{{ path('Login') }}">Sign In</a>
-                    </div>
+    <div class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2" id="signupbox" style="margin-top:50px">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <div class="panel-title">
+                    Sign Up
                 </div>
-                <div class="panel-body">
-                    {{ form_start(form, {'attr': {'class': 'form-horizontal', 'id': 'signupform', 'role': 'form'}}) }}
-                        {{ form_row(form.Username) }}
-                        {{ form_row(form.Email) }}
-                        {{ form_row(form.Password) }}
-                        <input type="hidden" name="site_token" value="{{ local_site_token  }}">
-                        <div class="form-group" style="margin-top:10px">
-                            <!-- Button -->
-                            <div class="col-md-offset-3 col-md-9">
-                                <input id="btn-signup" type="submit" value="Sign Up" class="btn btn-info" id="btn-signup">
-                            </div>
+                <div style="float:right; font-size: 85%; position: relative; top:-10px">
+                    <a href="{{ path('Login') }}">Sign In</a>
+                </div>
+            </div>
+            <div class="panel-body">
+                {{ form_start(form, {'attr': {'class': 'form-horizontal', 'id': 'signupform', 'role': 'form'}}) }}
+                    {{ form_row(form.Username) }}
+                    {{ form_row(form.Email) }}
+                    {{ form_row(form.Password) }}
+                    <input type="hidden" name="site_token" value="{{ local_site_token  }}">
+                    <div class="form-group" style="margin-top:10px">
+                        <!-- Button -->
+                        <div class="col-md-offset-3 col-md-9">
+                            <input id="btn-signup" type="submit" value="Sign Up" class="btn btn-info" id="btn-signup">
                         </div>
-                    {{ form_end(form) }}
-                </div>
+                    </div>
+                {{ form_end(form) }}
             </div>
         </div>
     </div>

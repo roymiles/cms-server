@@ -6,30 +6,27 @@ use AppBundle\Entity\Users;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
-use AppBundle\Services\Entities\UsersManager;
 use AppBundle\Services\Entities\SitesManager;
 
-class UserVoter extends Voter
+class SiteVoter extends Voter
 {
     const GET = 'GET';
     const DELETE = 'DELETE';
     
-    public function __construct(UsersManager $UsersManager, SitesManager $SitesManager)
+    public function __construct(SitesManager $SitesManager)
     {
-        $this->UsersManager = $UsersManager;
         $this->SitesManager = $SitesManager;
     }
     
     public function supports($attribute, $subject)
     {
-        //dump($attribute, $subject);die;
         // if the attribute isn't one we support, return false
         if (!in_array($attribute, array(self::GET, self::DELETE))) {
             return false;
         }
 
-        // only vote on User objects inside this voter
-        if (!$subject instanceof Users) {
+        // only vote on Site objects inside this voter
+        if (!$subject instanceof Sites) {
             return false;
         }
   
@@ -55,20 +52,13 @@ class UserVoter extends Voter
             return false;
         }
         
-        // The subject must be a Users object
-        if (!$subject instanceof Users) {
+        // The subject must be a Sites object
+        if (!$subject instanceof Sites) {
             return false;
         }   
         
-        // Check if the user object is the same object as the current logged in user
-        if($subject->getId() == $user->getId()){
-            return true;
-        }  
-        
-        // Check if the logged in user owns the site for which the subject is part of
-        $SiteId = $subject->getSite()->getId();
-        
-        // user should be the owner of the site corresponding to the user subjects
+        // Check if the user owns the site
+        $SiteId = $subject->getId();
         $owner = $this->SitesManager->get(['Id' => $SiteId], ['limit' => 1])->getOwner();
         if($this->UsersManager->isEqual($owner, $user)){
             // the user is the owner of the site
@@ -85,26 +75,6 @@ class UserVoter extends Voter
             return false;
         }
         
-        // The subject must be a Users object
-        if (!$subject instanceof Users) {
-            return false;
-        }    
-        
-        // Cant delete themself
-        if($subject->getId() == $user->getId()){
-            return false;
-        }
-        
-        // Check if the logged in user owns the site for which the subject is part of
-        $SiteId = $subject->getSite()->getId();
-        
-        // user should be the owner of the site corresponding to the user subjects
-        $owner = $this->SitesManager->get(['Id' => $SiteId], ['limit' => 1])->getOwner();
-        if($this->UsersManager->isEqual($owner, $user)){
-            // the user is the owner of the site
-            return true;
-        }else{
-            return false;
-        }
+        return false; // Cant delete sites yet
     }    
 }
