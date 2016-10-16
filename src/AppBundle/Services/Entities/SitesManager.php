@@ -13,7 +13,7 @@ use AppBundle\Services\Interfaces\iTable;
 
 class SitesManager implements iTable
 {
-    const $LocalSiteToken = 'a'; // So other services/controllers can access the local site token
+    const LOCALSITETOKEN = 'a'; // So other services/controllers can access the local site token
     
     private $repository;
     public function __construct(EntityManager $em)

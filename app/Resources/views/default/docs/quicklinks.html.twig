@@ -1,5 +1,5 @@
 <li>
-    <a href="">{{ link.doc.getName }}</a>
+    <a href="{{ path("ViewDocumentation", parameters = { documentationId: link.element.getId}) }}">{{ link.element.getName }}</a>
     {% for child in link.children %}
         <ul>
             {% include 'default/docs/quicklinks.html.twig' with {

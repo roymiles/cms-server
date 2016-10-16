@@ -4,7 +4,7 @@
             <li><a href="{{ path('DocumentationHome') }}">Home</a></li>
         {% else %}
             {% for link in links %}
-                {% if link.active == true %}
+                {% if link.enabled == false %}
                     <li class="active">{{ link.name }}</li>
                 {% else %}
                     {% if link.parameters is defined %}

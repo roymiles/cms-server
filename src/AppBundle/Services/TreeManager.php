@@ -11,8 +11,8 @@ use Doctrine\ORM\EntityManager;
 
 
 class WrapperNode { 
-    function __construct($documentation){
-        $this->doc = $documentation;
+    function __construct($element){
+        $this->element = $element;
         $this->children = [];
     }
 }
@@ -43,6 +43,7 @@ class TreeManager
     public function makeTree($objects, string $parentReferenceName){
         $getParentFunctionName = 'get'.$parentReferenceName;
         
+        // Global variables
         $map = [];
         $parentNodes = [];
         

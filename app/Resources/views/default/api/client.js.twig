@@ -1,8 +1,5 @@
 {% extends 'default/api/base.js.twig' %}
 
 {% block body %}
-  {% for module in modules %}
-    {% include "modules/#{module}#.js.twig" %}
-    this.pushModule('{module}', {module});
-  {% endfor %}
+    <!-- Include the appropriate extensions -->
 {% endblock %}

@@ -20,9 +20,9 @@ class Documentation
     
     /**
      * @ORM\ManyToOne(targetEntity="Documentation", inversedBy="Documentation")
-     * @ORM\JoinColumn(name="ParentDocId", referencedColumnName="Id")
+     * @ORM\JoinColumn(name="ParentDocumentationId", referencedColumnName="Id")
      */
-    private $ParentDoc;
+    private $ParentDocumentation;
   
     /**
      * @ORM\Column(type="string", length=256)
@@ -122,26 +122,26 @@ class Documentation
     }
 
     /**
-     * Set parentDoc
+     * Set parentDocumentation
      *
-     * @param \AppBundle\Entity\Documentation $parentDoc
+     * @param \AppBundle\Entity\Documentation $parentDocumentation
      *
      * @return Documentation
      */
-    public function setParentDoc(\AppBundle\Entity\Documentation $parentDoc = null)
+    public function setParentDocumentation(\AppBundle\Entity\Documentation $parentDocumentation = null)
     {
-        $this->ParentDoc = $parentDoc;
-
+        $this->ParentDocumentation = $parentDocumentation;
+    
         return $this;
     }
 
     /**
-     * Get parentDoc
+     * Get parentDocumentation
      *
      * @return \AppBundle\Entity\Documentation
      */
-    public function getParentDoc()
+    public function getParentDocumentation()
     {
-        return $this->ParentDoc;
+        return $this->ParentDocumentation;
     }
 }
