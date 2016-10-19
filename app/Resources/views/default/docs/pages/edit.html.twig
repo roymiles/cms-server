@@ -17,8 +17,8 @@
             $(".page-editor").wysibb(wbbOpt);
         });
     </script>
-    {{ form_start(form) }}
+    {{ form_start(form, {attr: {novalidate: 'novalidate'}}) }}
         {{ form_row(form.PageContent) }}
-        {{ form_row(form.Save) }}
+        <input type="submit" id="form_Save" name="form[Save]" style="float:right" class="btn-default btn" value="Save Documentation" />
     {{ form_end(form) }}
 {% endblock %}

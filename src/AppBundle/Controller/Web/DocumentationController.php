@@ -6,10 +6,20 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
+// Added namespaces
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+
 use AppBundle\Entity\Documentation;
 use AppBundle\Exception\DocumentationNotFound;
+
+use AppBundle\Forms\DocumentationType;
+
+use AppBundle\Exception\NoSiteTokenSupplied;
+use AppBundle\Exception\InvalidSiteToken;
+use AppBundle\Exception\AuthorisationError;
+
 
 class DocumentationController extends Controller
 {   
@@ -27,6 +37,12 @@ class DocumentationController extends Controller
                 'Documentation does not exist'
             );    
         }
+        
+        if(!$this->isGranted('GET', $documentation)){
+            throw new AuthorisationError(
+                'You are not granted to perform this action'
+            );
+        }        
         
         $breadcrumbs = array();
         // Push the current documentation into the array
@@ -56,6 +72,7 @@ class DocumentationController extends Controller
     
     /**
      * @Route("/documentation/edit/id={documentationId}", name="EditDocumentation")
+     * @Method({"GET"})
      */
     public function editDocumentationAction(Request $request, $documentationId)
     {
@@ -68,6 +85,13 @@ class DocumentationController extends Controller
             );    
         }
         
+        // Check if user has privileges to edit this documentation
+        if(!$this->isGranted('EDIT', $documentation)){
+            throw new AuthorisationError(
+                'You are not granted to perform this action'
+            );
+        }
+       
         $breadcrumbs = array();
         // Push the current documentation into the array
         array_push($breadcrumbs, array('enabled' => true, 'path' => 'ViewDocumentation', 'parameters' => ['documentationId' => $documentation->getId()], 'name' => $documentation->getName()));
@@ -85,8 +109,8 @@ class DocumentationController extends Controller
         $d->setPageContent($documentation->getPageContent());
 
         $editDocumentationForm = $this->createFormBuilder($d)
+            ->setAction($this->generateUrl('ProcessDocumentationEdit', array('documentationId' => $documentationId)))
             ->add('PageContent', TextareaType::class, array('attr' => array('class' => 'page-editor'), 'label' => false))
-            ->add('Save', SubmitType::class, array('attr' => array('style' => 'float:right'), 'label' => 'Save Documentation'))
             ->getForm();
         
         return $this->render('default/docs/pages/edit.html.twig', [
@@ -97,5 +121,34 @@ class DocumentationController extends Controller
             'form' => $editDocumentationForm->createView()
         ]);
     }    
-          
+       
+    /**
+     * When the form is submitted, this controller will be executed
+     * @Route("/documentation/edit/id={documentationId}", name="ProcessDocumentationEdit")
+     * @Method({"POST"})
+     */
+    public function editDocumentationProcessAction(Request $request, $documentationId)
+    {
+        $documentationManager = $this->get('app.DocumentationManager');
+        $documentation = $documentationManager->get(['Id' => $documentationId], ['limit' => 1]);
+
+        if(empty($documentation)){
+            throw new DocumentationNotFound(
+                'Documentation does not exist'
+            );    
+        }
+        
+        // Check if user has privileges to edit this documentation
+        if(!$this->isGranted('EDIT', $documentation)){
+            throw new AuthorisationError(
+                'You are not granted to perform this action'
+            );
+        }
+        
+        
+        
+        // Redirect to the documentation page
+        
+        echo "hi";die;
+    }
 }

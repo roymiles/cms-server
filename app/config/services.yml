@@ -26,7 +26,7 @@ services:
         
     app.UsersManager:
         class: AppBundle\Services\Entities\UsersManager
-        arguments: ['@doctrine.orm.entity_manager', '@validator', '@app.SitesManager'] 
+        arguments: ['@doctrine.orm.entity_manager', '@validator', '@app.SitesManager', '@app.ValidationManager'] 
         
     # Generic services  
     app.AuthenticationManager:
@@ -44,7 +44,11 @@ services:
     app.SessionsManager:
         class: AppBundle\Services\SessionsManager
         arguments: ['@doctrine.orm.entity_manager']  
-     
+    
+    app.ValidationManager:
+        class: AppBundle\Services\ValidationManager
+        arguments: ['@service_container']
+         
     # For generating hierarchical structures from doctrines array of entity objects
     app.TreeManager:
         class: AppBundle\Services\TreeManager 
@@ -65,10 +69,22 @@ services:
         class: AppBundle\Security\Api\TokenAuthenticator
         arguments: ['@doctrine.orm.entity_manager', '@session', '@app.UsersManager', '@app.SitesManager', '@app.AccessTokensManager', '@router']
         
-    # Security Voteers    
+    # Security Voters
+    app.DocumentationVoter:
+        class: AppBundle\Security\DocumentationVoter
+        arguments: ['@app.DocumentationManager']
+        tags:
+            - { name: security.voter }    
+    
     app.UserVoter:
         class: AppBundle\Security\UserVoter
         arguments: ['@app.UsersManager', '@app.SitesManager']
+        tags:
+            - { name: security.voter }
+            
+    app.SiteVoter:
+        class: AppBundle\Security\SiteVoter
+        arguments: ['@app.SitesManager']
         tags:
             - { name: security.voter }
          

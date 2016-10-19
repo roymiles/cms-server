@@ -7,13 +7,13 @@ use Symfony\Component\HttpFoundation\Request;
 interface iTable
 {
     // Show the table / render twig template for generic inline table
-    public function getAction(Request $request, $pageNumber, $sortBy);
+    public function getAction(Request $request);
     
     // Post request only to add a row to the table
-    public function addAction(array $item);
+    public function addAction(Request $request);
     
     // Post request only to delete a row in the table
-    public function deleteAction($obj);
+    public function deleteAction(Request $request);
     
     // Post request only to update a row in the table
     public function updateAction(Request $request);

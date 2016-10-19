@@ -12,14 +12,14 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/xampp/htdocs/zeal/app/Resources/views/default/docs/pages/view.html.twig</file>
-            <file>file:/C:/xampp/htdocs/zeal/app/Resources/views/default/widgets/breadcrumbs.html.twig</file>
-            <file>file:/C:/xampp/htdocs/zeal/app/Resources/views/base.html.twig</file>
-            <file>file:/C:/xampp/htdocs/zeal/app/Resources/views/page.html.twig</file>
+            <file>file:/C:/xampp/htdocs/zeal/app/config/services.yml</file>
+            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Controller/Web/LoginController.php</file>
+            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Services/ValidationManager.php</file>
+            <file>file:/C:/xampp/htdocs/zeal/app/Resources/views/default/pages/register.html.twig</file>
+            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Services/Entities/UsersManager.php</file>
             <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Controller/Web/DocumentationController.php</file>
-            <file>file:/C:/xampp/htdocs/zeal/app/Resources/views/default/docs/base.html.twig</file>
-            <file>file:/C:/xampp/htdocs/zeal/web/css/bootstrap-custom.css</file>
-            <file>file:/C:/xampp/htdocs/zeal/app/Resources/views/default/docs/pages/edit.html.twig</file>
+            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Entity/Users.php</file>
+            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Controller/Web/RegistrationController.php</file>
         </group>
     </open-files>
 </project-private>

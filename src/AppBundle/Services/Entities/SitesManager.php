@@ -4,11 +4,17 @@
 
 namespace AppBundle\Services\Entities;
 
-use AppBundle\Entity\Sites;
-use AppBundle\Entity\Users;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
+// Services
 use Doctrine\ORM\EntityManager;
+
+// Entities
+use AppBundle\Entity\Sites;
+use AppBundle\Entity\Users;
+
+// Interfaces
 use AppBundle\Services\Interfaces\iTable;
 
 class SitesManager implements iTable

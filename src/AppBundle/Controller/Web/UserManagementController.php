@@ -18,10 +18,10 @@ use AppBundle\Exception\AuthorisationError;
 
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
-class UserManagementController extends Controller
+class UserManagementController extends Controller implements iTable
 {  
     
-    public function isColumn($columnName, string $flags){
+    public function isColumn(string $columnName, string $flags){
         if($columnName === null){ return false; } 
         $columns = ['id', 'username', 'email'];
         if(in_array(strtolower($columnName), $columns)){
@@ -54,12 +54,12 @@ class UserManagementController extends Controller
         
         // Retrieve and define default filter parameters from $_GET vars (if not supplied)
         $pageNumber = $request->query->get('pageNumber', 1);
-        $sortBy = $request->query->get('sortBy', 'Id');    
-        $order = $request->query->get('order', 'ASC');
+        $sortBy     = $request->query->get('sortBy', 'Id');    
+        $order      = $request->query->get('order', 'ASC');
 
         // Is there a token in the URL?
         $SiteToken = $request->query->get('site_token');
-        if($SiteToken ===  null){
+        if(!$SiteToken){
             throw new NoSiteTokenSupplied(
                 'No site token supplied'
             );
@@ -110,9 +110,9 @@ class UserManagementController extends Controller
         // See: http://stackoverflow.com/questions/3520996/calculating-item-offset-for-pagination
         $offset = ($pageNumber - 1) * $usersPerPage + 1;
         
-        $Options = [];
-        $Filters = ['sortBy' => $sortBy, 'order' => $order, 'limit' => $usersPerPage, 'offset' => $offset, 'Site' => $Site];
-        $Users = $UsersManager->get($Options, $Filters);        
+        $Options    = ['Site' => $Site];
+        $Filters    = ['sortBy' => $sortBy, 'order' => $order, 'limit' => $usersPerPage, 'offset' => $offset];
+        $Users      = $UsersManager->get($Options, $Filters);        
         
         // Validate the pageNumber parameter
         // ...
@@ -156,7 +156,7 @@ class UserManagementController extends Controller
         }
     }
     
-    public function addAction(array $item){
+    public function addAction(Request $request){
         
     }
     

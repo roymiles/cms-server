@@ -12,28 +12,24 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
-class UserType extends AbstractType{
+class DocumentationType extends AbstractType{
     
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('Username', TextType::class)
-                ->add('Email', EmailType::class)
-                ->add('Password', PasswordType::class);
+        $builder->add('PageContent', TextareaType::class);
     }
     
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-           'data_class' => 'AppBundle\Entity\Users'
+           'data_class' => 'AppBundle\Entity\Documentation'
         ));
     }
     
     public function getName(){
-        return "app_bundle_user_type";
+        return "app_bundle_documentation_type";
     }
     
 }
