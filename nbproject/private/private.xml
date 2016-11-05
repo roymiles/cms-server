@@ -18,6 +18,7 @@
             <file>file:/C:/xampp/htdocs/zeal/app/Resources/views/default/pages/register.html.twig</file>
             <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Services/Entities/UsersManager.php</file>
             <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Controller/Web/DocumentationController.php</file>
+            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Controller/Api/LoginController.php</file>
             <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Entity/Users.php</file>
             <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Controller/Web/RegistrationController.php</file>
         </group>

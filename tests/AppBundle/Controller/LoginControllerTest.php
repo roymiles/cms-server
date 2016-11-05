@@ -15,15 +15,9 @@ class LoginControllerTest extends WebTestCase
     public function testLoginPage()
     {
         $client = static::createClient();
-        
-        $crawler = $client->request('GET', 'http://localhost/login'); 
+        $crawler = $client->request('GET', TestingManager::URL . 'login'); 
         $response = $client->getResponse();
-        $error = $this->tm->getError($response, $crawler);
-        //echo "testLoginPage() response <title> = ";
-        //echo $error ? $error : '';
-        //echo "\n";
         
-        // 200 => 'OK'
         $this->assertTrue($client->getResponse()->isSuccessful());    
     }
     
@@ -32,7 +26,7 @@ class LoginControllerTest extends WebTestCase
     {
         // 'browse' to the page
         $client = static::createClient();
-        $crawler = $client->request('GET', 'http://localhost/login');
+        $crawler = $client->request('GET', TestingManager::URL . 'login');
         $error = $this->tm->getError($client->getResponse(), $crawler);
         //echo "testValidLogin() response <title> = ";
         //echo $error ? $error : '';
@@ -44,7 +38,7 @@ class LoginControllerTest extends WebTestCase
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
         $client->followRedirect(); // Will redirect back to login form
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
-        
+           
         $this->assertRegexp(
             '/Username could not be found./',
             $client->getResponse()->getContent()
@@ -55,24 +49,15 @@ class LoginControllerTest extends WebTestCase
     {
         // 'browse' to the page
         $client = static::createClient();
-        $crawler = $client->request('GET', 'http://localhost/login');
-        $error = $this->tm->getError($client->getResponse(), $crawler);
-        //echo "testValidLogin() response <title> = ";
-        //echo $error ? $error : '';
-        //echo "\n";
+        $crawler = $client->request('GET', TestingManager::URL . 'login');
         
         $form = $crawler->selectButton('Login')->form();
         $form['Username'] = 'admin';
         $form['Password'] = 'admin';
 
         $crawler = $client->submit($form);
-        dump($error);
-        $this->assertEquals(302, $client->getResponse()->getStatusCode());
-        $client->followRedirect(); // Will redirect back to login form
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
-        
-        dump($client->getResponse());
-        
+
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Manage")')->count());
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Logout")')->count());
     }

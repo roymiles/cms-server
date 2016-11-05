@@ -48,4 +48,38 @@ class DocumentationManager
         
         return $doc; 
     }
+    
+    //-----------------------------------------------------
+    // DELETE actions
+    //-----------------------------------------------------        
+    
+    public function delete($Documentation)
+    {
+        $this->em->remove($Documentation);
+        $this->em->flush();
+    }
+    
+    //-----------------------------------------------------
+    // UPDATE actions
+    //----------------------------------------------------- 
+    
+    public function update($Documentation, array $Options)
+    {
+        foreach($Options as $row => $value){
+            switch($row){
+                case 'content':
+                case 'pageContent':
+                    $Documentation->setPageContent($value);
+                    break;
+            }
+        }
+        
+        // Flush the updated object
+        $this->em->flush();      
+    }
+    
+    //-----------------------------------------------------
+    // INSERT actions
+    //-----------------------------------------------------
+    
 }

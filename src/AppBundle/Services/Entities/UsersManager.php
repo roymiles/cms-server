@@ -106,23 +106,21 @@ class UsersManager implements iTable
     
     public function update($User, array $Options)
     {
-        // Needs to be implemented
-        $User->setUsername($Username);
-        $em->flush();      
+        foreach($Options as $row => $value){
+            switch($row){
+                case 'username':
+                    $User->setUsername($value);
+                    break;
+            }
+        }
+        
+        // Flush the updated object
+        $this->em->flush();      
     }
     
     //-----------------------------------------------------
     // INSERT actions
     //-----------------------------------------------------
-    
-    // Not being used
-    /*private $EntityConstraintErrors;
-    public function getEntityConstraintErrors(){
-        $EntityConstraintErrors = $this->EntityConstraintErrors;
-        // Errors are cleared once read
-        $this->EntityConstraintErrors = array();
-        return $EntityConstraintErrors;
-    }*/
     
     public function add(array $Options)
     {

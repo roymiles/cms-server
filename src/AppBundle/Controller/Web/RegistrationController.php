@@ -47,9 +47,6 @@ class RegistrationController extends Controller
         $SitesManager           = $this->get('app.SitesManager');
         $ValidationManager      = $this->get('app.ValidationManager');
         
-        // Check if the site token is local or external
-        $isAjax = $request->isXmlHttpRequest();
-        
         /*
          *  Get user form fields
          *  eg:

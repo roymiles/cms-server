@@ -47,8 +47,10 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
      * Called on every request. Return whatever credentials you want,
      * or null to stop authentication.
      */
+    private $userAgent;
     public function getCredentials(Request $request)
     {
+        $this->userAgent = $request->headers->get('User-Agent', '0');
         if($request->getPathInfo() == '/login' && $request->isMethod('POST')){
             // Login form submission
             return array(
@@ -108,7 +110,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
                 if($user->getSite()->getId() === -1){
                     $this->session->set('User', $user);
                     $this->session->set('isLoggedIn', true);
-                    $this->session->set('LoginString', hash('sha512', $user->getPassword().$_SERVER['HTTP_USER_AGENT']));
+                    $this->session->set('LoginString', hash('sha512', $user->getPassword().$this->userAgent));
                     return true;
                 }else{
                     return false;
@@ -118,7 +120,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
         
         if($this->isSession){
             $Password = $user->getPassword();
-            $loginCheck = hash('sha512', $Password.$_SERVER['HTTP_USER_AGENT']);
+            $loginCheck = hash('sha512', $Password.$this->userAgent);
             
             $UserId = $credentials['UserId'];
             $loginString = $credentials['LoginString'];

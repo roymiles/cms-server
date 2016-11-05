@@ -129,7 +129,8 @@ class DocumentationController extends Controller
      */
     public function editDocumentationProcessAction(Request $request, $documentationId)
     {
-        $documentationManager = $this->get('app.DocumentationManager');
+        $documentationManager   = $this->get('app.DocumentationManager');
+        $ValidationManager      = $this->get('app.ValidationManager');
         $documentation = $documentationManager->get(['Id' => $documentationId], ['limit' => 1]);
 
         if(empty($documentation)){
@@ -145,7 +146,30 @@ class DocumentationController extends Controller
             );
         }
         
+        $editedDocumentation = $request->request->get('documentation');
         
+        // Check if all field elements exist, if not redirect back to register form
+        if(['pageContent', '_token'] != array_keys($editedDocumentation)){
+            $this->addFlash('documentationEditErrors', "Malformed request");
+            return $this->redirect('ViewDocumentation', array('id' => $documentationId));
+        }
+        
+        // Validate the page content
+        $ValidationManager->documentationContent($editedDocumentation['Username']);  
+        
+        $errors = $ValidationManager->getErrors();
+        foreach($errors as $error){
+            // addFlash pushes each element into an array
+            $this->addFlash('documentationEditErrors', $error);
+        }        
+        
+        // If there are errors in the site_token, redirect immediately
+        if(!empty($errors)){
+            return $this->redirect('ViewDocumentation', array('id' => $documentationId));
+        }
+        
+        // Passed all validation, so add the user
+        $documentationManager->update($documentation, ['pageContent' => 's']);
         
         // Redirect to the documentation page
         
