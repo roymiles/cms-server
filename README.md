@@ -1,13 +1,16 @@
 # Zeal web development project
 
 ## Summary
-Zeal is a web development project to allow clients to create fully database driven websites without having any back end code on their web host. This is done through a javascript framework that authenticates a websites request to access, modify and delete different aspects of the their website to enable dynamic webpages.
+Zeal is a web development project that allow users to create fully database driven websites without having to use any back end code. This means that there needs to be an extensive and open API for the user to query.
+
+A javascript library will be written to query the API and synchronise the users website with their 'backend' logic securely.
 
 At the moment, this project is in its very early stages and is a mere proof of concept. I may take this project in a different direction as I see fit.
 
-The project is written with the [Symfony2](https://symfony.com/) framework and has made extensive use of their FOS bundles to speed up development.
+The project is written with the [Symfony2](https://symfony.com/) framework and has made extensive use of their FOS bundles to speed up dev
 
-**Main point and goal of this project is that Everything (modules, actions etc) written and used on this site has to be able to be used externally on other websites.** All references will be done through the SiteId where SiteId = -1 will be for zela.io directly with local session storage and SiteId != -1 will be for external sites that use AccessTokens. 
+- Note: all modules that are used on the site must be available externally via the API
+
 
 ## TODO
 
@@ -41,10 +44,6 @@ The project is written with the [Symfony2](https://symfony.com/) framework and h
 
 
 - [ ] Try and ensure all controllers methods have minimal number of attached routes
-
-
-*By Roy Miles*
-
 
 
 
