@@ -146,16 +146,19 @@ class DocumentationController extends Controller
             );
         }
         
-        $editedDocumentation = $request->request->get('documentation');
+        //dump($documentationId);die;
+        
+        // Get the form values
+        $form = $request->request->get('form', array());
         
         // Check if all field elements exist, if not redirect back to register form
-        if(['pageContent', '_token'] != array_keys($editedDocumentation)){
+        if(['pageContent', '_token', 'Save'] != array_keys($form)){
             $this->addFlash('documentationEditErrors', "Malformed request");
-            return $this->redirect('ViewDocumentation', array('id' => $documentationId));
+            return $this->redirect('EditDocumentation', array('documentationId' => $documentationId));
         }
         
         // Validate the page content
-        $ValidationManager->documentationContent($editedDocumentation['Username']);  
+        $ValidationManager->documentationContent($form['pageContent']);  
         
         $errors = $ValidationManager->getErrors();
         foreach($errors as $error){
@@ -165,7 +168,7 @@ class DocumentationController extends Controller
         
         // If there are errors in the site_token, redirect immediately
         if(!empty($errors)){
-            return $this->redirect('ViewDocumentation', array('id' => $documentationId));
+            return $this->redirect('EditDocumentation', array('documentationId' => $documentationId));
         }
         
         // Passed all validation, so add the user

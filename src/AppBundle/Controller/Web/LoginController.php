@@ -59,6 +59,8 @@ class LoginController extends Controller
         $exception = $this->get('security.authentication_utils')
           ->getLastAuthenticationError();
         
+        // Absolute url for which user will be redirected to after success
+        $redirect = $request->query->get('redirect', null);
         
         //$csrf_token = $AuthenticationManager->csrf_generate('csrf_token');
         return $this->render('default/pages/login.html.twig', [
@@ -67,6 +69,7 @@ class LoginController extends Controller
             //'csrf_token' => $csrf_token,
             'site_token' => $SiteToken,
             
+            'redirect' => $redirect,
             'session_data' => $session->all(),
             'error' => $exception ? $exception->getMessage() : NULL,
         ]);

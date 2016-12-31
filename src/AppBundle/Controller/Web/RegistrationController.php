@@ -22,8 +22,8 @@ class RegistrationController extends Controller
          */
         $session = $request->getSession();
         
-        $AuthenticationManager = $this->get('app.AuthenticationManager');     
-        $csrf_token = $AuthenticationManager->csrf_generate('csrf_token');
+        //$AuthenticationManager = $this->get('app.AuthenticationManager');     
+        //$csrf_token = $AuthenticationManager->csrf_generate('csrf_token');
         
         $User = new Users();
         // Generate the form for the UserType. Include username, email, password
@@ -51,9 +51,9 @@ class RegistrationController extends Controller
          *  Get user form fields
          *  eg:
             "user" => array:4 [▼
-                "Username" => "sdf"
-                "Email" => "sadfa@asd.com"
-                "Password" => "sdasf"
+                "Username" => "example"
+                "Email" => "example@example.com"
+                "Password" => "password"
                 "_token" => "GkmZQRZUOWvn80XuPUVcOeUDBmSskdJN2LAIshZcboA"
             ]
          * 

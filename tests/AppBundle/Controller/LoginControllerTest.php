@@ -9,9 +9,10 @@ class LoginControllerTest extends WebTestCase
 {
     public function __construct()
     {
-        $this->tm = new TestingManager();
+        $this->testingManager = new TestingManager();
     }
     
+    // Check the login page is working
     public function testLoginPage()
     {
         $client = static::createClient();
@@ -22,29 +23,30 @@ class LoginControllerTest extends WebTestCase
     }
     
     
+    // Check that the login form returns an error if the credentials are incorrect
     public function testInvalidLogin()
     {
         // 'browse' to the page
         $client = static::createClient();
         $crawler = $client->request('GET', TestingManager::URL . 'login');
-        $error = $this->tm->getError($client->getResponse(), $crawler);
-        //echo "testValidLogin() response <title> = ";
-        //echo $error ? $error : '';
-        //echo "\n";
+        $error = $this->testingManager->getError($client->getResponse(), $crawler);
         
         $form = $crawler->selectButton('Login')->form();
+        // Invalid credentials
+        $form['Username'] = '-';
+        $form['Password'] = '-';        
         
         $crawler = $client->submit($form);
-        $this->assertEquals(302, $client->getResponse()->getStatusCode());
-        $client->followRedirect(); // Will redirect back to login form
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertTrue($client->getResponse()->isRedirect());
+        $client->followRedirect();
            
-        $this->assertRegexp(
-            '/Username could not be found./',
+        $this->assertContains(
+            'Username could not be found.',
             $client->getResponse()->getContent()
         );
     }
     
+    // Check the login form works when valid credentials are supplied
     public function testValidLogin()
     {
         // 'browse' to the page
@@ -52,11 +54,13 @@ class LoginControllerTest extends WebTestCase
         $crawler = $client->request('GET', TestingManager::URL . 'login');
         
         $form = $crawler->selectButton('Login')->form();
+        // Correct credentials
         $form['Username'] = 'admin';
         $form['Password'] = 'admin';
 
         $crawler = $client->submit($form);
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertTrue($client->getResponse()->isRedirect());
+        $client->followRedirect();
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Manage")')->count());
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Logout")')->count());

@@ -151,6 +151,8 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
         // on success, let the request continue
+        //$this->session->getFlashBag()->add('banner-notice', 'Logged in successfully');
+        //return new RedirectResponse($this->router->generate('Homepage'));
         return null;
     }
 
