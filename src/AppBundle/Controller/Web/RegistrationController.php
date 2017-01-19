@@ -19,6 +19,8 @@ class RegistrationController extends Controller
         /*
          *  Symfony automatically starts sessions for you
          *  http://stackoverflow.com/questions/21276048/failed-to-start-the-session-already-started-by-php-session-is-set-500-inte
+         * 
+         *  Retrieve the session object
          */
         $session = $request->getSession();
         
@@ -26,7 +28,9 @@ class RegistrationController extends Controller
         //$csrf_token = $AuthenticationManager->csrf_generate('csrf_token');
         
         $User = new Users();
-        // Generate the form for the UserType. Include username, email, password
+        /*
+         *  Generate the form for the UserType. Include username, email, password
+         */
         $form = $this->createForm(UserType::class, $User, array('action' => $this->generateUrl('ProcessRegisterRequest')));
         
         return $this->render('default/pages/register.html.twig', [
@@ -50,7 +54,7 @@ class RegistrationController extends Controller
         /*
          *  Get user form fields
          *  eg:
-            "user" => array:4 [▼
+            "user" => array:4 [
                 "Username" => "example"
                 "Email" => "example@example.com"
                 "Password" => "password"
@@ -61,13 +65,17 @@ class RegistrationController extends Controller
         $user           = $request->request->get('user');
         $repeatPassword = $request->request->get('repeatPassword');
         
-        // Check if all field elements exist, if not redirect back to register form
+        /*
+         *  Check if all field elements exist, if not redirect back to register form
+         */
         if(['Username', 'Email', 'Password', '_token'] != array_keys($user)){
             $this->addFlash('registrationErrors', "Malformed request");
             return $this->redirectToRoute('RegisterForm');
         }
         
-        // Is there a token in the URL
+        /*
+         *  Check if a site token has been supplied in the URL
+         */
         $site_token = $request->request->get('site_token');
         
         /*
@@ -86,11 +94,15 @@ class RegistrationController extends Controller
         
         $errors = $ValidationManager->getErrors();
         foreach($errors as $error){
-            // addFlash pushes each element into an array
+            /*
+             *  addFlash pushes each element into an array
+             */
             $this->addFlash('registrationErrors', $error);
         }        
         
-        // If there are errors in the site_token, redirect immediately
+        /*
+         *  If there are errors in the site_token, redirect immediately
+         */
         if(!empty($errors)){
             return $this->redirectToRoute('RegisterForm');
         }
@@ -104,19 +116,27 @@ class RegistrationController extends Controller
         
         $errors = array_merge($errors, $ValidationManager->getErrors());
         foreach($errors as $error){
-            // addFlash pushes each element into an array
+            /*
+             *  addFlash pushes each element into an array
+             */
             $this->addFlash('registrationErrors', $error);
         }
         
-        // If there are errors in the fields (will be empty error if none)
+        /*
+         *  If there are errors in the fields (will be empty error if none)
+         */
         if(!empty($errors)){
             return $this->redirectToRoute('RegisterForm');
         }
 
-        // Passed all validation, so add the user
+        /*
+         *  Passed all validation, so add the user
+         */
         $UsersManager->add($user);
         
-        // Redirect to the login form so that the user can log in with their new account
+        /*
+         *  Redirect to the login form so that the user can log in with their new account
+         */
         return $this->redirectToRoute('LoginForm');
            
     }    

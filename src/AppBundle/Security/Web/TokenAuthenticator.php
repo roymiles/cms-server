@@ -50,13 +50,13 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     private $userAgent;
     public function getCredentials(Request $request)
     {
+        // This function will extract the credentials from the request
         $this->userAgent = $request->headers->get('User-Agent', '0');
         if($request->getPathInfo() == '/login' && $request->isMethod('POST')){
             // Login form submission
             return array(
               'Username' => $request->request->get('Username'),
-              'Password' => $request->request->get('Password'),
-              'SiteToken' => $request->request->get('site_token'),
+              'Password' => $request->request->get('Password')
             ); 
         }
         
@@ -83,9 +83,10 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
         }
         
         if(array_key_exists('Username', $credentials) && array_key_exists('Password', $credentials)){
-            // Get site
-            $Site = $this->SitesManager->get(['Token' => 'a'], ['limit' => 1]);
-            // Login form
+            // The web token authenticator, is for a local login only
+            $local_site_token = $this->container->getParameter('local_site_token');
+            $Site = $this->SitesManager->get(['Token' => $local_site_token], ['limit' => 1]);
+            // Login form. Return the user object
             return $this->UsersManager->get(['Username' => $credentials['Username'], 'Site' => $Site], ['limit' => 1]);
         }
         
@@ -97,27 +98,33 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
         }    
     }
 
+    private $isFormLoginRequest = 0;
     public function checkCredentials($credentials, UserInterface $user)
     {     
+        // User is not logged in
         if($user instanceof AnonymousUser){
             return true;
         }
         
+        // Logging in through a form, using a password
         if(array_key_exists('Password', $credentials)){
             if(password_verify($credentials['Password'], $user->getPassword())){
                 // Valid credentials
-                // Should be for the local site only
                 if($user->getSite()->getId() === -1){
+                    // Only need to set session data if logging in locally
                     $this->session->set('User', $user);
                     $this->session->set('isLoggedIn', true);
                     $this->session->set('LoginString', hash('sha512', $user->getPassword().$this->userAgent));
+                    $this->isFormLoginRequest = 1;
                     return true;
                 }else{
+                    // Cant login to external website through the web token authenticator
                     return false;
                 }
             }
         }
         
+        // Verifying credentials using the loginString from the session
         if($this->isSession){
             $Password = $user->getPassword();
             $loginCheck = hash('sha512', $Password.$this->userAgent);
@@ -151,13 +158,18 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
         // on success, let the request continue
-        //$this->session->getFlashBag()->add('banner-notice', 'Logged in successfully');
-        //return new RedirectResponse($this->router->generate('Homepage'));
-        return null;
+        if($this->isFormLoginRequest){
+            $this->session->getFlashBag()->add('banner-notice', 'Logged in successfully');
+            $response = new RedirectResponse($this->router->generate('Homepage'));
+            return $response;
+        }else{
+            return null;
+        }
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
+        die('failure');
         $this->session->getFlashBag()->add('banner-error', strtr($exception->getMessageKey(), $exception->getMessageData()));
         return new RedirectResponse($this->router->generate('Login'));
     }

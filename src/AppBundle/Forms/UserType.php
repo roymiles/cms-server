@@ -20,6 +20,9 @@ class UserType extends AbstractType{
     
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        /*
+         * This will generate a registration form
+         */
         $builder->add('Username', TextType::class)
                 ->add('Email', EmailType::class)
                 ->add('Password', PasswordType::class);

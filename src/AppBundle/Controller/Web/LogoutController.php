@@ -15,6 +15,10 @@ class LogoutController extends Controller
      */
     public function logoutAction(Request $request)
     {
+        /*
+         * TODO:
+         * Perform CSRF check using a token
+         */
         $session = $this->get('session');
         $session->clear(); // Clear all attributes
         return $this->redirectToRoute('Homepage');

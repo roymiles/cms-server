@@ -22,13 +22,16 @@ class UserVoter extends Voter
     
     public function supports($attribute, $subject)
     {
-        //dump($attribute, $subject);die;
-        // if the attribute isn't one we support, return false
+        /*
+         *  If the attribute isn't one we support, return false
+         */
         if (!in_array($attribute, array(self::GET, self::DELETE))) {
             return false;
         }
 
-        // only vote on User objects inside this voter
+        /*
+         *  Only vote on User objects inside this voter
+         */
         if (!$subject instanceof Users) {
             return false;
         }
@@ -46,32 +49,48 @@ class UserVoter extends Voter
                 return $this->canDelete($object, $user);
         }
         
-        throw new \LogicException('This code should not be reached! 1.');
+        /*
+         * Should not reach here
+         */
+        throw new \LogicException('This code should not be reached!');
     }
     
     private function canGet($subject, $user){
-        // Anonymous users dont have privileges
+        /*
+         *  Anonymous users dont have privileges
+         */
         if ($user instanceof AnonymousUser) {
             return false;
         }
         
-        // The subject must be a Users object
+        /*
+         *  The subject must be a Users object
+         */
         if (!$subject instanceof Users) {
             return false;
         }   
         
-        // Check if the user object is the same object as the current logged in user
+        /*
+         *  Check if the user object is the same object as the current logged in user,
+         *  in which case the user is authorised
+         */
         if($subject->getId() == $user->getId()){
             return true;
         }  
         
-        // Check if the logged in user owns the site for which the subject is part of
+        /*
+         *  Check if the logged in user owns the site for which the subject is part of
+         */
         $SiteId = $subject->getSite()->getId();
         
-        // user should be the owner of the site corresponding to the user subjects
+        /*
+         *  User should be the owner of the site corresponding to the user subjects
+         */
         $owner = $this->SitesManager->get(['Id' => $SiteId], ['limit' => 1])->getOwner();
         if($this->UsersManager->isEqual($owner, $user)){
-            // the user is the owner of the site
+            /*
+             *  The user is the owner of the site
+             */
             return true;
         }else{
             return false;
@@ -80,28 +99,40 @@ class UserVoter extends Voter
 
 
     private function canDelete(Users $subject, $user){
-        // Anonymous users dont have privileges
+        /*
+         *  Anonymous users dont have privileges
+         */
         if ($user instanceof AnonymousUser) {
             return false;
         }
         
-        // The subject must be a Users object
+        /*
+         *  The subject must be a Users object
+         */
         if (!$subject instanceof Users) {
             return false;
         }    
         
-        // Cant delete themself
+        /*
+         *  Cant delete themself (yet)
+         */
         if($subject->getId() == $user->getId()){
             return false;
         }
         
-        // Check if the logged in user owns the site for which the subject is part of
+        /*
+         *  Check if the logged in user owns the site for which the subject is part of
+         */
         $SiteId = $subject->getSite()->getId();
         
-        // user should be the owner of the site corresponding to the user subjects
+        /*
+         *  User should be the owner of the site corresponding to the user subjects
+         */
         $owner = $this->SitesManager->get(['Id' => $SiteId], ['limit' => 1])->getOwner();
         if($this->UsersManager->isEqual($owner, $user)){
-            // the user is the owner of the site
+            /*
+             *  The user is the owner of the site
+             */
             return true;
         }else{
             return false;

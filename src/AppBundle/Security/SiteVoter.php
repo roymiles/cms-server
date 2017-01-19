@@ -20,12 +20,16 @@ class SiteVoter extends Voter
     
     public function supports($attribute, $subject)
     {
-        // if the attribute isn't one we support, return false
+        /*
+         *  If the attribute isn't one we support, return false
+         */
         if (!in_array($attribute, array(self::GET, self::DELETE))) {
             return false;
         }
 
-        // only vote on Site objects inside this voter
+        /*
+         *  Only vote on Site objects inside this voter
+         */
         if (!$subject instanceof Sites) {
             return false;
         }
@@ -43,25 +47,33 @@ class SiteVoter extends Voter
                 return $this->canDelete($object, $user);
         }
         
-        throw new \LogicException('This code should not be reached! 1.');
+        throw new \LogicException('This code should not be reached!');
     }
     
     private function canGet($subject, $user){
-        // Anonymous users dont have privileges
+        /*
+         *  Anonymous users dont have privileges
+         */
         if ($user instanceof AnonymousUser) {
             return false;
         }
         
-        // The subject must be a Sites object
+        /*
+         *  The subject must be a Sites object
+         */
         if (!$subject instanceof Sites) {
             return false;
         }   
         
-        // Check if the user owns the site
+        /*
+         *  Check if the user owns the site
+         */
         $SiteId = $subject->getId();
         $owner = $this->SitesManager->get(['Id' => $SiteId], ['limit' => 1])->getOwner();
         if($this->UsersManager->isEqual($owner, $user)){
-            // the user is the owner of the site
+            /*
+             *  The user is the owner of the site
+             */
             return true;
         }else{
             return false;
@@ -70,10 +82,14 @@ class SiteVoter extends Voter
 
 
     private function canDelete(Users $subject, $user){
-        // Anonymous users dont have privileges
+        /*
+         *  Anonymous users dont have privileges
+         */
         if ($user instanceof AnonymousUser) {
             return false;
         }
+        
+        // TODO: needs to be implemented
         
         return false; // Cant delete sites yet
     }    

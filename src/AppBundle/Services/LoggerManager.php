@@ -38,10 +38,14 @@ class LoggerManager extends Controller
         $log->setData($data);
         $log->setDateTime(new \DateTime());
         
-        // Tells Doctrine you want to (eventually) save the Log (no queries yet)
+        /*
+         *  Tells Doctrine you want to (eventually) save the Log (no queries yet)
+         */
         $this->em->persist($log);
         
-        // Actually executes the queries (i.e. the INSERT query)
+        /*
+         *  Actually executes the queries (i.e. the INSERT query)
+         */
         $this->em->flush();   
         
         return true;

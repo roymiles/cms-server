@@ -12,7 +12,7 @@ class RegistrationControllerTest extends WebTestCase
         $this->testingManager = new TestingManager();
     }
     
-    public function testRegisterPage()
+    /*public function testRegisterPage()
     {
         $client = static::createClient();
         $crawler = $client->request('GET', TestingManager::URL . 'register'); 
@@ -74,5 +74,5 @@ class RegistrationControllerTest extends WebTestCase
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Manage")')->count());
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Logout")')->count());
-    }
+    }*/
 }

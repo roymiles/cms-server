@@ -18,13 +18,16 @@ class ManagementController extends Controller
 {
 
     /**
+     * This is the homepage for the user to manage their site
      * @Route("/manage", name="Manage")
      */
     public function manageAction(Request $request)
     {
         $SitesManager = $this->get('app.SitesManager');
 
-        // Is there a token in the URL?
+        /*
+         *  Check if a token has been supplied
+         */
         $SiteToken = $request->query->get('site_token');
         if($SiteToken ===  null){
             throw new NoSiteTokenSupplied(
@@ -32,7 +35,9 @@ class ManagementController extends Controller
             );
         }  
 
-        // Does the token correspond to a valid site
+        /*
+         *  Validate the site token
+         */
         $Site = $SitesManager->get(['Token' => $SiteToken], ['limit' => 1]);
         if(!$Site){
             throw new InvalidSiteToken(
@@ -40,6 +45,9 @@ class ManagementController extends Controller
             );
         }
         
+        /*
+         * Check the user is allowed to GET the site details. See SiteVoter.php
+         */
         $SiteType = new Sites();
         $SiteType->setToken($SiteToken);
         if(!$this->isGranted('GET', $SiteType)){
@@ -47,10 +55,11 @@ class ManagementController extends Controller
                 'You are not granted to perform this action'
             );
         }
-        // Check if logged in
-        // Check if own a site with framework
-        // Is their website verified?
-        // Show a series of links for managing their website
+        /*
+         *  TODO:
+         *  Check if website is verified
+         *  Show a series of links for managing their website
+         */
         return $this->render('default/manage/index.html.twig',[
             'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
         ]);

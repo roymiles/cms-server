@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 class HomepageController extends Controller
 {
     /**
+     * This is the homepage of the website
      * @Route("/", name="Homepage")
      */
     public function homepageAction(Request $request)

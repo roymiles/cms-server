@@ -21,10 +21,22 @@ class LoginController extends Controller
         /*
          *  Symfony automatically starts sessions for you
          *  http://stackoverflow.com/questions/21276048/failed-to-start-the-session-already-started-by-php-session-is-set-500-inte
+         * 
+         *  Retrieve the session object
          */
         $session = $request->getSession();
         
-        $SiteToken = $request->query->get('site_token', 'a');
+        $local_site_token = $this->container->getParameter('local_site_token');
+        /*
+         *  If a site token is not supplied, use the local site token for
+         *  a local login
+         */
+        $SiteToken = $request->query->get('site_token', $local_site_token);
+        
+        /*
+         * Check if the site token isn't null (may be redundant due to default
+         * value)
+         */
         if($SiteToken ===  null){
             return $this->render('default/blank.html.twig', [
                 'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
@@ -32,6 +44,9 @@ class LoginController extends Controller
             ]);
         }  
         
+        /*
+         * Validate the site token
+         */
         $SitesManager = $this->get('app.SitesManager');
         $Site = $SitesManager->get(['Token' => $SiteToken], ['limit' => 1]);
         if(!$Site instanceof Sites){
@@ -42,7 +57,9 @@ class LoginController extends Controller
         }
         
         if($Site->getId() != -1){
-            // External website login
+            /*
+             *  External website login (site id = -1)
+             */
             return $this->render('default/api/pages/login.html.twig', [
                 'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
                 'site_token' => $SiteToken,
@@ -50,6 +67,9 @@ class LoginController extends Controller
             ]);
         }
         
+        /*
+         * If user is already logged in, return to the homepage
+         */
         $user = $this->getUser();
         if($user instanceof UserInterface){
             return $this->redirectToRoute('Homepage');
@@ -59,7 +79,9 @@ class LoginController extends Controller
         $exception = $this->get('security.authentication_utils')
           ->getLastAuthenticationError();
         
-        // Absolute url for which user will be redirected to after success
+        /*
+         *  Absolute url for which user will be redirected to after success
+         */
         $redirect = $request->query->get('redirect', null);
         
         //$csrf_token = $AuthenticationManager->csrf_generate('csrf_token');

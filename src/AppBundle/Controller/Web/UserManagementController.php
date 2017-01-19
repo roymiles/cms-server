@@ -52,12 +52,16 @@ class UserManagementController extends Controller implements iTable
     public function getAction(Request $request){
         $SitesManager = $this->get('app.SitesManager');
         
-        // Retrieve and define default filter parameters from $_GET vars (if not supplied)
+        /*
+         *  Retrieve and define default filter parameters from $_GET vars (if not supplied)
+         */
         $pageNumber = $request->query->get('pageNumber', 1);
         $sortBy     = $request->query->get('sortBy', 'Id');    
         $order      = $request->query->get('order', 'ASC');
 
-        // Is there a token in the URL?
+        /*
+         *  Check if site token has been supplied in the URL
+         */
         $SiteToken = $request->query->get('site_token');
         if(!$SiteToken){
             throw new NoSiteTokenSupplied(
@@ -65,7 +69,9 @@ class UserManagementController extends Controller implements iTable
             );
         }  
 
-        // Does the token correspond to a valid site
+        /*
+         *  Validate site token
+         */
         $Site = $SitesManager->get(['Token' => $SiteToken], ['limit' => 1]);
         if(!$Site){
             throw new InvalidSiteToken(
@@ -75,26 +81,36 @@ class UserManagementController extends Controller implements iTable
         
         $UsersManager = $this->get('app.UsersManager');
           
-        // Validate the sortBy parameter   
+        /*
+         *  Validate the sortBy parameter   
+         */
         if(!$this->isColumn($sortBy, 'notSensitive')){
             $sortBy = 'Id';
         }
 
-        // Search if not implemented yet!!!
+        /*
+         *  Search if not implemented yet!!!
+         */
         $searchBy = $request->query->get('searchBy');  
         $searchQuery = $request->query->get('q');  
-        // Validate the searchBy parameter 
+        /*
+         *  Validate the searchBy parameter 
+         */
         if($this->isColumn($searchBy, 'notSensitive')){
             $searchBy = 'Username';
         }
         
-        // If a search query is supplied
+        /*
+         *  If a search query is supplied
+         */
         if(!$searchQuery){
             
         }
         
         
-        // Check if user has privileges to see these users details
+        /*
+         *  Check if user has privileges to see these users details
+         */
         $UserType = new Users();
         $UserType->setSite($Site);
         if(!$this->isGranted('GET', $UserType)){
