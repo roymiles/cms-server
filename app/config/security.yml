@@ -14,20 +14,13 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false  
                 
-        secured_area_web:
-            pattern: ^/((?!api\/).)*$
+        secured_area:
+            pattern: ^/
             anonymous: ~
             guard:
                 authenticators:
-                    - web.token_authenticator
-                    
-        secured_area_api:
-            pattern: ^/api
-            anonymous: ~
-            guard:
-                authenticators:
-                    - api.token_authenticator
-                    
+                    - token_authenticator
+                                    
     access_control:
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/manage, roles: ROLE_USER }                

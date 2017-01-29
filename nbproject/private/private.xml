@@ -11,18 +11,6 @@
         </file>
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Services/LoggerManager.php</file>
-            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Controller/Web/LogoutController.php</file>
-            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Controller/Web/LoginController.php</file>
-            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Security/SiteVoter.php</file>
-            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Forms/DocumentationType.php</file>
-            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Controller/ManagementController.php</file>
-            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Controller/Web/HomepageController.php</file>
-            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Security/UserVoter.php</file>
-            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Forms/UserType.php</file>
-            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Controller/Web/UserManagementController.php</file>
-            <file>file:/C:/xampp/htdocs/zeal/src/AppBundle/Controller/Web/RegistrationController.php</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>
