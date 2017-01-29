@@ -41,7 +41,9 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     private $SitesManager;
     private $AccessTokensManager;
     private $router;
+    
     private $loginType = LoginType::UNKNOWN;
+    private $AccessToken; // Store the access token object
     
     public function __construct(EntityManager $em, 
                                 Session $session, 
@@ -79,12 +81,12 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
 
         /*
          * Logging in with access token
-         * - Access token is a $_GET parameter (maybe change to header token?)
+         * - Access token is a $_POST parameter (inside the request)
          */
-        if($request->query->has('access_token')){
+        if($request->request->has('access_token')){
             $this->loginType = LoginType::AccessToken;
             return array(
-                'AccessToken' => $request->query->get('access_token')
+                'AccessToken' => $request->request->get('access_token')
             );  
         } 
         
@@ -147,6 +149,10 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
                 /*
                  * Logging in with session data
                  */
+                throw new NotYetImplemented(
+                    'Session authentication has not been implemented'
+                );                
+                
                 if(array_key_exists('UserId', $credentials)){
                     return $this->UsersManager->get(['Id' => $credentials['UserId']], ['limit' => 1]);
                 }
@@ -180,7 +186,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
                         /*
                          *  Valid credentials
                          */
-                        $AccessToken = $this->AccessTokensManager->add($user);
+                        $this->AccessToken = $this->AccessTokensManager->add($user);
                         return true;
                     }else{
                         // Invalid password
@@ -209,6 +215,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
                 /*
                  * Logging in with session data
                  */
+                
                 $Password = $user->getPassword();
                 $loginCheck = hash('sha512', $Password.$this->userAgent);
 
@@ -245,23 +252,31 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
+
         if(LoginType::UsernameAndPassword){
             // Redirect after logging in with the site_token available as a GET parameter
-            return new RedirectResponse($token->getUser()->getSite()->getDomainName() . '?site_token=' . $request->request->get('site_token'));
+            
+            // Create the redirect url
+            $url = $token->getUser()->getSite()->getDomainName();
+            $parameters = array(
+                                'site_token' => $request->request->get('site_token'),
+                                'access_token' => $this->AccessToken->getToken()
+                               );
+            
+            $redirect_url = $this->get('router')->generate($url, $parameters);
+            return new RedirectResponse($redirect_url);
         }else{
-            // on success, let the request continue
+            // On success, let the request continue
             return null;
         }
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
-        if(LoginType::UsernameAndPassword){
-            $this->session->getFlashBag()->add('login-errors', strtr($exception->getMessageKey(), $exception->getMessageData()));
-            return new RedirectResponse($this->router->generate('Login', array('site_token' => $request->request->get('site_token'))));
-        }else{
-            return new JsonResponse(array('Error' => 'Authentication failure'), Response::HTTP_FORBIDDEN); 
-        }
+        // Flash message containing the login error message
+        $this->session->getFlashBag()->add('login-errors', strtr($exception->getMessageKey(), $exception->getMessageData()));
+        $redirect_url = $this->router->generate('Login', array('site_token' => $request->request->get('site_token')));
+        return new RedirectResponse($redirect_url);        
     }
 
     /**
@@ -270,7 +285,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     public function start(Request $request, AuthenticationException $authException = null)
     {
         $data = array(
-            // you might translate this message
+            // You might translate this message
             'message' => 'Authentication Required'
         );
 
