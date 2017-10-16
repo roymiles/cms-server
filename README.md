@@ -1,4 +1,4 @@
-# Zeal web development project
+# Web development project
 
 ## Summary
 Zeal is a web development project that allow users to create fully database driven websites without having to use any back end code. This means that there needs to be an extensive and open API for the user to query.
